@@ -39,7 +39,7 @@ public readonly struct EquatableArray<T> : IEquatable<EquatableArray<T>>, IEnume
     /// <sinheritdoc/>
     public override int GetHashCode()
     {
-        if (_array is not T[] array)
+        if (_array is not { } array)
         {
             return 0;
         }
@@ -63,13 +63,13 @@ public readonly struct EquatableArray<T> : IEquatable<EquatableArray<T>>, IEnume
         return _array.AsSpan();
     }
 
-    /// <sinheritdoc/>
-    IEnumerator<T> IEnumerable<T>.GetEnumerator()
+    /// <inheritdoc/>
+    public IEnumerator<T> GetEnumerator()
     {
         return ((IEnumerable<T>)(_array ?? Array.Empty<T>())).GetEnumerator();
     }
 
-    /// <sinheritdoc/>
+    /// <inheritdoc/>
     IEnumerator IEnumerable.GetEnumerator()
     {
         return ((IEnumerable<T>)(_array ?? Array.Empty<T>())).GetEnumerator();

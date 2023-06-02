@@ -8,6 +8,7 @@
 //------------------------------------------------------------------------------
 
 #nullable enable
+
 using System;
 
 namespace MyTestNameSpace
@@ -300,7 +301,6 @@ namespace MyTestNameSpace
         /// of <see cref="MyTestNameSpace.MyEnum" />. This parameter is passed uninitialized.</param>
         /// <returns><see langword="true" /> if the value parameter was converted successfully; otherwise, <see langword="false" />.</returns>
         public static bool TryParse(
-            [global::System.Diagnostics.CodeAnalysis.NotNullWhen(true)]
             in ReadOnlySpan<char> name,
             out MyTestNameSpace.MyEnum value)
             => TryParse(name, out value, false, false);
@@ -319,7 +319,6 @@ namespace MyTestNameSpace
         /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode; <see langword="false" /> to read value in case sensitive mode.</param>
         /// <returns><see langword="true" /> if the value parameter was converted successfully; otherwise, <see langword="false" />.</returns>
         public static bool TryParse(
-            [global::System.Diagnostics.CodeAnalysis.NotNullWhen(true)]
             in ReadOnlySpan<char> name,
             out MyTestNameSpace.MyEnum value,
             bool ignoreCase)
@@ -341,7 +340,6 @@ namespace MyTestNameSpace
         /// <c>[Display]</c> attribute when parsing, otherwise only considers the member names.</param>
         /// <returns><see langword="true" /> if the value parameter was converted successfully; otherwise, <see langword="false" />.</returns>
         public static bool TryParse(
-            [global::System.Diagnostics.CodeAnalysis.NotNullWhen(true)]
             in ReadOnlySpan<char> name,
             out MyTestNameSpace.MyEnum result,
             bool ignoreCase,

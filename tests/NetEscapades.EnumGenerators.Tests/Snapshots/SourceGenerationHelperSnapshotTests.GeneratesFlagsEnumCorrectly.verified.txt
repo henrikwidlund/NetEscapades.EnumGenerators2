@@ -8,6 +8,7 @@
 //------------------------------------------------------------------------------
 
 #nullable enable
+
 using System;
 
 namespace Something.Blah
@@ -228,7 +229,6 @@ namespace Something.Blah
         /// of <see cref="Something.Blah.ShortName" />. This parameter is passed uninitialized.</param>
         /// <returns><see langword="true" /> if the value parameter was converted successfully; otherwise, <see langword="false" />.</returns>
         public static bool TryParse(
-            [global::System.Diagnostics.CodeAnalysis.NotNullWhen(true)]
             in ReadOnlySpan<char> name,
             out Something.Blah.ShortName value)
             => TryParse(name, out value, false, false);
@@ -247,7 +247,6 @@ namespace Something.Blah
         /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode; <see langword="false" /> to read value in case sensitive mode.</param>
         /// <returns><see langword="true" /> if the value parameter was converted successfully; otherwise, <see langword="false" />.</returns>
         public static bool TryParse(
-            [global::System.Diagnostics.CodeAnalysis.NotNullWhen(true)]
             in ReadOnlySpan<char> name,
             out Something.Blah.ShortName value,
             bool ignoreCase)
@@ -269,7 +268,6 @@ namespace Something.Blah
         /// <c>[Display]</c> attribute when parsing, otherwise only considers the member names.</param>
         /// <returns><see langword="true" /> if the value parameter was converted successfully; otherwise, <see langword="false" />.</returns>
         public static bool TryParse(
-            [global::System.Diagnostics.CodeAnalysis.NotNullWhen(true)]
             in ReadOnlySpan<char> name,
             out Something.Blah.ShortName result,
             bool ignoreCase,
