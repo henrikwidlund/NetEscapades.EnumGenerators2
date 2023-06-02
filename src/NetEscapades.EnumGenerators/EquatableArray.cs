@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Immutable;
-using System.Runtime.CompilerServices;
 
 namespace NetEscapades.EnumGenerators;
 
@@ -68,8 +67,8 @@ public readonly struct EquatableArray<T> : IEquatable<EquatableArray<T>>, IEnume
     IEnumerator<T> IEnumerable<T>.GetEnumerator()
     {
         return ((IEnumerable<T>)(_array ?? Array.Empty<T>())).GetEnumerator();
-    }    
-    
+    }
+
     /// <sinheritdoc/>
     IEnumerator IEnumerable.GetEnumerator()
     {

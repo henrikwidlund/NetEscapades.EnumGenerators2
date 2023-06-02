@@ -6,6 +6,7 @@ public readonly struct EnumValueOption : IEquatable<EnumValueOption>
     /// Custom name set by the <c>[Display(Name)]</c> attribute.
     /// </summary>
     public string? DisplayName { get; }
+
     public bool IsDisplayNameTheFirstPresence { get; }
 
     public EnumValueOption(string? displayName, bool isDisplayNameTheFirstPresence)
@@ -13,7 +14,7 @@ public readonly struct EnumValueOption : IEquatable<EnumValueOption>
         DisplayName = displayName;
         IsDisplayNameTheFirstPresence = isDisplayNameTheFirstPresence;
     }
-    
+
     public bool Equals(EnumValueOption other)
     {
         return DisplayName == other.DisplayName &&

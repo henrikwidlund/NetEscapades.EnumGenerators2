@@ -8,14 +8,12 @@
 //------------------------------------------------------------------------------
 
 #nullable enable
-#if NETCOREAPP && !NETCOREAPP2_0 && !NETCOREAPP1_1 && !NETCOREAPP1_0
 using System;
-#endif
 
 namespace MyTestNameSpace
 {
     /// <summary>
-    /// Extension methods for <see cref="MyTestNameSpace.InnerClass.MyEnum" />
+    /// Extension methods for <see cref="MyTestNameSpace.InnerClass.MyEnum" />.
     /// </summary>
     internal static partial class MyEnumExtensions
     {
@@ -31,101 +29,99 @@ namespace MyTestNameSpace
         /// uses the provided value. Otherwise uses the name of the member, equivalent to
         /// calling <c>ToString()</c> on <paramref name="value"/>.
         /// </summary>
-        /// <param name="value">The value to retrieve the string value for</param>
-        /// <returns>The string representation of the value</returns>
+        /// <param name="value">The value to retrieve the string value for.</param>
+        /// <returns>The string representation of the value.</returns>
         public static string ToStringFast(this MyTestNameSpace.InnerClass.MyEnum value)
             => value switch
             {
                 MyTestNameSpace.InnerClass.MyEnum.First => nameof(MyTestNameSpace.InnerClass.MyEnum.First),
                 MyTestNameSpace.InnerClass.MyEnum.Second => nameof(MyTestNameSpace.InnerClass.MyEnum.Second),
-                _ => value.ToString(),
+                _ => value.ToString()
             };
 
         /// <summary>
         /// Returns a boolean telling whether the given enum value exists in the enumeration.
         /// </summary>
-        /// <param name="value">The value to check if it's defined</param>
-        /// <returns><c>true</c> if the value exists in the enumeration, <c>false</c> otherwise</returns>
-       public static bool IsDefined(MyTestNameSpace.InnerClass.MyEnum value)
+        /// <param name="value">The value to check if it's defined.</param>
+        /// <returns><see langword="true" /> if the value exists in the enumeration, <see langword="false" /> otherwise.</returns>
+        public static bool IsDefined(MyTestNameSpace.InnerClass.MyEnum value)
             => value switch
             {
                 MyTestNameSpace.InnerClass.MyEnum.First => true,
                 MyTestNameSpace.InnerClass.MyEnum.Second => true,
-                _ => false,
+                _ => false
             };
 
         /// <summary>
         /// Returns a boolean telling whether an enum with the given name exists in the enumeration.
         /// </summary>
-        /// <param name="name">The name to check if it's defined</param>
-        /// <returns><c>true</c> if a member with the name exists in the enumeration, <c>false</c> otherwise</returns>
-        public static bool IsDefined(string name) => IsDefined(name, allowMatchingMetadataAttribute: false);
+        /// <param name="name">The name to check if it's defined.</param>
+        /// <returns><see langword="true" /> if a member with the name exists in the enumeration, <see langword="false" /> otherwise.</returns>
+        public static bool IsDefined(string name) => IsDefined(name, false);
 
         /// <summary>
         /// Returns a boolean telling whether an enum with the given name exists in the enumeration,
         /// or if a member decorated with a <c>[Display]</c> attribute
         /// with the required name exists.
         /// </summary>
-        /// <param name="name">The name to check if it's defined</param>
-        /// <param name="allowMatchingMetadataAttribute">If <c>true</c>, considers the value of metadata attributes,otherwise ignores them</param>
-        /// <returns><c>true</c> if a member with the name exists in the enumeration, or a member is decorated
-        /// with a <c>[Display]</c> attribute with the name, <c>false</c> otherwise</returns>
+        /// <param name="name">The name to check if it's defined.</param>
+        /// <param name="allowMatchingMetadataAttribute">If <see langword="true" />, considers the value of metadata attributes,otherwise ignores them.</param>
+        /// <returns><see langword="true" /> if a member with the name exists in the enumeration, or a member is decorated
+        /// with a <c>[Display]</c> attribute with the name, <see langword="false" /> otherwise.</returns>
         public static bool IsDefined(string name, bool allowMatchingMetadataAttribute)
         {
             return name switch
             {
                 nameof(MyTestNameSpace.InnerClass.MyEnum.First) => true,
                 nameof(MyTestNameSpace.InnerClass.MyEnum.Second) => true,
-                _ => false,
+                _ => false
             };
         }
 
-#if NETCOREAPP && !NETCOREAPP2_0 && !NETCOREAPP1_1 && !NETCOREAPP1_0
+        private static readonly ReadOnlyMemory<char> _firstEnumMemory = "First".AsMemory();
+        private static readonly ReadOnlyMemory<char> _secondEnumMemory = "Second".AsMemory();
+
         /// <summary>
-        /// Returns a boolean telling whether an enum with the given name exists in the enumeration
+        /// Returns a boolean telling whether an enum with the given name exists in the enumeration.
         /// </summary>
-        /// <param name="name">The name to check if it's defined</param>
-        /// <returns><c>true</c> if a member with the name exists in the enumeration, <c>false</c> otherwise</returns>
-        public static bool IsDefined(in ReadOnlySpan<char> name) => IsDefined(name, allowMatchingMetadataAttribute: false);
+        /// <param name="name">The name to check if it's defined.</param>
+        /// <returns><see langword="true" /> if a member with the name exists in the enumeration, <see langword="false" /> otherwise.</returns>
+        public static bool IsDefined(in ReadOnlySpan<char> name) => IsDefined(name, false);
 
         /// <summary>
         /// Returns a boolean telling whether an enum with the given name exists in the enumeration,
         /// or optionally if a member decorated with a <c>[Display]</c> attribute
         /// with the required name exists.
-        /// Slower then the <see cref="IsDefined(string, bool)" /> overload, but doesn't allocate memory./>
         /// </summary>
-        /// <param name="name">The name to check if it's defined</param>
-        /// <param name="allowMatchingMetadataAttribute">If <c>true</c>, considers the value of metadata attributes,otherwise ignores them</param>
-        /// <returns><c>true</c> if a member with the name exists in the enumeration, or a member is decorated
-        /// with a <c>[Display]</c> attribute with the name, <c>false</c> otherwise</returns>
+        /// <param name="name">The name to check if it's defined.</param>
+        /// <param name="allowMatchingMetadataAttribute">If <see langword="true" />, considers the value of metadata attributes, otherwise ignores them.</param>
+        /// <returns><see langword="true" /> if a member with the name exists in the enumeration, or a member is decorated
+        /// with a <c>[Display]</c> attribute with the name, <see langword="false" /> otherwise.</returns>
         public static bool IsDefined(in ReadOnlySpan<char> name, bool allowMatchingMetadataAttribute)
         {
             return name switch
             {
-                ReadOnlySpan<char> current when current.Equals(nameof(MyTestNameSpace.InnerClass.MyEnum.First).AsSpan(), global::System.StringComparison.Ordinal) => true,
-                ReadOnlySpan<char> current when current.Equals(nameof(MyTestNameSpace.InnerClass.MyEnum.Second).AsSpan(), global::System.StringComparison.Ordinal) => true,
-                _ => false,
+                var current when current.Equals(_firstEnumMemory.Span, global::System.StringComparison.Ordinal) => true,
+                var current when current.Equals(_secondEnumMemory.Span, global::System.StringComparison.Ordinal) => true,
+                _ => false
             };
         }
-#endif
 
         /// <summary>
         /// Converts the string representation of the name or numeric value of
         /// an <see cref="MyTestNameSpace.InnerClass.MyEnum" /> to the equivalent instance.
         /// The return value indicates whether the conversion succeeded.
         /// </summary>
-        /// <param name="name">The case-sensitive string representation of the enumeration name or underlying value to convert</param>
-        /// <param name="value">When this method returns, contains an object of type 
+        /// <param name="name">The case-sensitive string representation of the enumeration name or underlying value to convert.</param>
+        /// <param name="value">When this method returns, contains an object of type
         /// <see cref="MyTestNameSpace.InnerClass.MyEnum" /> whose
         /// value is represented by <paramref name="value"/> if the parse operation succeeds.
         /// If the parse operation fails, contains the default value of the underlying type
         /// of <see cref="MyTestNameSpace.InnerClass.MyEnum" />. This parameter is passed uninitialized.</param>
-        /// <returns><c>true</c> if the value parameter was converted successfully; otherwise, <c>false</c>.</returns>
+        /// <returns><see langword="true" /> if the value parameter was converted successfully; otherwise, <see langword="false" />.</returns>
         public static bool TryParse(
-#if NETCOREAPP3_0_OR_GREATER
             [global::System.Diagnostics.CodeAnalysis.NotNullWhen(true)]
-#endif
-            string? name, 
+            string? name,
             out MyTestNameSpace.InnerClass.MyEnum value)
             => TryParse(name, out value, false, false);
 
@@ -134,21 +130,19 @@ namespace MyTestNameSpace
         /// an <see cref="MyTestNameSpace.InnerClass.MyEnum" /> to the equivalent instance.
         /// The return value indicates whether the conversion succeeded.
         /// </summary>
-        /// <param name="name">The string representation of the enumeration name or underlying value to convert</param>
-        /// <param name="value">When this method returns, contains an object of type 
+        /// <param name="name">The string representation of the enumeration name or underlying value to convert.</param>
+        /// <param name="value">When this method returns, contains an object of type
         /// <see cref="MyTestNameSpace.InnerClass.MyEnum" /> whose
         /// value is represented by <paramref name="value"/> if the parse operation succeeds.
         /// If the parse operation fails, contains the default value of the underlying type
         /// of <see cref="MyTestNameSpace.InnerClass.MyEnum" />. This parameter is passed uninitialized.</param>
-        /// <param name="ignoreCase"><c>true</c> to read value in case insensitive mode; <c>false</c> to read value in case sensitive mode.</param>
-        /// <returns><c>true</c> if the value parameter was converted successfully; otherwise, <c>false</c>.</returns>
+        /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode; <see langword="false" /> to read value in case sensitive mode.</param>
+        /// <returns><see langword="true" /> if the value parameter was converted successfully; otherwise, <see langword="false" />.</returns>
         public static bool TryParse(
-#if NETCOREAPP3_0_OR_GREATER
             [global::System.Diagnostics.CodeAnalysis.NotNullWhen(true)]
-#endif
-            string? name, 
+            string? name,
             out MyTestNameSpace.InnerClass.MyEnum value,
-            bool ignoreCase) 
+            bool ignoreCase)
             => TryParse(name, out value, ignoreCase, false);
 
         /// <summary>
@@ -156,36 +150,34 @@ namespace MyTestNameSpace
         /// an <see cref="MyTestNameSpace.InnerClass.MyEnum" /> to the equivalent instance.
         /// The return value indicates whether the conversion succeeded.
         /// </summary>
-        /// <param name="name">The string representation of the enumeration name or underlying value to convert</param>
-        /// <param name="value">When this method returns, contains an object of type 
+        /// <param name="name">The string representation of the enumeration name or underlying value to convert.</param>
+        /// <param name="value">When this method returns, contains an object of type
         /// <see cref="MyTestNameSpace.InnerClass.MyEnum" /> whose
         /// value is represented by <paramref name="value"/> if the parse operation succeeds.
         /// If the parse operation fails, contains the default value of the underlying type
         /// of <see cref="MyTestNameSpace.InnerClass.MyEnum" />. This parameter is passed uninitialized.</param>
-        /// <param name="ignoreCase"><c>true</c> to read value in case insensitive mode; <c>false</c> to read value in case sensitive mode.</param>
-        /// <param name="allowMatchingMetadataAttribute">If <c>true</c>, considers the value included in metadata attributes such as
+        /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode; <see langword="false" /> to read value in case sensitive mode.</param>
+        /// <param name="allowMatchingMetadataAttribute">If <see langword="true" />, considers the value included in metadata attributes such as
         /// <c>[Display]</c> attribute when parsing, otherwise only considers the member names.</param>
-        /// <returns><c>true</c> if the value parameter was converted successfully; otherwise, <c>false</c>.</returns>
+        /// <returns><see langword="true" /> if the value parameter was converted successfully; otherwise, <see langword="false" />.</returns>
         public static bool TryParse(
-#if NETCOREAPP3_0_OR_GREATER
             [global::System.Diagnostics.CodeAnalysis.NotNullWhen(true)]
-#endif
-            string? name, 
-            out MyTestNameSpace.InnerClass.MyEnum value, 
-            bool ignoreCase, 
+            string? name,
+            out MyTestNameSpace.InnerClass.MyEnum value,
+            bool ignoreCase,
             bool allowMatchingMetadataAttribute)
         {
             if (ignoreCase)
             {
                 switch (name)
                 {
-                    case string s when s.Equals(nameof(MyTestNameSpace.InnerClass.MyEnum.First), global::System.StringComparison.OrdinalIgnoreCase):
+                    case not null when name.Equals(nameof(MyTestNameSpace.InnerClass.MyEnum.First), global::System.StringComparison.OrdinalIgnoreCase):
                         value = MyTestNameSpace.InnerClass.MyEnum.First;
                         return true;
-                    case string s when s.Equals(nameof(MyTestNameSpace.InnerClass.MyEnum.Second), global::System.StringComparison.OrdinalIgnoreCase):
+                    case not null when name.Equals(nameof(MyTestNameSpace.InnerClass.MyEnum.Second), global::System.StringComparison.OrdinalIgnoreCase):
                         value = MyTestNameSpace.InnerClass.MyEnum.Second;
                         return true;
-                    case string s when int.TryParse(name, out var val):
+                    case { Length: > 0 } when int.TryParse(name, out var val):
                         value = (MyTestNameSpace.InnerClass.MyEnum)val;
                         return true;
                     default:
@@ -193,44 +185,39 @@ namespace MyTestNameSpace
                         return false;
                 }
             }
-            else
+
+            switch (name)
             {
-                switch (name)
-                {
-                    case nameof(MyTestNameSpace.InnerClass.MyEnum.First):
-                        value = MyTestNameSpace.InnerClass.MyEnum.First;
-                        return true;
-                    case nameof(MyTestNameSpace.InnerClass.MyEnum.Second):
-                        value = MyTestNameSpace.InnerClass.MyEnum.Second;
-                        return true;
-                    case string s when int.TryParse(name, out var val):
-                        value = (MyTestNameSpace.InnerClass.MyEnum)val;
-                        return true;
-                    default:
-                        value = default;
-                        return false;
-                }
+                case nameof(MyTestNameSpace.InnerClass.MyEnum.First):
+                    value = MyTestNameSpace.InnerClass.MyEnum.First;
+                    return true;
+                case nameof(MyTestNameSpace.InnerClass.MyEnum.Second):
+                    value = MyTestNameSpace.InnerClass.MyEnum.Second;
+                    return true;
+                case { Length: > 0 } when int.TryParse(name, out var val):
+                    value = (MyTestNameSpace.InnerClass.MyEnum)val;
+                    return true;
+                default:
+                    value = default;
+                    return false;
             }
         }
 
-#if NETCOREAPP && !NETCOREAPP2_0 && !NETCOREAPP1_1 && !NETCOREAPP1_0
         /// <summary>
         /// Converts the span representation of the name or numeric value of
         /// an <see cref="MyTestNameSpace.InnerClass.MyEnum" /> to the equivalent instance.
         /// The return value indicates whether the conversion succeeded.
         /// </summary>
-        /// <param name="name">The span representation of the enumeration name or underlying value to convert</param>
-        /// <param name="value">When this method returns, contains an object of type 
+        /// <param name="name">The span representation of the enumeration name or underlying value to convert.</param>
+        /// <param name="value">When this method returns, contains an object of type
         /// <see cref="MyTestNameSpace.InnerClass.MyEnum" /> whose
         /// value is represented by <paramref name="value"/> if the parse operation succeeds.
         /// If the parse operation fails, contains the default value of the underlying type
         /// of <see cref="MyTestNameSpace.InnerClass.MyEnum" />. This parameter is passed uninitialized.</param>
-        /// <returns><c>true</c> if the value parameter was converted successfully; otherwise, <c>false</c>.</returns>
+        /// <returns><see langword="true" /> if the value parameter was converted successfully; otherwise, <see langword="false" />.</returns>
         public static bool TryParse(
-#if NETCOREAPP3_0_OR_GREATER
             [global::System.Diagnostics.CodeAnalysis.NotNullWhen(true)]
-#endif
-            in ReadOnlySpan<char> name, 
+            in ReadOnlySpan<char> name,
             out MyTestNameSpace.InnerClass.MyEnum value)
             => TryParse(name, out value, false, false);
 
@@ -239,21 +226,19 @@ namespace MyTestNameSpace
         /// an <see cref="MyTestNameSpace.InnerClass.MyEnum" /> to the equivalent instance.
         /// The return value indicates whether the conversion succeeded.
         /// </summary>
-        /// <param name="name">The span representation of the enumeration name or underlying value to convert</param>
-        /// <param name="value">When this method returns, contains an object of type 
+        /// <param name="name">The span representation of the enumeration name or underlying value to convert.</param>
+        /// <param name="value">When this method returns, contains an object of type
         /// <see cref="MyTestNameSpace.InnerClass.MyEnum" /> whose
         /// value is represented by <paramref name="value"/> if the parse operation succeeds.
         /// If the parse operation fails, contains the default value of the underlying type
         /// of <see cref="MyTestNameSpace.InnerClass.MyEnum" />. This parameter is passed uninitialized.</param>
-        /// <param name="ignoreCase"><c>true</c> to read value in case insensitive mode; <c>false</c> to read value in case sensitive mode.</param>
-        /// <returns><c>true</c> if the value parameter was converted successfully; otherwise, <c>false</c>.</returns>
+        /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode; <see langword="false" /> to read value in case sensitive mode.</param>
+        /// <returns><see langword="true" /> if the value parameter was converted successfully; otherwise, <see langword="false" />.</returns>
         public static bool TryParse(
-#if NETCOREAPP3_0_OR_GREATER
             [global::System.Diagnostics.CodeAnalysis.NotNullWhen(true)]
-#endif
-            in ReadOnlySpan<char> name, 
+            in ReadOnlySpan<char> name,
             out MyTestNameSpace.InnerClass.MyEnum value,
-            bool ignoreCase) 
+            bool ignoreCase)
             => TryParse(name, out value, ignoreCase, false);
 
         /// <summary>
@@ -261,36 +246,34 @@ namespace MyTestNameSpace
         /// an <see cref="MyTestNameSpace.InnerClass.MyEnum" /> to the equivalent instance.
         /// The return value indicates whether the conversion succeeded.
         /// </summary>
-        /// <param name="name">The span representation of the enumeration name or underlying value to convert</param>
-        /// <param name="result">When this method returns, contains an object of type 
+        /// <param name="name">The span representation of the enumeration name or underlying value to convert.</param>
+        /// <param name="result">When this method returns, contains an object of type
         /// <see cref="MyTestNameSpace.InnerClass.MyEnum" /> whose
         /// value is represented by <paramref name="result"/> if the parse operation succeeds.
         /// If the parse operation fails, contains the default value of the underlying type
         /// of <see cref="MyTestNameSpace.InnerClass.MyEnum" />. This parameter is passed uninitialized.</param>
-        /// <param name="ignoreCase"><c>true</c> to read value in case insensitive mode; <c>false</c> to read value in case sensitive mode.</param>
-        /// <param name="allowMatchingMetadataAttribute">If <c>true</c>, considers the value included in metadata attributes such as
+        /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode; <see langword="false" /> to read value in case sensitive mode.</param>
+        /// <param name="allowMatchingMetadataAttribute">If <see langword="true" />, considers the value included in metadata attributes such as
         /// <c>[Display]</c> attribute when parsing, otherwise only considers the member names.</param>
-        /// <returns><c>true</c> if the value parameter was converted successfully; otherwise, <c>false</c>.</returns>
+        /// <returns><see langword="true" /> if the value parameter was converted successfully; otherwise, <see langword="false" />.</returns>
         public static bool TryParse(
-#if NETCOREAPP3_0_OR_GREATER
             [global::System.Diagnostics.CodeAnalysis.NotNullWhen(true)]
-#endif
-            in ReadOnlySpan<char> name, 
-            out MyTestNameSpace.InnerClass.MyEnum result, 
-            bool ignoreCase,             
+            in ReadOnlySpan<char> name,
+            out MyTestNameSpace.InnerClass.MyEnum result,
+            bool ignoreCase,
             bool allowMatchingMetadataAttribute)
         {
             if (ignoreCase)
             {
                 switch (name)
                 {
-                    case ReadOnlySpan<char> current when current.Equals(nameof(MyTestNameSpace.InnerClass.MyEnum.First).AsSpan(), global::System.StringComparison.OrdinalIgnoreCase):
+                    case var current when current.Equals(_firstEnumMemory.Span, global::System.StringComparison.OrdinalIgnoreCase):
                         result = MyTestNameSpace.InnerClass.MyEnum.First;
                         return true;
-                    case ReadOnlySpan<char> current when current.Equals(nameof(MyTestNameSpace.InnerClass.MyEnum.Second).AsSpan(), global::System.StringComparison.OrdinalIgnoreCase):
+                    case var current when current.Equals(_secondEnumMemory.Span, global::System.StringComparison.OrdinalIgnoreCase):
                         result = MyTestNameSpace.InnerClass.MyEnum.Second;
                         return true;
-                    case ReadOnlySpan<char> current when int.TryParse(name, out var numericResult):
+                    case { IsEmpty: false } when int.TryParse(name, out var numericResult):
                         result = (MyTestNameSpace.InnerClass.MyEnum)numericResult;
                         return true;
                     default:
@@ -298,26 +281,97 @@ namespace MyTestNameSpace
                         return false;
                 }
             }
-            else
+
+            switch (name)
             {
-                switch (name)
-                {
-                    case ReadOnlySpan<char> current when current.Equals(nameof(MyTestNameSpace.InnerClass.MyEnum.First).AsSpan(), global::System.StringComparison.Ordinal):
-                        result = MyTestNameSpace.InnerClass.MyEnum.First;
-                        return true;
-                    case ReadOnlySpan<char> current when current.Equals(nameof(MyTestNameSpace.InnerClass.MyEnum.Second).AsSpan(), global::System.StringComparison.Ordinal):
-                        result = MyTestNameSpace.InnerClass.MyEnum.Second;
-                        return true;
-                    case ReadOnlySpan<char> current when int.TryParse(name, out var numericResult):
-                        result = (MyTestNameSpace.InnerClass.MyEnum)numericResult;
-                        return true;
-                    default:
-                        result = default;
-                        return false;
-                }
+                case var current when current.Equals(_firstEnumMemory.Span, global::System.StringComparison.Ordinal):
+                    result = MyTestNameSpace.InnerClass.MyEnum.First;
+                    return true;
+                case var current when current.Equals(_secondEnumMemory.Span, global::System.StringComparison.Ordinal):
+                    result = MyTestNameSpace.InnerClass.MyEnum.Second;
+                    return true;
+                case { IsEmpty: false } when int.TryParse(name, out var numericResult):
+                    result = (MyTestNameSpace.InnerClass.MyEnum)numericResult;
+                    return true;
+                default:
+                    result = default;
+                    return false;
             }
         }
-#endif
+
+        /// <summary>
+        /// Retrieves an array of the metadata or <see langword="default" /> values of the members defined in
+        /// <see cref="MyTestNameSpace.InnerClass.MyEnum" />.
+        /// Note that this returns a new array with every invocation, so
+        /// should be cached if appropriate.
+        /// </summary>
+        /// <returns>An array of the metadata or <see langword="default" /> values defined in <see cref="MyTestNameSpace.InnerClass.MyEnum" />.</returns>
+        public static string[] GetMetadataNamesOrDefault() =>
+            new[]
+            {
+                nameof(MyTestNameSpace.InnerClass.MyEnum.First),
+                nameof(MyTestNameSpace.InnerClass.MyEnum.Second),
+            };
+
+        /// <summary>
+        /// Gets the <see cref="MyTestNameSpace.InnerClass.MyEnum" /> representation of the <paramref name="name"/>
+        /// or <see langword="default" /> if there's no match.
+        /// </summary>
+        /// <param name="name">The value that should be matched.</param>
+        /// <returns>The matching <see cref="MyTestNameSpace.InnerClass.MyEnum" /> or <see langword="null" /> if there was no match.</returns>
+        public static MyTestNameSpace.InnerClass.MyEnum? GetValueOrDefault(string? name) =>
+            TryParse(name, out MyTestNameSpace.InnerClass.MyEnum value) ? value : null;
+
+        /// <summary>
+        /// Gets the <see cref="MyTestNameSpace.InnerClass.MyEnum" /> representation of the <paramref name="name"/>
+        /// or <see langword="default" /> if there's no match.
+        /// </summary>
+        /// <param name="name">The value that should be matched.</param>
+        /// <returns>The matching <see cref="MyTestNameSpace.InnerClass.MyEnum" /> or <see langword="null" /> if there was no match.</returns>
+        public static MyTestNameSpace.InnerClass.MyEnum? GetValueOrDefault(in ReadOnlySpan<char> name) =>
+            TryParse(name, out MyTestNameSpace.InnerClass.MyEnum value) ? value : null;
+
+        /// <summary>
+        /// Gets the <see cref="MyTestNameSpace.InnerClass.MyEnum" /> representation of the <paramref name="name"/>
+        /// or <see langword="default" /> if there's no match.
+        /// </summary>
+        /// <param name="name">The value that should be matched.</param>
+        /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode; <see langword="false" /> to read value in case sensitive mode.</param>
+        /// <returns>The matching <see cref="MyTestNameSpace.InnerClass.MyEnum" /> or <see langword="null" /> if there was no match.</returns>
+        public static MyTestNameSpace.InnerClass.MyEnum? GetValueOrDefault(string? name, bool ignoreCase) =>
+            TryParse(name, out MyTestNameSpace.InnerClass.MyEnum value, ignoreCase) ? value : null;
+
+        /// <summary>
+        /// Gets the <see cref="MyTestNameSpace.InnerClass.MyEnum" /> representation of the <paramref name="name"/>
+        /// or <see langword="default" /> if there's no match.
+        /// </summary>
+        /// <param name="name">The value that should be matched.</param>
+        /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode; <see langword="false" /> to read value in case sensitive mode.</param>
+        /// <returns>The matching <see cref="MyTestNameSpace.InnerClass.MyEnum" /> or <see langword="null" /> if there was no match.</returns>
+        public static MyTestNameSpace.InnerClass.MyEnum? GetValueOrDefault(in ReadOnlySpan<char> name, bool ignoreCase) =>
+            TryParse(name, out MyTestNameSpace.InnerClass.MyEnum value, ignoreCase) ? value : null;
+
+        /// <summary>
+        /// Gets the <see cref="MyTestNameSpace.InnerClass.MyEnum" /> representation of the <paramref name="name"/>
+        /// or <see langword="default" /> if there's no match.
+        /// </summary>
+        /// <param name="name">The value that should be matched.</param>
+        /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode; <see langword="false" /> to read value in case sensitive mode.</param>
+        /// <param name="allowMatchingMetadataAttribute">If <see langword="true" />, considers the value of metadata attributes,otherwise ignores them.</param>
+        /// <returns>The matching <see cref="MyTestNameSpace.InnerClass.MyEnum" /> or <see langword="null" /> if there was no match.</returns>
+        public static MyTestNameSpace.InnerClass.MyEnum? GetValueOrDefault(string? name, bool ignoreCase, bool allowMatchingMetadataAttribute) =>
+            TryParse(name, out MyTestNameSpace.InnerClass.MyEnum value, ignoreCase, allowMatchingMetadataAttribute) ? value : null;
+
+        /// <summary>
+        /// Gets the <see cref="MyTestNameSpace.InnerClass.MyEnum" /> representation of the <paramref name="name"/>
+        /// or <see langword="default" /> if there's no match.
+        /// </summary>
+        /// <param name="name">The value that should be matched.</param>
+        /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode; <see langword="false" /> to read value in case sensitive mode.</param>
+        /// <param name="allowMatchingMetadataAttribute">If <see langword="true" />, considers the value of metadata attributes,otherwise ignores them.</param>
+        /// <returns>The matching <see cref="MyTestNameSpace.InnerClass.MyEnum" /> or <see langword="null" /> if there was no match.</returns>
+        public static MyTestNameSpace.InnerClass.MyEnum? GetValueOrDefault(in ReadOnlySpan<char> name, bool ignoreCase, bool allowMatchingMetadataAttribute) =>
+            TryParse(name, out MyTestNameSpace.InnerClass.MyEnum value, ignoreCase, allowMatchingMetadataAttribute) ? value : null;
 
         /// <summary>
         /// Retrieves an array of the values of the members defined in
@@ -325,15 +379,14 @@ namespace MyTestNameSpace
         /// Note that this returns a new array with every invocation, so
         /// should be cached if appropriate.
         /// </summary>
-        /// <returns>An array of the values defined in <see cref="MyTestNameSpace.InnerClass.MyEnum" /></returns>
-        public static MyTestNameSpace.InnerClass.MyEnum[] GetValues()
-        {
-            return new[]
+        /// <returns>An array of the values defined in <see cref="MyTestNameSpace.InnerClass.MyEnum" />.</returns>
+        public static MyTestNameSpace.InnerClass.MyEnum[] GetValues() =>
+            new[]
             {
                 MyTestNameSpace.InnerClass.MyEnum.First,
                 MyTestNameSpace.InnerClass.MyEnum.Second,
             };
-        }
+
 
         /// <summary>
         /// Retrieves an array of the names of the members defined in
@@ -341,14 +394,12 @@ namespace MyTestNameSpace
         /// Note that this returns a new array with every invocation, so
         /// should be cached if appropriate.
         /// </summary>
-        /// <returns>An array of the names of the members defined in <see cref="MyTestNameSpace.InnerClass.MyEnum" /></returns>
-        public static string[] GetNames()
-        {
-            return new[]
+        /// <returns>An array of the names of the members defined in <see cref="MyTestNameSpace.InnerClass.MyEnum" />.</returns>
+        public static string[] GetNames() =>
+            new[]
             {
                 nameof(MyTestNameSpace.InnerClass.MyEnum.First),
                 nameof(MyTestNameSpace.InnerClass.MyEnum.Second),
             };
-        }
     }
 }

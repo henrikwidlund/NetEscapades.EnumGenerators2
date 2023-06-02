@@ -15,13 +15,13 @@ public static class SourceGenerationHelper
 
 #nullable enable";
 
-    public const string Attribute = Header + @"
+    internal const string Attribute = Header + @"
 
 #if NETESCAPADES_ENUMGENERATORS_EMBED_ATTRIBUTES
 namespace NetEscapades.EnumGenerators
 {
     /// <summary>
-    /// Add to enums to indicate that extension methods should be generated for the type
+    /// Add to enums to indicate that extension methods should be generated for the type.
     /// </summary>
     [global::System.AttributeUsage(global::System.AttributeTargets.Enum)]
     [global::System.Diagnostics.Conditional(""NETESCAPADES_ENUMGENERATORS_USAGES"")]
@@ -29,7 +29,7 @@ namespace NetEscapades.EnumGenerators
     {
         /// <summary>
         /// The namespace to generate the extension class.
-        /// If not provided the namespace of the enum will be used
+        /// If not provided the namespace of the enum will be used.
         /// </summary>
         public string? ExtensionClassNamespace { get; set; }
 
@@ -37,7 +37,7 @@ namespace NetEscapades.EnumGenerators
         /// The name to use for the extension class.
         /// If not provided, the enum name with ""Extensions"" will be used.
         /// For example for an Enum called StatusCodes, the default name
-        /// will be StatusCodesExtensions
+        /// will be StatusCodesExtensions.
         /// </summary>
         public string? ExtensionClassName { get; set; }
     }
@@ -50,9 +50,7 @@ namespace NetEscapades.EnumGenerators
         sb
             .Append(Header)
             .Append(@"
-#if NETCOREAPP && !NETCOREAPP2_0 && !NETCOREAPP1_1 && !NETCOREAPP1_0
 using System;
-#endif
 ");
         if (!string.IsNullOrEmpty(enumToGenerate.Namespace))
         {
@@ -63,7 +61,7 @@ namespace ").Append(enumToGenerate.Namespace).Append(@"
 
         sb.Append(@"
     /// <summary>
-    /// Extension methods for <see cref=""").Append(enumToGenerate.FullyQualifiedName).Append(@""" />
+    /// Extension methods for <see cref=""").Append(enumToGenerate.FullyQualifiedName).Append(@""" />.
     /// </summary>
     ").Append(enumToGenerate.IsPublic ? "public" : "internal").Append(@" static partial class ").Append(enumToGenerate.Name).Append(@"
     {
@@ -79,8 +77,8 @@ namespace ").Append(enumToGenerate.Namespace).Append(@"
         /// uses the provided value. Otherwise uses the name of the member, equivalent to
         /// calling <c>ToString()</c> on <paramref name=""value""/>.
         /// </summary>
-        /// <param name=""value"">The value to retrieve the string value for</param>
-        /// <returns>The string representation of the value</returns>
+        /// <param name=""value"">The value to retrieve the string value for.</param>
+        /// <returns>The string representation of the value.</returns>
         public static string ToStringFast(this ").Append(enumToGenerate.FullyQualifiedName).Append(@" value)
             => value switch
             {");
@@ -101,7 +99,7 @@ namespace ").Append(enumToGenerate.Namespace).Append(@"
         }
 
         sb.Append(@"
-                _ => value.ToString(),
+                _ => value.ToString()
             };");
 
         if (enumToGenerate.HasFlags)
@@ -112,13 +110,13 @@ namespace ").Append(enumToGenerate.Namespace).Append(@"
         /// Determines whether one or more bit fields are set in the current instance.
         /// Equivalent to calling <see cref=""global::System.Enum.HasFlag"" /> on <paramref name=""value""/>.
         /// </summary>
-        /// <param name=""value"">The value of the instance to investigate</param>
-        /// <param name=""flag"">The flag to check for</param>
-        /// <returns><c>true</c> if the fields set in the flag are also set in the current instance; otherwise <c>false</c>.</returns>
+        /// <param name=""value"">The value of the instance to investigate.</param>
+        /// <param name=""flag"">The flag to check for.</param>
+        /// <returns><see langword=""true"" /> if the fields set in the flag are also set in the current instance; otherwise <see langword=""false"" />.</returns>
         /// <remarks>If the underlying value of <paramref name=""flag""/> is zero, the method returns true.
-        /// This is consistent with the behaviour of <see cref=""global::System.Enum.HasFlag"" /></remarks>
+        /// This is consistent with the behaviour of <see cref=""global::System.Enum.HasFlag"" />.</remarks>
         public static bool HasFlagFast(this ").Append(enumToGenerate.FullyQualifiedName).Append(@" value, ").Append(enumToGenerate.FullyQualifiedName).Append(@" flag)
-            => flag == 0 ? true : (value & flag) == flag;");
+            => flag == 0 || (value & flag) == flag;");
         }
 
         sb.Append(@"
@@ -126,9 +124,9 @@ namespace ").Append(enumToGenerate.Namespace).Append(@"
         /// <summary>
         /// Returns a boolean telling whether the given enum value exists in the enumeration.
         /// </summary>
-        /// <param name=""value"">The value to check if it's defined</param>
-        /// <returns><c>true</c> if the value exists in the enumeration, <c>false</c> otherwise</returns>
-       public static bool IsDefined(").Append(enumToGenerate.FullyQualifiedName).Append(@" value)
+        /// <param name=""value"">The value to check if it's defined.</param>
+        /// <returns><see langword=""true"" /> if the value exists in the enumeration, <see langword=""false"" /> otherwise.</returns>
+        public static bool IsDefined(").Append(enumToGenerate.FullyQualifiedName).Append(@" value)
             => value switch
             {");
         foreach (var member in enumToGenerate.Names)
@@ -139,7 +137,7 @@ namespace ").Append(enumToGenerate.Namespace).Append(@"
         }
 
         sb.Append(@"
-                _ => false,
+                _ => false
             };");
 
         sb.Append(@"
@@ -147,19 +145,19 @@ namespace ").Append(enumToGenerate.Namespace).Append(@"
         /// <summary>
         /// Returns a boolean telling whether an enum with the given name exists in the enumeration.
         /// </summary>
-        /// <param name=""name"">The name to check if it's defined</param>
-        /// <returns><c>true</c> if a member with the name exists in the enumeration, <c>false</c> otherwise</returns>
-        public static bool IsDefined(string name) => IsDefined(name, allowMatchingMetadataAttribute: false);
+        /// <param name=""name"">The name to check if it's defined.</param>
+        /// <returns><see langword=""true"" /> if a member with the name exists in the enumeration, <see langword=""false"" /> otherwise.</returns>
+        public static bool IsDefined(string name) => IsDefined(name, false);
 
         /// <summary>
         /// Returns a boolean telling whether an enum with the given name exists in the enumeration,
         /// or if a member decorated with a <c>[Display]</c> attribute
         /// with the required name exists.
         /// </summary>
-        /// <param name=""name"">The name to check if it's defined</param>
-        /// <param name=""allowMatchingMetadataAttribute"">If <c>true</c>, considers the value of metadata attributes,otherwise ignores them</param>
-        /// <returns><c>true</c> if a member with the name exists in the enumeration, or a member is decorated
-        /// with a <c>[Display]</c> attribute with the name, <c>false</c> otherwise</returns>
+        /// <param name=""name"">The name to check if it's defined.</param>
+        /// <param name=""allowMatchingMetadataAttribute"">If <see langword=""true"" />, considers the value of metadata attributes,otherwise ignores them.</param>
+        /// <returns><see langword=""true"" /> if a member with the name exists in the enumeration, or a member is decorated
+        /// with a <c>[Display]</c> attribute with the name, <see langword=""false"" /> otherwise.</returns>
         public static bool IsDefined(string name, bool allowMatchingMetadataAttribute)
         {");
         if (enumToGenerate.IsDisplayAttributeUsed)
@@ -180,16 +178,14 @@ namespace ").Append(enumToGenerate.Namespace).Append(@"
             }
 
             sb.Append(@"
-                    _ => false,
+                    _ => false
                 };
             }
 
             if (isDefinedInDisplayAttribute)
             {
                 return true;
-            }
-
-            ");
+            }").AppendLine();
         }
 
         sb.Append(@"
@@ -202,30 +198,44 @@ namespace ").Append(enumToGenerate.Namespace).Append(@"
         }
 
         sb.Append(@"
-                _ => false,
+                _ => false
             };
-        }");
+        }")
+            .AppendLine();
 
+        foreach (var member in enumToGenerate.Names)
+        {
+            sb.Append(@"
+        private static readonly ReadOnlyMemory<char> ").Append(member.Key.GetPrivateMemoryFieldName()).Append(@" = """)
+                .Append(member.Key).Append(@""".AsMemory();");
+        }
+
+        foreach (var member in enumToGenerate.Names.Where(static m =>
+                     m.Value.DisplayName is not null && m.Value.IsDisplayNameTheFirstPresence))
+        {
+            sb.Append(@"
+        private static readonly ReadOnlyMemory<char> ").Append(member.Key.GetPrivateDisplayMemoryFieldName())
+                .Append(@" = """).Append(member.Value.DisplayName).Append(@""".AsMemory();");
+        }
+
+        sb.AppendLine();
         sb.Append(@"
-
-#if NETCOREAPP && !NETCOREAPP2_0 && !NETCOREAPP1_1 && !NETCOREAPP1_0
         /// <summary>
-        /// Returns a boolean telling whether an enum with the given name exists in the enumeration
+        /// Returns a boolean telling whether an enum with the given name exists in the enumeration.
         /// </summary>
-        /// <param name=""name"">The name to check if it's defined</param>
-        /// <returns><c>true</c> if a member with the name exists in the enumeration, <c>false</c> otherwise</returns>
-        public static bool IsDefined(in ReadOnlySpan<char> name) => IsDefined(name, allowMatchingMetadataAttribute: false);
+        /// <param name=""name"">The name to check if it's defined.</param>
+        /// <returns><see langword=""true"" /> if a member with the name exists in the enumeration, <see langword=""false"" /> otherwise.</returns>
+        public static bool IsDefined(in ReadOnlySpan<char> name) => IsDefined(name, false);
 
         /// <summary>
         /// Returns a boolean telling whether an enum with the given name exists in the enumeration,
         /// or optionally if a member decorated with a <c>[Display]</c> attribute
         /// with the required name exists.
-        /// Slower then the <see cref=""IsDefined(string, bool)"" /> overload, but doesn't allocate memory./>
         /// </summary>
-        /// <param name=""name"">The name to check if it's defined</param>
-        /// <param name=""allowMatchingMetadataAttribute"">If <c>true</c>, considers the value of metadata attributes,otherwise ignores them</param>
-        /// <returns><c>true</c> if a member with the name exists in the enumeration, or a member is decorated
-        /// with a <c>[Display]</c> attribute with the name, <c>false</c> otherwise</returns>
+        /// <param name=""name"">The name to check if it's defined.</param>
+        /// <param name=""allowMatchingMetadataAttribute"">If <see langword=""true"" />, considers the value of metadata attributes, otherwise ignores them.</param>
+        /// <returns><see langword=""true"" /> if a member with the name exists in the enumeration, or a member is decorated
+        /// with a <c>[Display]</c> attribute with the name, <see langword=""false"" /> otherwise.</returns>
         public static bool IsDefined(in ReadOnlySpan<char> name, bool allowMatchingMetadataAttribute)
         {");
 
@@ -242,12 +252,12 @@ namespace ").Append(enumToGenerate.Namespace).Append(@"
                 if (member.Value.DisplayName is not null && member.Value.IsDisplayNameTheFirstPresence)
                 {
                     sb.Append(@"
-                    ReadOnlySpan<char> current when current.Equals(""").Append(member.Value.DisplayName).Append(@""".AsSpan(), global::System.StringComparison.Ordinal) => true,");
+                    var current when current.Equals(").Append(member.Key.GetPrivateDisplayMemoryFieldName()).Append(@".Span, global::System.StringComparison.Ordinal) => true,");
                 }
             }
 
             sb.Append(@"
-                    _ => false,
+                    _ => false
                 };
             }
 
@@ -264,15 +274,13 @@ namespace ").Append(enumToGenerate.Namespace).Append(@"
         foreach (var member in enumToGenerate.Names)
         {
             sb.Append(@"
-                ReadOnlySpan<char> current when current.Equals(nameof(").Append(enumToGenerate.FullyQualifiedName).Append('.').Append(member.Key)
-                .Append(@").AsSpan(), global::System.StringComparison.Ordinal) => true,");
+                var current when current.Equals(").Append(member.Key.GetPrivateMemoryFieldName()).Append(@".Span, global::System.StringComparison.Ordinal) => true,");
         }
 
         sb.Append(@"
-                _ => false,
+                _ => false
             };
-        }
-#endif");
+        }");
 
         sb.Append(@"
 
@@ -281,18 +289,16 @@ namespace ").Append(enumToGenerate.Namespace).Append(@"
         /// an <see cref=""").Append(enumToGenerate.FullyQualifiedName).Append(@""" /> to the equivalent instance.
         /// The return value indicates whether the conversion succeeded.
         /// </summary>
-        /// <param name=""name"">The case-sensitive string representation of the enumeration name or underlying value to convert</param>
-        /// <param name=""value"">When this method returns, contains an object of type 
+        /// <param name=""name"">The case-sensitive string representation of the enumeration name or underlying value to convert.</param>
+        /// <param name=""value"">When this method returns, contains an object of type
         /// <see cref=""").Append(enumToGenerate.FullyQualifiedName).Append(@""" /> whose
         /// value is represented by <paramref name=""value""/> if the parse operation succeeds.
         /// If the parse operation fails, contains the default value of the underlying type
         /// of <see cref=""").Append(enumToGenerate.FullyQualifiedName).Append(@""" />. This parameter is passed uninitialized.</param>
-        /// <returns><c>true</c> if the value parameter was converted successfully; otherwise, <c>false</c>.</returns>
+        /// <returns><see langword=""true"" /> if the value parameter was converted successfully; otherwise, <see langword=""false"" />.</returns>
         public static bool TryParse(
-#if NETCOREAPP3_0_OR_GREATER
             [global::System.Diagnostics.CodeAnalysis.NotNullWhen(true)]
-#endif
-            string? name, 
+            string? name,
             out ").Append(enumToGenerate.FullyQualifiedName).Append(@" value)
             => TryParse(name, out value, false, false);");
         sb.Append(@"
@@ -302,21 +308,19 @@ namespace ").Append(enumToGenerate.Namespace).Append(@"
         /// an <see cref=""").Append(enumToGenerate.FullyQualifiedName).Append(@""" /> to the equivalent instance.
         /// The return value indicates whether the conversion succeeded.
         /// </summary>
-        /// <param name=""name"">The string representation of the enumeration name or underlying value to convert</param>
-        /// <param name=""value"">When this method returns, contains an object of type 
+        /// <param name=""name"">The string representation of the enumeration name or underlying value to convert.</param>
+        /// <param name=""value"">When this method returns, contains an object of type
         /// <see cref=""").Append(enumToGenerate.FullyQualifiedName).Append(@""" /> whose
         /// value is represented by <paramref name=""value""/> if the parse operation succeeds.
         /// If the parse operation fails, contains the default value of the underlying type
         /// of <see cref=""").Append(enumToGenerate.FullyQualifiedName).Append(@""" />. This parameter is passed uninitialized.</param>
-        /// <param name=""ignoreCase""><c>true</c> to read value in case insensitive mode; <c>false</c> to read value in case sensitive mode.</param>
-        /// <returns><c>true</c> if the value parameter was converted successfully; otherwise, <c>false</c>.</returns>
+        /// <param name=""ignoreCase""><see langword=""true"" /> to read value in case insensitive mode; <see langword=""false"" /> to read value in case sensitive mode.</param>
+        /// <returns><see langword=""true"" /> if the value parameter was converted successfully; otherwise, <see langword=""false"" />.</returns>
         public static bool TryParse(
-#if NETCOREAPP3_0_OR_GREATER
             [global::System.Diagnostics.CodeAnalysis.NotNullWhen(true)]
-#endif
-            string? name, 
+            string? name,
             out ").Append(enumToGenerate.FullyQualifiedName).Append(@" value,
-            bool ignoreCase) 
+            bool ignoreCase)
             => TryParse(name, out value, ignoreCase, false);");
         sb.Append(@"
 
@@ -325,23 +329,21 @@ namespace ").Append(enumToGenerate.Namespace).Append(@"
         /// an <see cref=""").Append(enumToGenerate.FullyQualifiedName).Append(@""" /> to the equivalent instance.
         /// The return value indicates whether the conversion succeeded.
         /// </summary>
-        /// <param name=""name"">The string representation of the enumeration name or underlying value to convert</param>
-        /// <param name=""value"">When this method returns, contains an object of type 
+        /// <param name=""name"">The string representation of the enumeration name or underlying value to convert.</param>
+        /// <param name=""value"">When this method returns, contains an object of type
         /// <see cref=""").Append(enumToGenerate.FullyQualifiedName).Append(@""" /> whose
         /// value is represented by <paramref name=""value""/> if the parse operation succeeds.
         /// If the parse operation fails, contains the default value of the underlying type
         /// of <see cref=""").Append(enumToGenerate.FullyQualifiedName).Append(@""" />. This parameter is passed uninitialized.</param>
-        /// <param name=""ignoreCase""><c>true</c> to read value in case insensitive mode; <c>false</c> to read value in case sensitive mode.</param>
-        /// <param name=""allowMatchingMetadataAttribute"">If <c>true</c>, considers the value included in metadata attributes such as
+        /// <param name=""ignoreCase""><see langword=""true"" /> to read value in case insensitive mode; <see langword=""false"" /> to read value in case sensitive mode.</param>
+        /// <param name=""allowMatchingMetadataAttribute"">If <see langword=""true"" />, considers the value included in metadata attributes such as
         /// <c>[Display]</c> attribute when parsing, otherwise only considers the member names.</param>
-        /// <returns><c>true</c> if the value parameter was converted successfully; otherwise, <c>false</c>.</returns>
+        /// <returns><see langword=""true"" /> if the value parameter was converted successfully; otherwise, <see langword=""false"" />.</returns>
         public static bool TryParse(
-#if NETCOREAPP3_0_OR_GREATER
             [global::System.Diagnostics.CodeAnalysis.NotNullWhen(true)]
-#endif
-            string? name, 
-            out ").Append(enumToGenerate.FullyQualifiedName).Append(@" value, 
-            bool ignoreCase, 
+            string? name,
+            out ").Append(enumToGenerate.FullyQualifiedName).Append(@" value,
+            bool ignoreCase,
             bool allowMatchingMetadataAttribute)
         {");
 
@@ -354,21 +356,20 @@ namespace ").Append(enumToGenerate.Namespace).Append(@"
                 {
                     switch (name)
                     {");
+
             foreach (var member in enumToGenerate.Names)
             {
                 if (member.Value.DisplayName is not null && member.Value.IsDisplayNameTheFirstPresence)
                 {
                     sb.Append(@"
-                        case string s when s.Equals(""").Append(member.Value.DisplayName).Append(@""", global::System.StringComparison.OrdinalIgnoreCase):
+                        case not null when name.Equals(""").Append(member.Value.DisplayName).Append(@""", global::System.StringComparison.OrdinalIgnoreCase):
                             value = ").Append(enumToGenerate.FullyQualifiedName).Append('.').Append(member.Key).Append(@";
                             return true;");
                 }
             }
 
             sb.Append(@"
-                        default:
-                            break;
-                    };
+                    }
                 }
                 else
                 {
@@ -386,9 +387,7 @@ namespace ").Append(enumToGenerate.Namespace).Append(@"
             }
 
             sb.Append(@"
-                        default:
-                            break;
-                    };
+                    }
                 }
             }
 ");
@@ -402,14 +401,13 @@ namespace ").Append(enumToGenerate.Namespace).Append(@"
         foreach (var member in enumToGenerate.Names)
         {
             sb.Append(@"
-                    case string s when s.Equals(nameof(").Append(enumToGenerate.FullyQualifiedName).Append('.').Append(member.Key).Append(
-                @"), global::System.StringComparison.OrdinalIgnoreCase):
+                    case not null when name.Equals(nameof(").Append(enumToGenerate.FullyQualifiedName).Append('.').Append(member.Key).Append(@"), global::System.StringComparison.OrdinalIgnoreCase):
                         value = ").Append(enumToGenerate.FullyQualifiedName).Append('.').Append(member.Key).Append(@";
                         return true;");
         }
 
         sb.Append(@"
-                    case string s when ").Append(enumToGenerate.UnderlyingType).Append(@".TryParse(name, out var val):
+                    case { Length: > 0 } when ").Append(enumToGenerate.UnderlyingType).Append(@".TryParse(name, out var val):
                         value = (").Append(enumToGenerate.FullyQualifiedName).Append(@")val;
                         return true;
                     default:
@@ -417,49 +415,44 @@ namespace ").Append(enumToGenerate.Namespace).Append(@"
                         return false;
                 }
             }
-            else
-            {
-                switch (name)
-                {");
+
+            switch (name)
+            {");
         foreach (var member in enumToGenerate.Names)
         {
             sb.Append(@"
-                    case nameof(").Append(enumToGenerate.FullyQualifiedName).Append('.').Append(member.Key).Append(@"):
-                        value = ").Append(enumToGenerate.FullyQualifiedName).Append('.').Append(member.Key).Append(@";
-                        return true;");
+                case nameof(").Append(enumToGenerate.FullyQualifiedName).Append('.').Append(member.Key).Append(@"):
+                    value = ").Append(enumToGenerate.FullyQualifiedName).Append('.').Append(member.Key).Append(@";
+                    return true;");
         }
 
         sb.Append(@"
-                    case string s when ").Append(enumToGenerate.UnderlyingType).Append(@".TryParse(name, out var val):
-                        value = (").Append(enumToGenerate.FullyQualifiedName).Append(@")val;
-                        return true;
-                    default:
-                        value = default;
-                        return false;
-                }
+                case { Length: > 0 } when ").Append(enumToGenerate.UnderlyingType).Append(@".TryParse(name, out var val):
+                    value = (").Append(enumToGenerate.FullyQualifiedName).Append(@")val;
+                    return true;
+                default:
+                    value = default;
+                    return false;
             }
         }");
 
         sb.Append(@"
 
-#if NETCOREAPP && !NETCOREAPP2_0 && !NETCOREAPP1_1 && !NETCOREAPP1_0
         /// <summary>
         /// Converts the span representation of the name or numeric value of
         /// an <see cref=""").Append(enumToGenerate.FullyQualifiedName).Append(@""" /> to the equivalent instance.
         /// The return value indicates whether the conversion succeeded.
         /// </summary>
-        /// <param name=""name"">The span representation of the enumeration name or underlying value to convert</param>
-        /// <param name=""value"">When this method returns, contains an object of type 
+        /// <param name=""name"">The span representation of the enumeration name or underlying value to convert.</param>
+        /// <param name=""value"">When this method returns, contains an object of type
         /// <see cref=""").Append(enumToGenerate.FullyQualifiedName).Append(@""" /> whose
         /// value is represented by <paramref name=""value""/> if the parse operation succeeds.
         /// If the parse operation fails, contains the default value of the underlying type
         /// of <see cref=""").Append(enumToGenerate.FullyQualifiedName).Append(@""" />. This parameter is passed uninitialized.</param>
-        /// <returns><c>true</c> if the value parameter was converted successfully; otherwise, <c>false</c>.</returns>
+        /// <returns><see langword=""true"" /> if the value parameter was converted successfully; otherwise, <see langword=""false"" />.</returns>
         public static bool TryParse(
-#if NETCOREAPP3_0_OR_GREATER
             [global::System.Diagnostics.CodeAnalysis.NotNullWhen(true)]
-#endif
-            in ReadOnlySpan<char> name, 
+            in ReadOnlySpan<char> name,
             out ").Append(enumToGenerate.FullyQualifiedName).Append(@" value)
             => TryParse(name, out value, false, false);");
         sb.Append(@"
@@ -469,21 +462,19 @@ namespace ").Append(enumToGenerate.Namespace).Append(@"
         /// an <see cref=""").Append(enumToGenerate.FullyQualifiedName).Append(@""" /> to the equivalent instance.
         /// The return value indicates whether the conversion succeeded.
         /// </summary>
-        /// <param name=""name"">The span representation of the enumeration name or underlying value to convert</param>
-        /// <param name=""value"">When this method returns, contains an object of type 
+        /// <param name=""name"">The span representation of the enumeration name or underlying value to convert.</param>
+        /// <param name=""value"">When this method returns, contains an object of type
         /// <see cref=""").Append(enumToGenerate.FullyQualifiedName).Append(@""" /> whose
         /// value is represented by <paramref name=""value""/> if the parse operation succeeds.
         /// If the parse operation fails, contains the default value of the underlying type
         /// of <see cref=""").Append(enumToGenerate.FullyQualifiedName).Append(@""" />. This parameter is passed uninitialized.</param>
-        /// <param name=""ignoreCase""><c>true</c> to read value in case insensitive mode; <c>false</c> to read value in case sensitive mode.</param>
-        /// <returns><c>true</c> if the value parameter was converted successfully; otherwise, <c>false</c>.</returns>
+        /// <param name=""ignoreCase""><see langword=""true"" /> to read value in case insensitive mode; <see langword=""false"" /> to read value in case sensitive mode.</param>
+        /// <returns><see langword=""true"" /> if the value parameter was converted successfully; otherwise, <see langword=""false"" />.</returns>
         public static bool TryParse(
-#if NETCOREAPP3_0_OR_GREATER
             [global::System.Diagnostics.CodeAnalysis.NotNullWhen(true)]
-#endif
-            in ReadOnlySpan<char> name, 
+            in ReadOnlySpan<char> name,
             out ").Append(enumToGenerate.FullyQualifiedName).Append(@" value,
-            bool ignoreCase) 
+            bool ignoreCase)
             => TryParse(name, out value, ignoreCase, false);");
 
         sb.Append(@"
@@ -493,23 +484,21 @@ namespace ").Append(enumToGenerate.Namespace).Append(@"
         /// an <see cref=""").Append(enumToGenerate.FullyQualifiedName).Append(@""" /> to the equivalent instance.
         /// The return value indicates whether the conversion succeeded.
         /// </summary>
-        /// <param name=""name"">The span representation of the enumeration name or underlying value to convert</param>
-        /// <param name=""result"">When this method returns, contains an object of type 
+        /// <param name=""name"">The span representation of the enumeration name or underlying value to convert.</param>
+        /// <param name=""result"">When this method returns, contains an object of type
         /// <see cref=""").Append(enumToGenerate.FullyQualifiedName).Append(@""" /> whose
         /// value is represented by <paramref name=""result""/> if the parse operation succeeds.
         /// If the parse operation fails, contains the default value of the underlying type
         /// of <see cref=""").Append(enumToGenerate.FullyQualifiedName).Append(@""" />. This parameter is passed uninitialized.</param>
-        /// <param name=""ignoreCase""><c>true</c> to read value in case insensitive mode; <c>false</c> to read value in case sensitive mode.</param>
-        /// <param name=""allowMatchingMetadataAttribute"">If <c>true</c>, considers the value included in metadata attributes such as
+        /// <param name=""ignoreCase""><see langword=""true"" /> to read value in case insensitive mode; <see langword=""false"" /> to read value in case sensitive mode.</param>
+        /// <param name=""allowMatchingMetadataAttribute"">If <see langword=""true"" />, considers the value included in metadata attributes such as
         /// <c>[Display]</c> attribute when parsing, otherwise only considers the member names.</param>
-        /// <returns><c>true</c> if the value parameter was converted successfully; otherwise, <c>false</c>.</returns>
+        /// <returns><see langword=""true"" /> if the value parameter was converted successfully; otherwise, <see langword=""false"" />.</returns>
         public static bool TryParse(
-#if NETCOREAPP3_0_OR_GREATER
             [global::System.Diagnostics.CodeAnalysis.NotNullWhen(true)]
-#endif
-            in ReadOnlySpan<char> name, 
-            out ").Append(enumToGenerate.FullyQualifiedName).Append(@" result, 
-            bool ignoreCase,             
+            in ReadOnlySpan<char> name,
+            out ").Append(enumToGenerate.FullyQualifiedName).Append(@" result,
+            bool ignoreCase,
             bool allowMatchingMetadataAttribute)
         {");
 
@@ -522,22 +511,22 @@ namespace ").Append(enumToGenerate.Namespace).Append(@"
                 {
                     switch (name)
                     {");
+
             foreach (var member in enumToGenerate.Names)
             {
                 if (member.Value.DisplayName is not null && member.Value.IsDisplayNameTheFirstPresence)
                 {
                     sb.Append(@"
-                        case ReadOnlySpan<char> current when current.Equals(""").Append(member.Value.DisplayName).Append(
-                        @""".AsSpan(), global::System.StringComparison.OrdinalIgnoreCase):
-                            result = ").Append(enumToGenerate.FullyQualifiedName).Append('.').Append(member.Key).Append(@";
+                        case var current when current.Equals(").Append(member.Key.GetPrivateDisplayMemoryFieldName())
+                        .Append(@".Span, global::System.StringComparison.OrdinalIgnoreCase):
+                            result = ").Append(enumToGenerate.FullyQualifiedName).Append('.').Append(member.Key)
+                        .Append(@";
                             return true;");
                 }
             }
 
             sb.Append(@"
-                        default:
-                            break;
-                    };
+                    }
                 }
                 else
                 {
@@ -548,16 +537,15 @@ namespace ").Append(enumToGenerate.Namespace).Append(@"
                 if (member.Value.DisplayName is not null && member.Value.IsDisplayNameTheFirstPresence)
                 {
                     sb.Append(@"
-                        case ReadOnlySpan<char> current when current.Equals(""").Append(member.Value.DisplayName).Append(@""".AsSpan(), global::System.StringComparison.Ordinal):
+                        case var current when current.Equals(").Append(member.Key.GetPrivateDisplayMemoryFieldName())
+                        .Append(@".Span, global::System.StringComparison.Ordinal):
                             result = ").Append(enumToGenerate.FullyQualifiedName).Append('.').Append(member.Key).Append(@";
                             return true;");
                 }
             }
 
             sb.Append(@"
-                        default:
-                            break;
-                    };
+                    }
                 }
             }
 ");
@@ -571,14 +559,13 @@ namespace ").Append(enumToGenerate.Namespace).Append(@"
         foreach (var member in enumToGenerate.Names)
         {
             sb.Append(@"
-                    case ReadOnlySpan<char> current when current.Equals(nameof(").Append(enumToGenerate.FullyQualifiedName).Append('.').Append(member.Key).Append(
-                @").AsSpan(), global::System.StringComparison.OrdinalIgnoreCase):
+                    case var current when current.Equals(").Append(member.Key.GetPrivateMemoryFieldName()).Append(@".Span, global::System.StringComparison.OrdinalIgnoreCase):
                         result = ").Append(enumToGenerate.FullyQualifiedName).Append('.').Append(member.Key).Append(@";
                         return true;");
         }
 
         sb.Append(@"
-                    case ReadOnlySpan<char> current when ").Append(enumToGenerate.UnderlyingType).Append(@".TryParse(name, out var numericResult):
+                    case { IsEmpty: false } when ").Append(enumToGenerate.UnderlyingType).Append(@".TryParse(name, out var numericResult):
                         result = (").Append(enumToGenerate.FullyQualifiedName).Append(@")numericResult;
                         return true;
                     default:
@@ -586,43 +573,143 @@ namespace ").Append(enumToGenerate.Namespace).Append(@"
                         return false;
                 }
             }
-            else
-            {
-                switch (name)
-                {");
+
+            switch (name)
+            {");
         foreach (var member in enumToGenerate.Names)
         {
             sb.Append(@"
-                    case ReadOnlySpan<char> current when current.Equals(nameof(").Append(enumToGenerate.FullyQualifiedName).Append('.').Append(member.Key).Append(
-                @").AsSpan(), global::System.StringComparison.Ordinal):
-                        result = ").Append(enumToGenerate.FullyQualifiedName).Append('.').Append(member.Key).Append(@";
-                        return true;");
+                case var current when current.Equals(").Append(member.Key.GetPrivateMemoryFieldName()).Append(@".Span, global::System.StringComparison.Ordinal):
+                    result = ").Append(enumToGenerate.FullyQualifiedName).Append('.').Append(member.Key).Append(@";
+                    return true;");
         }
 
         sb.Append(@"
-                    case ReadOnlySpan<char> current when ").Append(enumToGenerate.UnderlyingType).Append(@".TryParse(name, out var numericResult):
-                        result = (").Append(enumToGenerate.FullyQualifiedName).Append(@")numericResult;
-                        return true;
-                    default:
-                        result = default;
-                        return false;
-                }
+                case { IsEmpty: false } when ").Append(enumToGenerate.UnderlyingType).Append(@".TryParse(name, out var numericResult):
+                    result = (").Append(enumToGenerate.FullyQualifiedName).Append(@")numericResult;
+                    return true;
+                default:
+                    result = default;
+                    return false;
+            }
+        }");
+
+        sb.AppendLine().Append(@"
+        /// <summary>
+        /// Retrieves an array of the metadata or <see langword=""default"" /> values of the members defined in
+        /// <see cref=""").Append(enumToGenerate.FullyQualifiedName).Append(@""" />.
+        /// Note that this returns a new array with every invocation, so
+        /// should be cached if appropriate.
+        /// </summary>
+        /// <returns>An array of the metadata or <see langword=""default"" /> values defined in <see cref=""").Append(enumToGenerate.FullyQualifiedName).Append(@""" />.</returns>
+        public static string[] GetMetadataNamesOrDefault() =>
+            new[]
+            {");
+        foreach (var member in enumToGenerate.Names)
+        {
+            if (member.Value.DisplayName is not null)
+            {
+                sb.Append(@"
+                ").Append('"').Append(member.Value.DisplayName).Append(@""",");
+            }
+            else
+            {
+                sb.Append(@"
+                nameof(").Append(enumToGenerate.FullyQualifiedName).Append('.').Append(member.Key).Append(')').Append(',');
             }
         }
-#endif");
 
         sb.Append(@"
+            };");
 
+        sb.AppendLine().Append(@"
+        /// <summary>
+        /// Gets the <see cref=""").Append(enumToGenerate.FullyQualifiedName).Append(@""" /> representation of the <paramref name=""name""/>
+        /// or <see langword=""default"" /> if there's no match.
+        /// </summary>
+        /// <param name=""name"">The value that should be matched.</param>
+        /// <returns>The matching <see cref=""").Append(enumToGenerate.FullyQualifiedName).Append(@""" /> or <see langword=""null"" /> if there was no match.</returns>
+        public static ").Append(enumToGenerate.FullyQualifiedName).Append(@"? GetValueOrDefault(string? name) =>");
+        sb.Append(@"
+            TryParse(name, out ").Append(enumToGenerate.FullyQualifiedName)
+            .Append(" value) ? value : null;");
+
+        sb.AppendLine().Append(@"
+        /// <summary>
+        /// Gets the <see cref=""").Append(enumToGenerate.FullyQualifiedName).Append(@""" /> representation of the <paramref name=""name""/>
+        /// or <see langword=""default"" /> if there's no match.
+        /// </summary>
+        /// <param name=""name"">The value that should be matched.</param>
+        /// <returns>The matching <see cref=""").Append(enumToGenerate.FullyQualifiedName).Append(@""" /> or <see langword=""null"" /> if there was no match.</returns>
+        public static ").Append(enumToGenerate.FullyQualifiedName).Append(@"? GetValueOrDefault(in ReadOnlySpan<char> name) =>");
+        sb.Append(@"
+            TryParse(name, out ").Append(enumToGenerate.FullyQualifiedName)
+            .Append(" value) ? value : null;");
+
+        sb.AppendLine().Append(@"
+        /// <summary>
+        /// Gets the <see cref=""").Append(enumToGenerate.FullyQualifiedName).Append(@""" /> representation of the <paramref name=""name""/>
+        /// or <see langword=""default"" /> if there's no match.
+        /// </summary>
+        /// <param name=""name"">The value that should be matched.</param>
+        /// <param name=""ignoreCase""><see langword=""true"" /> to read value in case insensitive mode; <see langword=""false"" /> to read value in case sensitive mode.</param>
+        /// <returns>The matching <see cref=""").Append(enumToGenerate.FullyQualifiedName).Append(@""" /> or <see langword=""null"" /> if there was no match.</returns>
+        public static ").Append(enumToGenerate.FullyQualifiedName).Append(@"? GetValueOrDefault(string? name, bool ignoreCase) =>");
+        sb.Append(@"
+            TryParse(name, out ").Append(enumToGenerate.FullyQualifiedName)
+            .Append(" value, ignoreCase) ? value : null;");
+
+        sb.AppendLine().Append(@"
+        /// <summary>
+        /// Gets the <see cref=""").Append(enumToGenerate.FullyQualifiedName).Append(@""" /> representation of the <paramref name=""name""/>
+        /// or <see langword=""default"" /> if there's no match.
+        /// </summary>
+        /// <param name=""name"">The value that should be matched.</param>
+        /// <param name=""ignoreCase""><see langword=""true"" /> to read value in case insensitive mode; <see langword=""false"" /> to read value in case sensitive mode.</param>
+        /// <returns>The matching <see cref=""").Append(enumToGenerate.FullyQualifiedName).Append(@""" /> or <see langword=""null"" /> if there was no match.</returns>
+        public static ").Append(enumToGenerate.FullyQualifiedName).Append(@"? GetValueOrDefault(in ReadOnlySpan<char> name, bool ignoreCase) =>");
+        sb.Append(@"
+            TryParse(name, out ").Append(enumToGenerate.FullyQualifiedName)
+            .Append(" value, ignoreCase) ? value : null;");
+
+        sb.AppendLine().Append(@"
+        /// <summary>
+        /// Gets the <see cref=""").Append(enumToGenerate.FullyQualifiedName).Append(@""" /> representation of the <paramref name=""name""/>
+        /// or <see langword=""default"" /> if there's no match.
+        /// </summary>
+        /// <param name=""name"">The value that should be matched.</param>
+        /// <param name=""ignoreCase""><see langword=""true"" /> to read value in case insensitive mode; <see langword=""false"" /> to read value in case sensitive mode.</param>
+        /// <param name=""allowMatchingMetadataAttribute"">If <see langword=""true"" />, considers the value of metadata attributes,otherwise ignores them.</param>
+        /// <returns>The matching <see cref=""").Append(enumToGenerate.FullyQualifiedName).Append(@""" /> or <see langword=""null"" /> if there was no match.</returns>
+        public static ").Append(enumToGenerate.FullyQualifiedName).Append(@"? GetValueOrDefault(string? name, bool ignoreCase, bool allowMatchingMetadataAttribute) =>");
+        sb.Append(@"
+            TryParse(name, out ").Append(enumToGenerate.FullyQualifiedName)
+            .Append(" value, ignoreCase, allowMatchingMetadataAttribute) ? value : null;");
+
+        sb.AppendLine().Append(@"
+        /// <summary>
+        /// Gets the <see cref=""").Append(enumToGenerate.FullyQualifiedName).Append(@""" /> representation of the <paramref name=""name""/>
+        /// or <see langword=""default"" /> if there's no match.
+        /// </summary>
+        /// <param name=""name"">The value that should be matched.</param>
+        /// <param name=""ignoreCase""><see langword=""true"" /> to read value in case insensitive mode; <see langword=""false"" /> to read value in case sensitive mode.</param>
+        /// <param name=""allowMatchingMetadataAttribute"">If <see langword=""true"" />, considers the value of metadata attributes,otherwise ignores them.</param>
+        /// <returns>The matching <see cref=""").Append(enumToGenerate.FullyQualifiedName).Append(@""" /> or <see langword=""null"" /> if there was no match.</returns>
+        public static ").Append(enumToGenerate.FullyQualifiedName).Append(@"? GetValueOrDefault(in ReadOnlySpan<char> name, bool ignoreCase, bool allowMatchingMetadataAttribute) =>");
+        sb.Append(@"
+            TryParse(name, out ").Append(enumToGenerate.FullyQualifiedName)
+            .Append(" value, ignoreCase, allowMatchingMetadataAttribute) ? value : null;");
+
+        sb.AppendLine().Append(@"
         /// <summary>
         /// Retrieves an array of the values of the members defined in
         /// <see cref=""").Append(enumToGenerate.FullyQualifiedName).Append(@""" />.
         /// Note that this returns a new array with every invocation, so
         /// should be cached if appropriate.
         /// </summary>
-        /// <returns>An array of the values defined in <see cref=""").Append(enumToGenerate.FullyQualifiedName).Append(@""" /></returns>
-        public static ").Append(enumToGenerate.FullyQualifiedName).Append(@"[] GetValues()
-        {
-            return new[]
+        /// <returns>An array of the values defined in <see cref=""").Append(enumToGenerate.FullyQualifiedName).Append(@""" />.</returns>
+        public static ").Append(enumToGenerate.FullyQualifiedName).Append(@"[] GetValues() =>
+            new[]
             {");
         foreach (var member in enumToGenerate.Names)
         {
@@ -631,10 +718,9 @@ namespace ").Append(enumToGenerate.Namespace).Append(@"
         }
 
         sb.Append(@"
-            };
-        }");
+            };");
 
-        sb.Append(@"
+        sb.AppendLine().Append(@"
 
         /// <summary>
         /// Retrieves an array of the names of the members defined in
@@ -642,10 +728,9 @@ namespace ").Append(enumToGenerate.Namespace).Append(@"
         /// Note that this returns a new array with every invocation, so
         /// should be cached if appropriate.
         /// </summary>
-        /// <returns>An array of the names of the members defined in <see cref=""").Append(enumToGenerate.FullyQualifiedName).Append(@""" /></returns>
-        public static string[] GetNames()
-        {
-            return new[]
+        /// <returns>An array of the names of the members defined in <see cref=""").Append(enumToGenerate.FullyQualifiedName).Append(@""" />.</returns>
+        public static string[] GetNames() =>
+            new[]
             {");
         foreach (var member in enumToGenerate.Names)
         {
@@ -655,13 +740,139 @@ namespace ").Append(enumToGenerate.Namespace).Append(@"
 
         sb.Append(@"
             };
-        }
     }");
+
         if (!string.IsNullOrEmpty(enumToGenerate.Namespace))
         {
             sb.Append(@"
 }");
         }
+
+        return sb.ToString();
+    }
+
+    internal const string EnumJsonConverterAttribute = Header + @"
+
+#if NETESCAPADES_ENUMGENERATORS_EMBED_ATTRIBUTES
+namespace NetEscapades.EnumGenerators
+{
+    /// <summary>
+    /// Add to enums to indicate that a JsonConverter for the enum should be generated.
+    /// </summary>
+    [System.AttributeUsage(System.AttributeTargets.Enum)]
+    [System.Diagnostics.Conditional(""NETESCAPADES_ENUMGENERATORS_USAGES"")]
+    public class EnumJsonConverterAttribute : System.Attribute
+    {
+        /// <summary>
+        /// The converter that should be generated.
+        /// </summary>
+        public System.Type ConverterType { get; }
+
+        /// <summary>
+        /// Indicates if the string representation is case sensitive when deserializing it as an enum.
+        /// </summary>
+        public bool CaseSensitive { get; set; }
+
+        /// <summary>
+        /// Indicates if the value of <see cref=""PropertyName""/> should be camel cased.
+        /// </summary>
+        public bool CamelCase { get; set; }
+
+        /// <summary>
+        /// If set, this value will be used in messages when there are problems with validation and/or serialization/deserialization occurs.
+        /// </summary>
+        public string? PropertyName { get; set; }
+        
+        /// <summary>
+        /// Creates an instance of <see cref=""EnumJsonConverterAttribute""/>.
+        /// </summary>
+        /// <param name=""converterType"">The converter to generate.</param>
+        public EnumJsonConverterAttribute(System.Type converterType)
+        {
+            ConverterType = converterType;
+        }
+    }
+}
+#endif
+";
+
+    public static string GenerateJsonConverterClass(StringBuilder sb, JsonConverterToGenerate jsonConverterToGenerate)
+    {
+        sb.Append(Header)
+            .AppendLine();
+
+        if (!string.IsNullOrEmpty(jsonConverterToGenerate.ConverterNamespace))
+        {
+            sb
+                .Append("namespace ")
+                .Append(jsonConverterToGenerate.ConverterNamespace)
+                .Append(";")
+                .AppendLine();
+        }
+
+        var fullyQualifiedExtension = string.IsNullOrEmpty(jsonConverterToGenerate.ExtensionNamespace)
+            ? jsonConverterToGenerate.ExtensionName
+            : $"{jsonConverterToGenerate.ExtensionNamespace}.{jsonConverterToGenerate.ExtensionName}";
+
+        sb.AppendLine()
+            .AppendLine($"""
+            /// <summary>
+            /// Converts a <see cref="{jsonConverterToGenerate.FullyQualifiedName}" /> to or from JSON.
+            /// </summary>
+            """)
+            .Append(jsonConverterToGenerate.IsPublic ? "public" : "internal").Append(" sealed class ")
+            .Append(jsonConverterToGenerate.ConverterType)
+            .Append(" : global::System.Text.Json.Serialization.JsonConverter<")
+            .Append(jsonConverterToGenerate.FullyQualifiedName)
+            .AppendLine(">")
+            .AppendLine("{");
+
+        var propertyName = jsonConverterToGenerate.PropertyName;
+        if (!string.IsNullOrEmpty(propertyName) && jsonConverterToGenerate.CamelCase)
+        {
+            propertyName = propertyName.ToCamelCase();
+        }
+
+        if (!string.IsNullOrEmpty(propertyName))
+            sb.Append("     private const string PropertyName = \"")
+                .Append(propertyName)
+                .AppendLine("\";")
+                .AppendLine();
+
+        sb.AppendLine($"""
+                 /// <inheritdoc />
+                 /// <summary>
+                 /// Read and convert the JSON to <see cref="{jsonConverterToGenerate.FullyQualifiedName}" />.
+                 /// </summary>
+                 /// <remarks>
+                 /// A converter may throw any Exception, but should throw <see cref="global::System.Text.Json.JsonException" /> when the JSON is invalid.
+                 /// </remarks>
+            """)
+            .Append("     public override ")
+            .Append(jsonConverterToGenerate.FullyQualifiedName)
+            .AppendLine(" Read(ref global::System.Text.Json.Utf8JsonReader reader, global::System.Type typeToConvert, global::System.Text.Json.JsonSerializerOptions options)")
+            .AppendLine("     {")
+            .AppendLine("         var value = reader.GetString();")
+            .Append("         if (")
+            .Append(fullyQualifiedExtension)
+            .Append(".TryParse(value, out var enumValue, ")
+            .Append(jsonConverterToGenerate.CaseSensitive ? "false" : "true")
+            .AppendLine(", true))")
+            .AppendLine("            return enumValue;")
+            .AppendLine()
+            .Append("         throw new global::System.Text.Json.JsonException($\"{value} is not a valid value.\", ")
+            .Append(string.IsNullOrEmpty(propertyName) ? "null" : "PropertyName")
+            .AppendLine(", null, null);")
+            .AppendLine("     }")
+            .AppendLine()
+            .AppendLine("""
+                 /// <inheritdoc />
+            """)
+            .Append("     public override void Write(global::System.Text.Json.Utf8JsonWriter writer, ")
+            .Append(jsonConverterToGenerate.FullyQualifiedName)
+            .AppendLine(" value, global::System.Text.Json.JsonSerializerOptions options)")
+            .Append("         => writer.WriteStringValue(").Append(fullyQualifiedExtension).AppendLine(".ToStringFast(value));")
+            .AppendLine("}");
 
         return sb.ToString();
     }

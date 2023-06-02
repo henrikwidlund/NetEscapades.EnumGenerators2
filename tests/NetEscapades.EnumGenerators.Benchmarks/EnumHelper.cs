@@ -13,7 +13,7 @@ internal static class EnumHelper<T> where T : struct
         var enumValues = (T[])Enum.GetValues(typeof(T));
         foreach (var value in enumValues)
         {
-            if (TryGetDisplayName(value.ToString(), out var displayName) && displayName!.Equals(name, stringComparisonOption))
+            if (TryGetDisplayName(value.ToString(), out var displayName) && displayName.Equals(name, stringComparisonOption))
             {
                 enumValue = value;
                 return true;
@@ -25,53 +25,25 @@ internal static class EnumHelper<T> where T : struct
 
     private static bool TryGetDisplayName(
         string? value,
-#if NETCOREAPP3_0_OR_GREATER
-        [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out string? displayName)
-#else
+        [System.Diagnostics.CodeAnalysis.NotNullWhen(true)]
         out string? displayName)
-#endif
     {
         displayName = default;
 
-        if (typeof(T).IsEnum)
-        {
-            // Prevent: Warning CS8604  Possible null reference argument for parameter 'name' in 'MemberInfo[] Type.GetMember(string name)'
-            if (value is not null)
-            {
-                var memberInfo = typeof(T).GetMember(value);
-                if (memberInfo.Length > 0)
-                {
-                    displayName = memberInfo[0].GetCustomAttribute<DisplayAttribute>()?.GetName();
-                    if (displayName is null)
-                    {
-                        return false;
-                    }
-
-                    return true;
-                }
-            }
-        }
-
-        return false;
+        if (!typeof(T).IsEnum || value is null) return false;
+        // Prevent: Warning CS8604  Possible null reference argument for parameter 'name' in 'MemberInfo[] Type.GetMember(string name)'
+        var memberInfo = typeof(T).GetMember(value);
+        if (memberInfo.Length <= 0) return false;
+        displayName = memberInfo[0].GetCustomAttribute<DisplayAttribute>()?.GetName();
+        return displayName is not null;
     }
 
     internal static string GetDisplayName(T value)
     {
-        if (typeof(T).IsEnum)
-        {
-            var memberInfo = typeof(T).GetMember(value.ToString()!);
-            if (memberInfo.Length > 0)
-            {
-                var displayName = memberInfo[0].GetCustomAttribute<DisplayAttribute>()!.GetName();
-                if (displayName is null)
-                {
-                    return string.Empty;
-                }
-
-                return displayName;
-            }
-        }
-
-        return string.Empty;
+        if (!typeof(T).IsEnum) return string.Empty;
+        var memberInfo = typeof(T).GetMember(value.ToString()!);
+        if (memberInfo.Length <= 0) return string.Empty;
+        var displayName = memberInfo[0].GetCustomAttribute<DisplayAttribute>()!.GetName();
+        return displayName ?? string.Empty;
     }
 }

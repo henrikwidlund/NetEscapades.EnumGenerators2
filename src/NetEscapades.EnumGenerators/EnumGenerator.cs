@@ -15,34 +15,33 @@ public class EnumGenerator : IIncrementalGenerator
 
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
-        context.RegisterPostInitializationOutput(ctx => ctx.AddSource(
+        context.RegisterPostInitializationOutput(static ctx => ctx.AddSource(
             "EnumExtensionsAttribute.g.cs", SourceText.From(SourceGenerationHelper.Attribute, Encoding.UTF8)));
 
-        IncrementalValuesProvider<EnumToGenerate?> enumsToGenerate = context.SyntaxProvider
+        var enumsToGenerate = context.SyntaxProvider
             .ForAttributeWithMetadataName(
                 EnumExtensionsAttribute,
-                predicate: (node, _) => node is EnumDeclarationSyntax,
-                transform: GetTypeToGenerate)
+                static (node, _) => node is EnumDeclarationSyntax,
+                GetTypeToGenerate)
             .Where(static m => m is not null);
 
         context.RegisterSourceOutput(enumsToGenerate,
             static (spc, enumToGenerate) => Execute(in enumToGenerate, spc));
     }
 
-    static void Execute(in EnumToGenerate? enumToGenerate, SourceProductionContext context)
+    private static void Execute(in EnumToGenerate? enumToGenerate, SourceProductionContext context)
     {
         if (enumToGenerate is { } eg)
         {
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new();
             var result = SourceGenerationHelper.GenerateExtensionClass(sb, in eg);
-            context.AddSource(eg.Name + "_EnumExtensions.g.cs", SourceText.From(result, Encoding.UTF8));    
+            context.AddSource(eg.Name + "_EnumExtensions.g.cs", SourceText.From(result, Encoding.UTF8));
         }
     }
 
-    static EnumToGenerate? GetTypeToGenerate(GeneratorAttributeSyntaxContext context, CancellationToken ct)
+    private static EnumToGenerate? GetTypeToGenerate(GeneratorAttributeSyntaxContext context, CancellationToken ct)
     {
-        INamedTypeSymbol? enumSymbol = context.TargetSymbol as INamedTypeSymbol;
-        if (enumSymbol is null)
+        if (context.TargetSymbol is not INamedTypeSymbol enumSymbol)
         {
             // nothing to do if this type isn't available
             return null;
@@ -50,14 +49,13 @@ public class EnumGenerator : IIncrementalGenerator
 
         ct.ThrowIfCancellationRequested();
 
-        string name = enumSymbol.Name + "Extensions";
-        string nameSpace = enumSymbol.ContainingNamespace.IsGlobalNamespace ? string.Empty : enumSymbol.ContainingNamespace.ToString();
+        var name = enumSymbol.Name + "Extensions";
+        var nameSpace = enumSymbol.ContainingNamespace.IsGlobalNamespace ? string.Empty : enumSymbol.ContainingNamespace.ToString();
         var hasFlags = false;
 
-        foreach (AttributeData attributeData in enumSymbol.GetAttributes())
+        foreach (var attributeData in enumSymbol.GetAttributes())
         {
-            if ((attributeData.AttributeClass?.Name == "FlagsAttribute" ||
-                 attributeData.AttributeClass?.Name == "Flags") &&
+            if (attributeData.AttributeClass?.Name is "FlagsAttribute" or "Flags" &&
                 attributeData.AttributeClass.ToDisplayString() == FlagsAttribute)
             {
                 hasFlags = true;
@@ -70,25 +68,22 @@ public class EnumGenerator : IIncrementalGenerator
                 continue;
             }
 
-            foreach (KeyValuePair<string, TypedConstant> namedArgument in attributeData.NamedArguments)
+            foreach (var namedArgument in attributeData.NamedArguments)
             {
-                if (namedArgument.Key == "ExtensionClassNamespace"
-                    && namedArgument.Value.Value?.ToString() is { } ns)
+                switch (namedArgument.Key)
                 {
-                    nameSpace = ns;
-                    continue;
-                }
-
-                if (namedArgument.Key == "ExtensionClassName"
-                    && namedArgument.Value.Value?.ToString() is { } n)
-                {
-                    name = n;
+                    case "ExtensionClassNamespace" when namedArgument.Value.Value?.ToString() is { } ns:
+                        nameSpace = ns;
+                        continue;
+                    case "ExtensionClassName" when namedArgument.Value.Value?.ToString() is { } n:
+                        name = n;
+                        break;
                 }
             }
         }
 
-        string fullyQualifiedName = enumSymbol.ToString();
-        string underlyingType = enumSymbol.EnumUnderlyingType?.ToString() ?? "int";
+        var fullyQualifiedName = enumSymbol.ToString();
+        var underlyingType = enumSymbol.EnumUnderlyingType?.ToString() ?? "int";
 
         var enumMembers = enumSymbol.GetMembers();
         var members = new List<(string, EnumValueOption)>(enumMembers.Length);
@@ -119,8 +114,8 @@ public class EnumGenerator : IIncrementalGenerator
                         }
                     }
                 }
-                
-                if (attribute.AttributeClass?.Name == "DescriptionAttribute" 
+
+                if (attribute.AttributeClass?.Name == "DescriptionAttribute"
                     && attribute.AttributeClass.ToDisplayString() == DescriptionAttribute
                     && attribute.ConstructorArguments.Length == 1)
                 {
@@ -137,20 +132,21 @@ public class EnumGenerator : IIncrementalGenerator
             if (displayName is not null)
             {
                 displayNames ??= new();
-                isDisplayNameTheFirstPresence = displayNames.Add(displayName);    
+                isDisplayNameTheFirstPresence = displayNames.Add(displayName);
             }
-            
+
             members.Add((member.Name, new EnumValueOption(displayName, isDisplayNameTheFirstPresence)));
         }
 
         return new EnumToGenerate(
-            name: name,
-            fullyQualifiedName: fullyQualifiedName,
-            ns: nameSpace,
-            underlyingType: underlyingType,
-            isPublic: enumSymbol.DeclaredAccessibility == Accessibility.Public,
-            hasFlags: hasFlags,
-            names: members,
-            isDisplayAttributeUsed: displayNames?.Count > 0);
+            name,
+            fullyQualifiedName,
+            nameSpace,
+            enumSymbol.DeclaredAccessibility == Accessibility.Public,
+            hasFlags,
+            underlyingType,
+            displayNames?.Count > 0,
+            new EquatableArray<(string Key, EnumValueOption Value)>(members.ToArray())
+        );
     }
 }

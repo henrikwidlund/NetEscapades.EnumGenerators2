@@ -5,7 +5,7 @@
 
 A Source Generator package that generates extension methods for enums, to allow fast "reflection".
 
-> This source generator requires the .NET 7 SDK. You can target earlier frameworks like .NET Core 3.1 etc, but the _SDK_ must be at least 7.0.100
+> This source generator requires the .NET 7 SDK.
 
 Add the package to your application using
 
@@ -23,7 +23,7 @@ This adds a `<PackageReference>` to your project. You can additionally mark the 
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
   </PropertyGroup>
 
   <!-- Add the package -->
@@ -148,15 +148,6 @@ public static partial class MyEnumExtensions
 }
 ```
 
-If you create a "Flags" `enum` by decorating it with the `[Flags]` attribute, an additional method is created, which provides a bitwise alternative to the `Enum.HasFlag(flag)` method:
-
-```csharp
-public static bool HasFlagFast(this MyEnum value, MyEnum flag)
-    => flag == 0 ? true : (value & flag) == flag;
-```
-
-Note that if you provide a `[Display]` or `[Description]` attribute, the value you provide for this attribute can be used by methods like `ToStringFast()` and `TryParse()` by passing the argument `allowMatchingMetadataAttribute: true`. Adding both attributes to an enum member is not supported, though conventionally the "first" attribute will be used.
-
 You can override the name of the extension class by setting `ExtensionClassName` in the attribute and/or the namespace of the class by setting `ExtensionClassNamespace`. By default, the class will be public if the enum is public, otherwise it will be internal.
 
 ## Embedding the attributes in your project
@@ -173,9 +164,9 @@ Your project file should look something like this:
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <!--  Define the MSBuild constant    -->
-    <DefineConstants>$(DefineConstants);NETESCAPADES_ENUMGENERATORS_EMBED_ATTRIBUTES</DefineConstants>
+    <DefineConstants>NETESCAPADES_ENUMGENERATORS_EMBED_ATTRIBUTES</DefineConstants>
   </PropertyGroup>
 
   <!-- Add the package -->
@@ -198,9 +189,9 @@ If you wish to preserve these attributes in the build output, you can define the
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <!--  Define the MSBuild constant to preserve usages   -->
-    <DefineConstants>$(DefineConstants);NETESCAPADES_ENUMGENERATORS_USAGES</DefineConstants>
+    <DefineConstants>NETESCAPADES_ENUMGENERATORS_USAGES</DefineConstants>
   </PropertyGroup>
 
   <!-- Add the package -->

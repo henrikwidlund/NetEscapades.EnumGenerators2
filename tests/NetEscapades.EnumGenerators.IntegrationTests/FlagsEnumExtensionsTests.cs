@@ -1,7 +1,4 @@
 using FluentAssertions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Xunit;
 
 namespace NetEscapades.EnumGenerators.IntegrationTests;
@@ -13,7 +10,7 @@ public class FlagsEnumExtensionsTests : ExtensionTests<FlagsEnum>
         FlagsEnum.First,
         FlagsEnum.Second,
         FlagsEnum.ThirdAndFourth,
-        (FlagsEnum)3,
+        (FlagsEnum)3
     };
 
     public static TheoryData<string> ValuesToParse() => new()
@@ -30,28 +27,31 @@ public class FlagsEnumExtensionsTests : ExtensionTests<FlagsEnum>
         "2147483647",
         "3000000000",
         "Fourth",
-        "Fifth",
+        "Fifth"
     };
 
     protected override string ToStringFast(FlagsEnum value) => value.ToStringFast();
-    protected override bool IsDefined(FlagsEnum value) => FlagsEnumExtensions.IsDefined(value);
-    protected override bool IsDefined(string name, bool allowMatchingMetadataAttribute) => FlagsEnumExtensions.IsDefined(name, allowMatchingMetadataAttribute: false);
-#if READONLYSPAN
-    protected override bool IsDefined(in ReadOnlySpan<char> name, bool allowMatchingMetadataAttribute) => FlagsEnumExtensions.IsDefined(name, allowMatchingMetadataAttribute: false);
-#endif
-    protected override bool TryParse(string name, out FlagsEnum parsed, bool ignoreCase, bool allowMatchingMetadataAttribute)
-        => FlagsEnumExtensions.TryParse(name, out parsed, ignoreCase);
-#if READONLYSPAN
-    protected override bool TryParse(in ReadOnlySpan<char> name, out FlagsEnum parsed, bool ignoreCase, bool allowMatchingMetadataAttribute)
-        => FlagsEnumExtensions.TryParse(name, out parsed, ignoreCase);
-#endif
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="value"></param>
-    /// <remarks>If the underlying value of <paramref name="flag"/> is zero, the method returns true.
-    /// This is consistent with the behaviour of <see cref=""Enum.HasFlag(Enum)""></remarks>
+    protected override bool IsDefined(FlagsEnum value) => FlagsEnumExtensions.IsDefined(value);
+
+    protected override bool IsDefined(string name, bool allowMatchingMetadataAttribute = false)
+        => FlagsEnumExtensions.IsDefined(name, false);
+
+    protected override bool IsDefined(in ReadOnlySpan<char> name, bool allowMatchingMetadataAttribute)
+        => FlagsEnumExtensions.IsDefined(name, false);
+
+    protected override bool TryParse(string name, out FlagsEnum parsed, bool ignoreCase, bool allowMatchingMetadataAttribute)
+        => FlagsEnumExtensions.TryParse(name, out parsed, ignoreCase, allowMatchingMetadataAttribute);
+
+    protected override bool TryParse(in ReadOnlySpan<char> name, out FlagsEnum parsed, bool ignoreCase, bool allowMatchingMetadataAttribute)
+        => FlagsEnumExtensions.TryParse(name, out parsed, ignoreCase, allowMatchingMetadataAttribute);
+
+    protected override FlagsEnum? GetValueOrDefault(string name, bool ignoreCase, bool allowMatchingMetadataAttribute)
+        => FlagsEnumExtensions.GetValueOrDefault(name, ignoreCase, allowMatchingMetadataAttribute);
+
+    protected override FlagsEnum? GetValueOrDefault(in ReadOnlySpan<char> name, bool ignoreCase, bool allowMatchingMetadataAttribute)
+        => FlagsEnumExtensions.GetValueOrDefault(name, ignoreCase, allowMatchingMetadataAttribute);
+
     [Theory]
     [MemberData(nameof(ValidEnumValues))]
     public void GeneratesToStringFast(FlagsEnum value) => GeneratesToStringFastTest(value);
@@ -62,13 +62,11 @@ public class FlagsEnumExtensionsTests : ExtensionTests<FlagsEnum>
 
     [Theory]
     [MemberData(nameof(ValuesToParse))]
-    public void GeneratesIsDefinedUsingName(string name) => GeneratesIsDefinedTest(name, allowMatchingMetadataAttribute: false);
+    public void GeneratesIsDefinedUsingName(string name) => GeneratesIsDefinedTest(name, false);
 
-#if READONLYSPAN
     [Theory]
     [MemberData(nameof(ValuesToParse))]
-    public void GeneratesIsDefinedUsingNameAsSpan(string name) => GeneratesIsDefinedTest(name.AsSpan(), allowMatchingMetadataAttribute: false);
-#endif
+    public void GeneratesIsDefinedUsingNameAsSpan(string name) => GeneratesIsDefinedTest(name.AsSpan(), false);
 
     public static IEnumerable<object[]> AllFlags()
     {
@@ -87,7 +85,7 @@ public class FlagsEnumExtensionsTests : ExtensionTests<FlagsEnum>
             from v2 in values
             select new object[] { v1, v2 };
     }
-    
+
     [Theory]
     [MemberData(nameof(AllFlags))]
     public void HasFlags(FlagsEnum value, FlagsEnum flag)
@@ -99,27 +97,45 @@ public class FlagsEnumExtensionsTests : ExtensionTests<FlagsEnum>
 
     [Theory]
     [MemberData(nameof(ValuesToParse))]
-    public void GeneratesTryParse(string name) => GeneratesTryParseTest(name, ignoreCase: false, allowMatchingMetadataAttribute: false);
-
-#if READONLYSPAN
-    [Theory]
-    [MemberData(nameof(ValuesToParse))]
-    public void GeneratesTryParseAsSpan(string name) => GeneratesTryParseTest(name.AsSpan(), ignoreCase: false, allowMatchingMetadataAttribute: false);
-#endif
+    public void GeneratesTryParse(string name) => GeneratesTryParseTest(name, false, false);
 
     [Theory]
     [MemberData(nameof(ValuesToParse))]
-    public void GeneratesTryParseIgnoreCase(string name) => GeneratesTryParseTest(name, ignoreCase: true, allowMatchingMetadataAttribute: false);
+    public void GeneratesTryParseAsSpan(string name) => GeneratesTryParseTest(name.AsSpan(), false, false);
 
-#if READONLYSPAN
     [Theory]
     [MemberData(nameof(ValuesToParse))]
-    public void GeneratesTryParseIgnoreCaseAsSpan(string name) => GeneratesTryParseTest(name.AsSpan(), ignoreCase: true, allowMatchingMetadataAttribute: false);
-#endif
+    public void GeneratesTryParseIgnoreCase(string name) => GeneratesTryParseTest(name, true, false);
+
+    [Theory]
+    [MemberData(nameof(ValuesToParse))]
+    public void GeneratesTryParseIgnoreCaseAsSpan(string name)
+        => GeneratesTryParseTest(name.AsSpan(), true, false);
+
+
+    [Theory]
+    [MemberData(nameof(ValuesToParse))]
+    public void GeneratesGetValueOrDefault(string name) => GeneratesGetValueOrDefaultTest(name, false, false);
+
+    [Theory]
+    [MemberData(nameof(ValuesToParse))]
+    public void GeneratesGetValueOrDefaultAsSpan(string name) => GeneratesGetValueOrDefaultTest(name.AsSpan(), false, false);
+
+    [Theory]
+    [MemberData(nameof(ValuesToParse))]
+    public void GeneratesGetValueOrDefaultIgnoreCase(string name) => GeneratesGetValueOrDefaultTest(name, true, false);
+
+    [Theory]
+    [MemberData(nameof(ValuesToParse))]
+    public void GeneratesGetValueOrDefaultIgnoreCaseAsSpan(string name)
+        => GeneratesGetValueOrDefaultTest(name.AsSpan(), true, false);
+
+    [Fact]
+    public void GeneratesGetMetadataNamesOrDefault() => GeneratesGetMetadataNamesOrDefaultTest(FlagsEnumExtensions.GetMetadataNamesOrDefault());
 
     [Fact]
     public void GeneratesGetValues() => GeneratesGetValuesTest(FlagsEnumExtensions.GetValues());
 
     [Fact]
-    public void GeneratesGetNames() => base.GeneratesGetNamesTest(FlagsEnumExtensions.GetNames());
+    public void GeneratesGetNames() => GeneratesGetNamesTest(FlagsEnumExtensions.GetNames());
 }

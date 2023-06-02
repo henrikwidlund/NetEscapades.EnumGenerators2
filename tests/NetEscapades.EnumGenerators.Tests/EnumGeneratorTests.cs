@@ -1,20 +1,8 @@
-using System.Threading.Tasks;
-using VerifyXunit;
-using Xunit;
-using Xunit.Abstractions;
-
 namespace NetEscapades.EnumGenerators.Tests;
 
 [UsesVerify]
 public class EnumGeneratorTests
 {
-    readonly ITestOutputHelper _output;
-
-    public EnumGeneratorTests(ITestOutputHelper output)
-    {
-        _output = output;
-    }
-
     [Fact]
     public Task CanGenerateEnumExtensionsInGlobalNamespace()
     {
@@ -24,12 +12,12 @@ public class EnumGeneratorTests
 public enum MyEnum
 {
     First,
-    Second,
+    Second
 }";
         var (diagnostics, output) = TestHelpers.GetGeneratedOutput<EnumGenerator>(input);
 
         Assert.Empty(diagnostics);
-        return Verifier.Verify(output).UseDirectory("Snapshots");
+        return Verify(output).UseDirectory("Snapshots");
     }
 
     [Fact]
@@ -43,13 +31,13 @@ namespace MyTestNameSpace
     public enum MyEnum
     {
         First = 0,
-        Second = 1,
+        Second = 1
     }
 }";
         var (diagnostics, output) = TestHelpers.GetGeneratedOutput<EnumGenerator>(input);
 
         Assert.Empty(diagnostics);
-        return Verifier.Verify(output).UseDirectory("Snapshots");
+        return Verify(output).UseDirectory("Snapshots");
     }
 
     [Fact]
@@ -65,14 +53,14 @@ namespace MyTestNameSpace
         internal enum MyEnum
         {
             First = 0,
-            Second = 1,
+            Second = 1
         }
     }
 }";
         var (diagnostics, output) = TestHelpers.GetGeneratedOutput<EnumGenerator>(input);
 
         Assert.Empty(diagnostics);
-        return Verifier.Verify(output).UseDirectory("Snapshots");
+        return Verify(output).UseDirectory("Snapshots");
     }
 
     [Fact]
@@ -86,13 +74,13 @@ namespace MyTestNameSpace
     internal enum MyEnum
     {
         First = 0,
-        Second = 1,
+        Second = 1
     }
 }";
         var (diagnostics, output) = TestHelpers.GetGeneratedOutput<EnumGenerator>(input);
 
         Assert.Empty(diagnostics);
-        return Verifier.Verify(output).UseDirectory("Snapshots");
+        return Verify(output).UseDirectory("Snapshots");
     }
 
     [Fact]
@@ -106,13 +94,13 @@ namespace MyTestNameSpace
     internal enum MyEnum
     {
         First = 0,
-        Second = 1,
+        Second = 1
     }
 }";
         var (diagnostics, output) = TestHelpers.GetGeneratedOutput<EnumGenerator>(input);
 
         Assert.Empty(diagnostics);
-        return Verifier.Verify(output).UseDirectory("Snapshots");
+        return Verify(output).UseDirectory("Snapshots");
     }
 
     [Fact]
@@ -126,13 +114,13 @@ namespace MyTestNameSpace
     internal enum MyEnum
     {
         First = 0,
-        Second = 1,
+        Second = 1
     }
 }";
         var (diagnostics, output) = TestHelpers.GetGeneratedOutput<EnumGenerator>(input);
 
         Assert.Empty(diagnostics);
-        return Verifier.Verify(output).UseDirectory("Snapshots");
+        return Verify(output).UseDirectory("Snapshots");
     }
 
     [Fact]
@@ -159,7 +147,7 @@ namespace MyTestNameSpace
         var (diagnostics, output) = TestHelpers.GetGeneratedOutput<EnumGenerator>(input);
 
         Assert.Empty(diagnostics);
-        return Verifier.Verify(output)
+        return Verify(output)
             .UseMethodName("CanGenerateEnumExtensionsWithCustomNames")
             .DisableRequireUniquePrefix()
             .UseDirectory("Snapshots");
@@ -192,7 +180,7 @@ namespace MyTestNameSpace
         var (diagnostics, output) = TestHelpers.GetGeneratedOutput<EnumGenerator>(input);
 
         Assert.Empty(diagnostics);
-        return Verifier.Verify(output)
+        return Verify(output)
             .UseMethodName("CanGenerateEnumExtensionsWithCustomNames")
             .DisableRequireUniquePrefix()
             .UseDirectory("Snapshots");
@@ -228,7 +216,7 @@ namespace MyTestNameSpace
         var (diagnostics, output) = TestHelpers.GetGeneratedOutput<EnumGenerator>(input);
 
         Assert.Empty(diagnostics);
-        return Verifier.Verify(output)
+        return Verify(output)
             .UseMethodName("CanGenerateEnumExtensionsWithCustomNames")
             .DisableRequireUniquePrefix()
             .UseDirectory("Snapshots");
@@ -258,7 +246,7 @@ namespace MyTestNameSpace
         var (diagnostics, output) = TestHelpers.GetGeneratedOutput<EnumGenerator>(input);
 
         Assert.Empty(diagnostics);
-        return Verifier.Verify(output).UseDirectory("Snapshots");
+        return Verify(output).UseDirectory("Snapshots");
     }
 
     [Theory]
@@ -287,7 +275,7 @@ namespace MyTestNameSpace
         var (diagnostics, output) = TestHelpers.GetGeneratedOutput<EnumGenerator>(input);
 
         Assert.Empty(diagnostics);
-        return Verifier.Verify(output)
+        return Verify(output)
             .UseTextForParameters("Params")
             .DisableRequireUniquePrefix()
             .UseDirectory("Snapshots");

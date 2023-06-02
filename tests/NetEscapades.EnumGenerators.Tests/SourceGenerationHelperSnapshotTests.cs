@@ -1,8 +1,4 @@
-using System.Collections.Generic;
 using System.Text;
-using System.Threading.Tasks;
-using VerifyXunit;
-using Xunit;
 
 namespace NetEscapades.EnumGenerators.Tests;
 
@@ -13,23 +9,24 @@ public class SourceGenerationHelperSnapshotTests
     public Task GeneratesEnumCorrectly()
     {
         var value = new EnumToGenerate(
-            "ShortName",
-            "Something.Blah",
+            "ShortNameExtensions",
             "Something.Blah.ShortName",
+            "Something.Blah",
+            true,
+            false,
             "int",
-            isPublic: true,
-            new List<(string Key, EnumValueOption Value)>
-            {
-                ("First", new EnumValueOption(null, false)),
-                ("Second", new EnumValueOption(null, false)),
-            },
-            hasFlags: false,
-            isDisplayAttributeUsed: false);
+            false,
+            new EquatableArray<(string Key, EnumValueOption Value)>(
+                new[]
+                {
+                    ("First", new EnumValueOption(null, false)),
+                    ("Second", new EnumValueOption(null, false))
+                }));
 
         var sb = new StringBuilder();
         var result = SourceGenerationHelper.GenerateExtensionClass(sb, value);
 
-        return Verifier.Verify(result)
+        return Verify(result)
             .UseDirectory("Snapshots");
     }
 
@@ -37,23 +34,47 @@ public class SourceGenerationHelperSnapshotTests
     public Task GeneratesFlagsEnumCorrectly()
     {
         var value = new EnumToGenerate(
-            "ShortName",
-            "Something.Blah",
+            "ShortNameExtensions",
             "Something.Blah.ShortName",
+            "Something.Blah",
+            true,
+            true,
             "int",
-            isPublic: true,
-            new List<(string, EnumValueOption)>
-            {
-                ("First", new EnumValueOption(null, false)),
-                ("Second", new EnumValueOption(null, false)),
-            },
-            hasFlags: true,
-            isDisplayAttributeUsed: false);
+            false,
+            new EquatableArray<(string Key, EnumValueOption Value)>(
+                new[]
+                {
+                    ("First", new EnumValueOption(null, false)),
+                    ("Second", new EnumValueOption(null, false))
+                }));
 
         var sb = new StringBuilder();
         var result = SourceGenerationHelper.GenerateExtensionClass(sb, value);
 
-        return Verifier.Verify(result)
+        return Verify(result)
+            .UseDirectory("Snapshots");
+    }
+
+    [Fact]
+    public Task GeneratesJsonConverterCorrectly()
+    {
+        var value = new JsonConverterToGenerate
+        {
+            CamelCase = true,
+            CaseSensitive = false,
+            ConverterNamespace = "Something.Blah",
+            ConverterType = "ShortNameConverter",
+            ExtensionName = "ShortNameExtensions",
+            ExtensionNamespace = "Something.Blah",
+            IsPublic = true,
+            PropertyName = "ShortName",
+            FullyQualifiedName = "Something.Blah.ShortNameConverter"
+        };
+
+        var sb = new StringBuilder();
+        var result = SourceGenerationHelper.GenerateJsonConverterClass(sb, value);
+
+        return Verify(result)
             .UseDirectory("Snapshots");
     }
 }

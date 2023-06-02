@@ -1,4 +1,3 @@
-using System;
 using Xunit;
 
 namespace NetEscapades.EnumGenerators.IntegrationTests;
@@ -9,7 +8,7 @@ public class EnumWithDisplayNameInNamespaceExtensionsTests : ExtensionTests<Enum
     {
         EnumWithDisplayNameInNamespace.First,
         EnumWithDisplayNameInNamespace.Second,
-        (EnumWithDisplayNameInNamespace)3,
+        (EnumWithDisplayNameInNamespace)3
     };
 
     public static TheoryData<string> ValuesToParse() => new()
@@ -26,21 +25,32 @@ public class EnumWithDisplayNameInNamespaceExtensionsTests : ExtensionTests<Enum
         "2147483647",
         "3000000000",
         "Fourth",
-        "Fifth",
+        "Fifth"
     };
 
     protected override string ToStringFast(EnumWithDisplayNameInNamespace value) => value.ToStringFast();
+
     protected override bool IsDefined(EnumWithDisplayNameInNamespace value) => EnumWithDisplayNameInNamespaceExtensions.IsDefined(value);
-    protected override bool IsDefined(string name, bool allowMatchingMetadataAttribute) => EnumWithDisplayNameInNamespaceExtensions.IsDefined(name, allowMatchingMetadataAttribute);
-#if READONLYSPAN
-    protected override bool IsDefined(in ReadOnlySpan<char> name, bool allowMatchingMetadataAttribute = false) => EnumWithDisplayNameInNamespaceExtensions.IsDefined(name, allowMatchingMetadataAttribute);
-#endif
+
+    protected override bool IsDefined(string name, bool allowMatchingMetadataAttribute = false)
+        => EnumWithDisplayNameInNamespaceExtensions.IsDefined(name, allowMatchingMetadataAttribute);
+
+    protected override bool IsDefined(in ReadOnlySpan<char> name, bool allowMatchingMetadataAttribute)
+        => EnumWithDisplayNameInNamespaceExtensions.IsDefined(name, allowMatchingMetadataAttribute);
+
     protected override bool TryParse(string name, out EnumWithDisplayNameInNamespace parsed, bool ignoreCase, bool allowMatchingMetadataAttribute)
         => EnumWithDisplayNameInNamespaceExtensions.TryParse(name, out parsed, ignoreCase, allowMatchingMetadataAttribute);
-#if READONLYSPAN
+
     protected override bool TryParse(in ReadOnlySpan<char> name, out EnumWithDisplayNameInNamespace parsed, bool ignoreCase, bool allowMatchingMetadataAttribute)
         => EnumWithDisplayNameInNamespaceExtensions.TryParse(name, out parsed, ignoreCase, allowMatchingMetadataAttribute);
-#endif
+
+    protected override EnumWithDisplayNameInNamespace? GetValueOrDefault(string name, bool ignoreCase,
+        bool allowMatchingMetadataAttribute)
+        => EnumWithDisplayNameInNamespaceExtensions.GetValueOrDefault(name, ignoreCase, allowMatchingMetadataAttribute);
+
+    protected override EnumWithDisplayNameInNamespace? GetValueOrDefault(in ReadOnlySpan<char> name, bool ignoreCase,
+        bool allowMatchingMetadataAttribute)
+        => EnumWithDisplayNameInNamespaceExtensions.GetValueOrDefault(name, ignoreCase, allowMatchingMetadataAttribute);
 
     [Theory]
     [MemberData(nameof(ValidEnumValues))]
@@ -52,67 +62,107 @@ public class EnumWithDisplayNameInNamespaceExtensionsTests : ExtensionTests<Enum
 
     [Theory]
     [MemberData(nameof(ValuesToParse))]
-    public void GeneratesIsDefinedUsingName(string name) => GeneratesIsDefinedTest(name, allowMatchingMetadataAttribute: false);
-
-#if READONLYSPAN
-    [Theory]
-    [MemberData(nameof(ValuesToParse))]
-    public void GeneratesIsDefinedUsingNameAsSpan(string name) => GeneratesIsDefinedTest(name.AsSpan(), allowMatchingMetadataAttribute: false);
-#endif
+    public void GeneratesIsDefinedUsingName(string name) => GeneratesIsDefinedTest(name, false);
 
     [Theory]
     [MemberData(nameof(ValuesToParse))]
-    public void GeneratesIsDefinedUsingNameallowMatchingMetadataAttribute(string name) => GeneratesIsDefinedTest(name, allowMatchingMetadataAttribute: true);
-
-#if READONLYSPAN
-    [Theory]
-    [MemberData(nameof(ValuesToParse))]
-    public void GeneratesIsDefinedUsingNameallowMatchingMetadataAttributeAsSpan(string name) => GeneratesIsDefinedTest(name.AsSpan(), allowMatchingMetadataAttribute: true);
-#endif
+    public void GeneratesIsDefinedUsingNameAsSpan(string name) => GeneratesIsDefinedTest(name.AsSpan(), false);
 
     [Theory]
     [MemberData(nameof(ValuesToParse))]
-    public void GeneratesTryParse(string name) => GeneratesTryParseTest(name, ignoreCase: false, allowMatchingMetadataAttribute: false);
-
-#if READONLYSPAN
-    [Theory]
-    [MemberData(nameof(ValuesToParse))]
-    public void GeneratesTryParseAsSpan(string name) => GeneratesTryParseTest(name.AsSpan(), ignoreCase: false, allowMatchingMetadataAttribute: false);
-#endif
+    public void GeneratesIsDefinedUsingNameAllowMatchingMetadataAttribute(string name)
+        => GeneratesIsDefinedTest(name, true);
 
     [Theory]
     [MemberData(nameof(ValuesToParse))]
-    public void GeneratesTryParseallowMatchingMetadataAttribute(string name) => GeneratesTryParseTest(name, ignoreCase: false, allowMatchingMetadataAttribute: true);
-
-#if READONLYSPAN
-    [Theory]
-    [MemberData(nameof(ValuesToParse))]
-    public void GeneratesTryParseallowMatchingMetadataAttributeAsSpan(string name) => GeneratesTryParseTest(name.AsSpan(), ignoreCase: false, allowMatchingMetadataAttribute: true);
-#endif
+    public void GeneratesIsDefinedUsingNameAllowMatchingMetadataAttributeAsSpan(string name)
+        => GeneratesIsDefinedTest(name.AsSpan(), true);
 
     [Theory]
     [MemberData(nameof(ValuesToParse))]
-    public void GeneratesTryParseIgnoreCase(string name) => GeneratesTryParseTest(name, ignoreCase: true, allowMatchingMetadataAttribute: false);
-
-#if READONLYSPAN
-    [Theory]
-    [MemberData(nameof(ValuesToParse))]
-    public void GeneratesTryParseIgnoreCaseAsSpan(string name) => GeneratesTryParseTest(name.AsSpan(), ignoreCase: true, allowMatchingMetadataAttribute: false);
-#endif
+    public void GeneratesTryParse(string name) => GeneratesTryParseTest(name, false, false);
 
     [Theory]
     [MemberData(nameof(ValuesToParse))]
-    public void GeneratesTryParseIgnoreCaseallowMatchingMetadataAttribute(string name) => GeneratesTryParseTest(name, ignoreCase: true, allowMatchingMetadataAttribute: true);
+    public void GeneratesTryParseAsSpan(string name)
+        => GeneratesTryParseTest(name.AsSpan(), false, false);
 
-#if READONLYSPAN
     [Theory]
     [MemberData(nameof(ValuesToParse))]
-    public void GeneratesTryParseIgnoreCaseallowMatchingMetadataAttributeAsSpan(string name) => GeneratesTryParseTest(name.AsSpan(), ignoreCase: true, allowMatchingMetadataAttribute: true);
-#endif
+    public void GeneratesTryParseAllowMatchingMetadataAttribute(string name)
+        => GeneratesTryParseTest(name, false, true);
+
+    [Theory]
+    [MemberData(nameof(ValuesToParse))]
+    public void GeneratesTryParseAllowMatchingMetadataAttributeAsSpan(string name)
+        => GeneratesTryParseTest(name.AsSpan(), false, true);
+
+    [Theory]
+    [MemberData(nameof(ValuesToParse))]
+    public void GeneratesTryParseIgnoreCase(string name)
+        => GeneratesTryParseTest(name, true, false);
+
+    [Theory]
+    [MemberData(nameof(ValuesToParse))]
+    public void GeneratesTryParseIgnoreCaseAsSpan(string name)
+        => GeneratesTryParseTest(name.AsSpan(), true, false);
+
+    [Theory]
+    [MemberData(nameof(ValuesToParse))]
+    public void GeneratesTryParseIgnoreCaseAllowMatchingMetadataAttribute(string name)
+        => GeneratesTryParseTest(name, true, true);
+
+    [Theory]
+    [MemberData(nameof(ValuesToParse))]
+    public void GeneratesTryParseIgnoreCaseAllowMatchingMetadataAttributeAsSpan(string name)
+        => GeneratesTryParseTest(name.AsSpan(), true, true);
+
+    [Theory]
+    [MemberData(nameof(ValuesToParse))]
+    public void GeneratesGetValueOrDefault(string name) => GeneratesGetValueOrDefaultTest(name, false, false);
+
+    [Theory]
+    [MemberData(nameof(ValuesToParse))]
+    public void GeneratesGetValueOrDefaultAsSpan(string name)
+        => GeneratesGetValueOrDefaultTest(name.AsSpan(), false, false);
+
+    [Theory]
+    [MemberData(nameof(ValuesToParse))]
+    public void GeneratesGetValueOrDefaultAllowMatchingMetadataAttribute(string name)
+        => GeneratesGetValueOrDefaultTest(name, false, true);
+
+    [Theory]
+    [MemberData(nameof(ValuesToParse))]
+    public void GeneratesGetValueOrDefaultAllowMatchingMetadataAttributeAsSpan(string name)
+        => GeneratesGetValueOrDefaultTest(name.AsSpan(), false, true);
+
+    [Theory]
+    [MemberData(nameof(ValuesToParse))]
+    public void GeneratesGetValueOrDefaultIgnoreCase(string name)
+        => GeneratesGetValueOrDefaultTest(name, true, false);
+
+    [Theory]
+    [MemberData(nameof(ValuesToParse))]
+    public void GeneratesGetValueOrDefaultIgnoreCaseAsSpan(string name)
+        => GeneratesGetValueOrDefaultTest(name.AsSpan(), true, false);
+
+    [Theory]
+    [MemberData(nameof(ValuesToParse))]
+    public void GeneratesGetValueOrDefaultIgnoreCaseAllowMatchingMetadataAttribute(string name)
+        => GeneratesGetValueOrDefaultTest(name, true, true);
+
+    [Theory]
+    [MemberData(nameof(ValuesToParse))]
+    public void GeneratesGetValueOrDefaultIgnoreCaseAllowMatchingMetadataAttributeAsSpan(string name)
+        => GeneratesGetValueOrDefaultTest(name.AsSpan(), true, true);
+
+    [Fact]
+    public void GeneratesGetMetadataNamesOrDefault()
+        => GeneratesGetMetadataNamesOrDefaultTest(EnumWithDisplayNameInNamespaceExtensions.GetMetadataNamesOrDefault());
 
     [Fact]
     public void GeneratesGetValues() => GeneratesGetValuesTest(EnumWithDisplayNameInNamespaceExtensions.GetValues());
 
     [Fact]
-    public void GeneratesGetNames() => base.GeneratesGetNamesTest(EnumWithDisplayNameInNamespaceExtensions.GetNames());
+    public void GeneratesGetNames() => GeneratesGetNamesTest(EnumWithDisplayNameInNamespaceExtensions.GetNames());
 }

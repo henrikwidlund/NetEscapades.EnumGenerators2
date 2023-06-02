@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 namespace NetEscapades.EnumGenerators;
 
 /// <summary>
-/// Polyfill for .NET 6 HashCode  
+/// Polyfill for .NET 7 HashCode
 /// </summary>
 internal struct HashCode
 {
