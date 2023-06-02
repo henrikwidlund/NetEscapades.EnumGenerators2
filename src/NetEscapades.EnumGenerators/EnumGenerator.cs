@@ -16,7 +16,7 @@ public class EnumGenerator : IIncrementalGenerator
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
         context.RegisterPostInitializationOutput(static ctx => ctx.AddSource(
-            "EnumExtensionsAttribute.g.cs", SourceText.From(SourceGenerationHelper.Attribute, Encoding.UTF8)));
+            "EnumExtensionsAttribute.g.cs", SourceText.From(EnumSourceBuilder.Attribute, Encoding.UTF8)));
 
         var enumsToGenerate = context.SyntaxProvider
             .ForAttributeWithMetadataName(
@@ -34,7 +34,7 @@ public class EnumGenerator : IIncrementalGenerator
         if (enumToGenerate is { } eg)
         {
             StringBuilder sb = new();
-            var result = SourceGenerationHelper.GenerateExtensionClass(sb, in eg);
+            var result = EnumSourceBuilder.GenerateExtensionClass(sb, in eg);
             context.AddSource(eg.Name + "_EnumExtensions.g.cs", SourceText.From(result, Encoding.UTF8));
         }
     }

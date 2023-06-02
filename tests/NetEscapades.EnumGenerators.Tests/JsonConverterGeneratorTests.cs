@@ -17,7 +17,7 @@ public enum MyEnum
     First,
     Second
 }";
-        var (diagnostics, output) = TestHelpers.GetGeneratedOutput<GenerateJsonConverter>(input);
+        var (diagnostics, output) = TestHelpers.GetGeneratedOutput<JsonConverterGenerator>(input);
 
         Assert.Empty(diagnostics);
         return Verify(output).UseDirectory("Snapshots");
@@ -40,7 +40,7 @@ namespace MyTestNameSpace
         Second = 1
     }
 }";
-        var (diagnostics, output) = TestHelpers.GetGeneratedOutput<GenerateJsonConverter>(input);
+        var (diagnostics, output) = TestHelpers.GetGeneratedOutput<JsonConverterGenerator>(input);
 
         Assert.Empty(diagnostics);
         return Verify(output).UseDirectory("Snapshots");
@@ -66,7 +66,7 @@ namespace MyTestNameSpace
         }
     }
 }";
-        var (diagnostics, output) = TestHelpers.GetGeneratedOutput<GenerateJsonConverter>(input);
+        var (diagnostics, output) = TestHelpers.GetGeneratedOutput<JsonConverterGenerator>(input);
 
         Assert.Empty(diagnostics);
         return Verify(output).UseDirectory("Snapshots");
@@ -89,7 +89,7 @@ namespace MyTestNameSpace
         Second = 1
     }
 }";
-        var (diagnostics, output) = TestHelpers.GetGeneratedOutput<GenerateJsonConverter>(input);
+        var (diagnostics, output) = TestHelpers.GetGeneratedOutput<JsonConverterGenerator>(input);
 
         Assert.Empty(diagnostics);
         return Verify(output).UseDirectory("Snapshots");
@@ -112,7 +112,7 @@ namespace MyTestNameSpace
         Second = 1
     }
 }";
-        var (diagnostics, output) = TestHelpers.GetGeneratedOutput<GenerateJsonConverter>(input);
+        var (diagnostics, output) = TestHelpers.GetGeneratedOutput<JsonConverterGenerator>(input);
 
         Assert.Empty(diagnostics);
         return Verify(output).UseDirectory("Snapshots");
@@ -135,7 +135,7 @@ namespace MyTestNameSpace
         Second = 1
     }
 }";
-        var (diagnostics, output) = TestHelpers.GetGeneratedOutput<GenerateJsonConverter>(input);
+        var (diagnostics, output) = TestHelpers.GetGeneratedOutput<JsonConverterGenerator>(input);
 
         Assert.Empty(diagnostics);
         return Verify(output).UseDirectory("Snapshots");
@@ -165,7 +165,7 @@ namespace MyTestNameSpace
         Fourth = 3
     }
 }";
-        var (diagnostics, output) = TestHelpers.GetGeneratedOutput<GenerateJsonConverter>(input);
+        var (diagnostics, output) = TestHelpers.GetGeneratedOutput<JsonConverterGenerator>(input);
 
         Assert.Empty(diagnostics);
         return Verify(output).UseDirectory("Snapshots");
@@ -195,7 +195,7 @@ namespace MyTestNameSpace
         Fourth = 3
     }
 }";
-        var (diagnostics, output) = TestHelpers.GetGeneratedOutput<GenerateJsonConverter>(input);
+        var (diagnostics, output) = TestHelpers.GetGeneratedOutput<JsonConverterGenerator>(input);
 
         Assert.Empty(diagnostics);
         return Verify(output).UseDirectory("Snapshots");

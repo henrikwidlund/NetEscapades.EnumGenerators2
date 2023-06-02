@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis.Text;
 namespace NetEscapades.EnumGenerators;
 
 [Generator]
-public class GenerateJsonConverter : IIncrementalGenerator
+public class JsonConverterGenerator : IIncrementalGenerator
 {
     private const string EnumJsonConverterAttribute = "NetEscapades.EnumGenerators.EnumJsonConverterAttribute";
     private const string EnumExtensionsAttribute = "NetEscapades.EnumGenerators.EnumExtensionsAttribute";
@@ -14,7 +14,7 @@ public class GenerateJsonConverter : IIncrementalGenerator
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
         context.RegisterPostInitializationOutput(static ctx => ctx.AddSource(
-            "EnumJsonConverterAttribute.g.cs", SourceText.From(SourceGenerationHelper.EnumJsonConverterAttribute, Encoding.UTF8)));
+            "EnumJsonConverterAttribute.g.cs", SourceText.From(JsonConverterSourceBuilder.Attribute, Encoding.UTF8)));
 
         var jsonConvertersToGenerate = context.SyntaxProvider
             .ForAttributeWithMetadataName(
@@ -32,7 +32,7 @@ public class GenerateJsonConverter : IIncrementalGenerator
         if (jsonConverterToGenerate is { } eg)
         {
             StringBuilder sb = new();
-            var result = SourceGenerationHelper.GenerateJsonConverterClass(sb, eg);
+            var result = JsonConverterSourceBuilder.GenerateJsonConverterClass(sb, eg);
             context.AddSource(eg.ConverterType + ".g.cs", SourceText.From(result, Encoding.UTF8));
         }
     }

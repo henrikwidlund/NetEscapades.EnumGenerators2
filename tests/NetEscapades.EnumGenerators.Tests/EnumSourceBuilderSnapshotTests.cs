@@ -3,7 +3,7 @@ using System.Text;
 namespace NetEscapades.EnumGenerators.Tests;
 
 [UsesVerify]
-public class SourceGenerationHelperSnapshotTests
+public class EnumSourceBuilderSnapshotTests
 {
     [Fact]
     public Task GeneratesEnumCorrectly()
@@ -24,7 +24,7 @@ public class SourceGenerationHelperSnapshotTests
                 }));
 
         var sb = new StringBuilder();
-        var result = SourceGenerationHelper.GenerateExtensionClass(sb, value);
+        var result = EnumSourceBuilder.GenerateExtensionClass(sb, value);
 
         return Verify(result)
             .UseDirectory("Snapshots");
@@ -49,30 +49,7 @@ public class SourceGenerationHelperSnapshotTests
                 }));
 
         var sb = new StringBuilder();
-        var result = SourceGenerationHelper.GenerateExtensionClass(sb, value);
-
-        return Verify(result)
-            .UseDirectory("Snapshots");
-    }
-
-    [Fact]
-    public Task GeneratesJsonConverterCorrectly()
-    {
-        var value = new JsonConverterToGenerate
-        {
-            CamelCase = true,
-            CaseSensitive = false,
-            ConverterNamespace = "Something.Blah",
-            ConverterType = "ShortNameConverter",
-            ExtensionName = "ShortNameExtensions",
-            ExtensionNamespace = "Something.Blah",
-            IsPublic = true,
-            PropertyName = "ShortName",
-            FullyQualifiedName = "Something.Blah.ShortNameConverter"
-        };
-
-        var sb = new StringBuilder();
-        var result = SourceGenerationHelper.GenerateJsonConverterClass(sb, value);
+        var result = EnumSourceBuilder.GenerateExtensionClass(sb, value);
 
         return Verify(result)
             .UseDirectory("Snapshots");
