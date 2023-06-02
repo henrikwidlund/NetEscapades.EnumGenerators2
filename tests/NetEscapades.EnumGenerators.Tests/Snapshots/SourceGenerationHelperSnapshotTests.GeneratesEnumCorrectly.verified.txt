@@ -78,9 +78,6 @@ namespace Something.Blah
             };
         }
 
-        private static readonly ReadOnlyMemory<char> _firstEnumMemory = "First".AsMemory();
-        private static readonly ReadOnlyMemory<char> _secondEnumMemory = "Second".AsMemory();
-
         /// <summary>
         /// Returns a boolean telling whether an enum with the given name exists in the enumeration.
         /// </summary>
@@ -106,6 +103,9 @@ namespace Something.Blah
                 _ => false
             };
         }
+
+        private static readonly ReadOnlyMemory<char> _firstEnumMemory = "First".AsMemory();
+        private static readonly ReadOnlyMemory<char> _secondEnumMemory = "Second".AsMemory();
 
         /// <summary>
         /// Converts the string representation of the name or numeric value of
