@@ -4,9 +4,11 @@ namespace NetEscapades.EnumGenerators;
 
 public static class JsonConverterSourceBuilder
 {
-    internal const string Attribute = Constants.GeneratedCodeHeader + @"
-
+    internal const string Attribute = $$"""
 #if NETESCAPADES_ENUMGENERATORS_EMBED_ATTRIBUTES
+
+{{Constants.GeneratedCodeHeader}}
+
 namespace NetEscapades.EnumGenerators
 {
     /// <summary>
@@ -40,14 +42,11 @@ namespace NetEscapades.EnumGenerators
         /// Creates an instance of <see cref=""EnumJsonConverterAttribute""/>.
         /// </summary>
         /// <param name=""converterType"">The converter to generate.</param>
-        public EnumJsonConverterAttribute(System.Type converterType)
-        {
-            ConverterType = converterType;
-        }
+        public EnumJsonConverterAttribute(System.Type converterType) => ConverterType = converterType;
     }
 }
 #endif
-";
+""";
 
     public static string GenerateJsonConverterClass(StringBuilder sb, JsonConverterToGenerate jsonConverterToGenerate)
     {

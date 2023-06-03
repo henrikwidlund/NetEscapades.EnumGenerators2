@@ -4,9 +4,11 @@ namespace NetEscapades.EnumGenerators;
 
 public static partial class EnumSourceBuilder
 {
-    internal const string Attribute = Constants.GeneratedCodeHeader + """
-
+    internal const string Attribute = $$"""
 #if NETESCAPADES_ENUMGENERATORS_EMBED_ATTRIBUTES
+
+{{Constants.GeneratedCodeHeader}}
+
 namespace NetEscapades.EnumGenerators
 {
     /// <summary>
