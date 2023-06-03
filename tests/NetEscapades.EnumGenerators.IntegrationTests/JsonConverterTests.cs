@@ -90,15 +90,15 @@ public class JsonConverterTests
         var modelWithString = new ModelWithString(name);
         var json = JsonSerializer.Serialize(modelWithString);
 
-        if (FlagsEnumExtensions.TryParse(name.AsSpan(), out var parsed, true, true))
+        if (FlagEnumsExtensions.TryParse(name.AsSpan(), out var parsed, true, true))
         {
-            var modelWithEnum = JsonSerializer.Deserialize<ModelWithEnum<FlagsEnum>>(json);
+            var modelWithEnum = JsonSerializer.Deserialize<ModelWithEnum<FlagEnums>>(json);
             modelWithEnum.Should().NotBeNull();
             modelWithEnum.EnumProperty.Should().Be(parsed);
         }
         else
         {
-            var action = () => JsonSerializer.Deserialize<ModelWithEnum<FlagsEnum>>(json);
+            var action = () => JsonSerializer.Deserialize<ModelWithEnum<FlagEnums>>(json);
             action.Should().Throw<JsonException>();
         }
     }

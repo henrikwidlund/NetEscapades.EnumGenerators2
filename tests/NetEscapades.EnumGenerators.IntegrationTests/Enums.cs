@@ -55,10 +55,10 @@ public enum LongEnum : long
 }
 
 [EnumExtensions]
-[EnumJsonConverter(typeof(FlagsEnumConverter), CamelCase = true, CaseSensitive = false, PropertyName = nameof(FlagsEnum))]
-[JsonConverter(typeof(FlagsEnumConverter))]
+[EnumJsonConverter(typeof(FlagEnumsConverter), CamelCase = true, CaseSensitive = false, PropertyName = nameof(FlagEnums))]
+[JsonConverter(typeof(FlagEnumsConverter))]
 [Flags]
-public enum FlagsEnum
+public enum FlagEnums
 {
     First = 1 << 0,
     Second = 1 << 1,

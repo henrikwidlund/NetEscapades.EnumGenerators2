@@ -1,28 +1,43 @@
-﻿using System;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using NetEscapades.EnumGenerators;
 
-var value = ExampleEnums.First;
+const ExampleEnums value = ExampleEnums.First;
 Console.WriteLine(value.ToStringFast());
 
-var flags = FlagsEnum.Flag1 | FlagsEnum.Flag3;
+var enumCollection = ExampleEnumsExtensions.GetValues();
+var serialized = JsonSerializer.Serialize(enumCollection, new JsonSerializerOptions
+{
+    WriteIndented = true
+});
+Console.WriteLine(serialized);
+var deserialized = JsonSerializer.Deserialize<ExampleEnums[]>(serialized);
+Console.WriteLine($"{nameof(enumCollection)} and {nameof(deserialized)} contains the same items? {deserialized?.SequenceEqual(enumCollection)}");
+
+const FlagEnums flags = FlagEnums.Flag1 | FlagEnums.Flag3;
 
 Console.WriteLine(flags.ToStringFast());
-Console.WriteLine($"HasFlag(Flag1), {flags.HasFlagFast(FlagsEnum.Flag1)}");
-Console.WriteLine($"HasFlag(Flag1), {flags.HasFlagFast(FlagsEnum.Flag2)}");
+Console.WriteLine($"HasFlag(Flag1), {flags.HasFlagFast(FlagEnums.Flag1)}");
+Console.WriteLine($"HasFlag(Flag1), {flags.HasFlagFast(FlagEnums.Flag2)}");
+Console.WriteLine($"HasFlag(Flag1), {flags.HasFlagFast(FlagEnums.Flag3)}");
 
 [EnumExtensions]
+[EnumJsonConverter(typeof(ExampleEnumsConverter))]
+[JsonConverter(typeof(ExampleEnumsConverter))]
 internal enum ExampleEnums
 {
-    First,
+    [Display(Name = "1st")] First,
     Second,
-    Third,
+    Third
 }
 
 [EnumExtensions]
 [Flags]
-internal enum FlagsEnum
+internal enum FlagEnums
 {
-    Flag1,
-    Flag2,
-    Flag3,
+    None = 0,
+    Flag1 = 1 << 0,
+    Flag2 = 1 << 1,
+    Flag3 = 1 << 2
 }

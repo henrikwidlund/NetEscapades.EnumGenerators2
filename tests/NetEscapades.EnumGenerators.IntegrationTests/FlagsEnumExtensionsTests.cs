@@ -3,14 +3,14 @@ using Xunit;
 
 namespace NetEscapades.EnumGenerators.IntegrationTests;
 
-public class FlagsEnumExtensionsTests : ExtensionTests<FlagsEnum>
+public class FlagsEnumExtensionsTests : ExtensionTests<FlagEnums>
 {
-    public static TheoryData<FlagsEnum> ValidEnumValues() => new()
+    public static TheoryData<FlagEnums> ValidEnumValues() => new()
     {
-        FlagsEnum.First,
-        FlagsEnum.Second,
-        FlagsEnum.ThirdAndFourth,
-        (FlagsEnum)3
+        FlagEnums.First,
+        FlagEnums.Second,
+        FlagEnums.ThirdAndFourth,
+        (FlagEnums)3
     };
 
     public static TheoryData<string> ValuesToParse() => new()
@@ -30,35 +30,35 @@ public class FlagsEnumExtensionsTests : ExtensionTests<FlagsEnum>
         "Fifth"
     };
 
-    protected override string ToStringFast(FlagsEnum value) => value.ToStringFast();
+    protected override string ToStringFast(FlagEnums value) => value.ToStringFast();
 
-    protected override bool IsDefined(FlagsEnum value) => FlagsEnumExtensions.IsDefined(value);
+    protected override bool IsDefined(FlagEnums value) => FlagEnumsExtensions.IsDefined(value);
 
     protected override bool IsDefined(string name, bool allowMatchingMetadataAttribute = false)
-        => FlagsEnumExtensions.IsDefined(name, false);
+        => FlagEnumsExtensions.IsDefined(name, false);
 
     protected override bool IsDefined(in ReadOnlySpan<char> name, bool allowMatchingMetadataAttribute)
-        => FlagsEnumExtensions.IsDefined(name, false);
+        => FlagEnumsExtensions.IsDefined(name, false);
 
-    protected override bool TryParse(string name, out FlagsEnum parsed, bool ignoreCase, bool allowMatchingMetadataAttribute)
-        => FlagsEnumExtensions.TryParse(name, out parsed, ignoreCase, allowMatchingMetadataAttribute);
+    protected override bool TryParse(string name, out FlagEnums parsed, bool ignoreCase, bool allowMatchingMetadataAttribute)
+        => FlagEnumsExtensions.TryParse(name, out parsed, ignoreCase, allowMatchingMetadataAttribute);
 
-    protected override bool TryParse(in ReadOnlySpan<char> name, out FlagsEnum parsed, bool ignoreCase, bool allowMatchingMetadataAttribute)
-        => FlagsEnumExtensions.TryParse(name, out parsed, ignoreCase, allowMatchingMetadataAttribute);
+    protected override bool TryParse(in ReadOnlySpan<char> name, out FlagEnums parsed, bool ignoreCase, bool allowMatchingMetadataAttribute)
+        => FlagEnumsExtensions.TryParse(name, out parsed, ignoreCase, allowMatchingMetadataAttribute);
 
-    protected override FlagsEnum? GetValueOrDefault(string name, bool ignoreCase, bool allowMatchingMetadataAttribute)
-        => FlagsEnumExtensions.GetValueOrDefault(name, ignoreCase, allowMatchingMetadataAttribute);
+    protected override FlagEnums? GetValueOrDefault(string name, bool ignoreCase, bool allowMatchingMetadataAttribute)
+        => FlagEnumsExtensions.GetValueOrDefault(name, ignoreCase, allowMatchingMetadataAttribute);
 
-    protected override FlagsEnum? GetValueOrDefault(in ReadOnlySpan<char> name, bool ignoreCase, bool allowMatchingMetadataAttribute)
-        => FlagsEnumExtensions.GetValueOrDefault(name, ignoreCase, allowMatchingMetadataAttribute);
-
-    [Theory]
-    [MemberData(nameof(ValidEnumValues))]
-    public void GeneratesToStringFast(FlagsEnum value) => GeneratesToStringFastTest(value);
+    protected override FlagEnums? GetValueOrDefault(in ReadOnlySpan<char> name, bool ignoreCase, bool allowMatchingMetadataAttribute)
+        => FlagEnumsExtensions.GetValueOrDefault(name, ignoreCase, allowMatchingMetadataAttribute);
 
     [Theory]
     [MemberData(nameof(ValidEnumValues))]
-    public void GeneratesIsDefined(FlagsEnum value) => GeneratesIsDefinedTest(value);
+    public void GeneratesToStringFast(FlagEnums value) => GeneratesToStringFastTest(value);
+
+    [Theory]
+    [MemberData(nameof(ValidEnumValues))]
+    public void GeneratesIsDefined(FlagEnums value) => GeneratesIsDefinedTest(value);
 
     [Theory]
     [MemberData(nameof(ValuesToParse))]
@@ -72,13 +72,13 @@ public class FlagsEnumExtensionsTests : ExtensionTests<FlagsEnum>
     {
         var values = new[]
         {
-            FlagsEnum.First,
-            FlagsEnum.Second,
-            FlagsEnum.Third,
-            FlagsEnum.ThirdAndFourth,
-            FlagsEnum.First | FlagsEnum.Second,
-            (FlagsEnum)65,
-            (FlagsEnum)0,
+            FlagEnums.First,
+            FlagEnums.Second,
+            FlagEnums.Third,
+            FlagEnums.ThirdAndFourth,
+            FlagEnums.First | FlagEnums.Second,
+            (FlagEnums)65,
+            (FlagEnums)0,
         };
 
         return from v1 in values
@@ -88,7 +88,7 @@ public class FlagsEnumExtensionsTests : ExtensionTests<FlagsEnum>
 
     [Theory]
     [MemberData(nameof(AllFlags))]
-    public void HasFlags(FlagsEnum value, FlagsEnum flag)
+    public void HasFlags(FlagEnums value, FlagEnums flag)
     {
         var isDefined = value.HasFlagFast(flag);
 
@@ -131,11 +131,11 @@ public class FlagsEnumExtensionsTests : ExtensionTests<FlagsEnum>
         => GeneratesGetValueOrDefaultTest(name.AsSpan(), true, false);
 
     [Fact]
-    public void GeneratesGetMetadataNamesOrDefault() => GeneratesGetMetadataNamesOrDefaultTest(FlagsEnumExtensions.GetMetadataNamesOrDefault());
+    public void GeneratesGetMetadataNamesOrDefault() => GeneratesGetMetadataNamesOrDefaultTest(FlagEnumsExtensions.GetMetadataNamesOrDefault());
 
     [Fact]
-    public void GeneratesGetValues() => GeneratesGetValuesTest(FlagsEnumExtensions.GetValues());
+    public void GeneratesGetValues() => GeneratesGetValuesTest(FlagEnumsExtensions.GetValues());
 
     [Fact]
-    public void GeneratesGetNames() => GeneratesGetNamesTest(FlagsEnumExtensions.GetNames());
+    public void GeneratesGetNames() => GeneratesGetNamesTest(FlagEnumsExtensions.GetNames());
 }
