@@ -48,7 +48,7 @@ namespace MyTestNameSpace
         /// <param name="value">The value of the instance to investigate.</param>
         /// <param name="flag">The flag to check for.</param>
         /// <returns><see langword="true" /> if the fields set in the flag are also set in the current instance; otherwise <see langword="false" />.</returns>
-        /// <remarks>If the underlying value of <paramref name="flag"/> is zero, the method returns true.
+        /// <remarks>If the underlying value of <paramref name="flag"/> is zero, the method returns <see langword="true" />.
         /// This is consistent with the behaviour of <see cref="global::System.Enum.HasFlag" />.</remarks>
         public static bool HasFlagFast(this MyTestNameSpace.MyEnum value, MyTestNameSpace.MyEnum flag)
             => flag == 0 || (value & flag) == flag;
@@ -80,7 +80,7 @@ namespace MyTestNameSpace
         /// with the required name exists.
         /// </summary>
         /// <param name="name">The name to check if it's defined.</param>
-        /// <param name="allowMatchingMetadataAttribute">If <see langword="true" />, considers the value of metadata attributes,otherwise ignores them.</param>
+        /// <param name="allowMatchingMetadataAttribute">If <see langword="true" />, considers the value of metadata attributes, otherwise ignores them.</param>
         /// <returns><see langword="true" /> if a member with the name exists in the enumeration, or a member is decorated
         /// with a <c>[Display]</c> attribute with the name, <see langword="false" /> otherwise.</returns>
         public static bool IsDefined(string name, bool allowMatchingMetadataAttribute)
@@ -364,7 +364,8 @@ namespace MyTestNameSpace
         /// or <see langword="default" /> if there's no match.
         /// </summary>
         /// <param name="name">The value that should be matched.</param>
-        /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode; <see langword="false" /> to read value in case sensitive mode.</param>
+        /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode;
+        /// <see langword="false" /> to read value in case sensitive mode.</param>
         /// <returns>The matching <see cref="MyTestNameSpace.MyEnum" /> or <see langword="null" /> if there was no match.</returns>
         public static MyTestNameSpace.MyEnum? GetValueOrDefault(string? name, bool ignoreCase) =>
             TryParse(name, out MyTestNameSpace.MyEnum value, ignoreCase) ? value : null;
@@ -374,7 +375,8 @@ namespace MyTestNameSpace
         /// or <see langword="default" /> if there's no match.
         /// </summary>
         /// <param name="name">The value that should be matched.</param>
-        /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode; <see langword="false" /> to read value in case sensitive mode.</param>
+        /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode;
+        /// <see langword="false" /> to read value in case sensitive mode.</param>
         /// <returns>The matching <see cref="MyTestNameSpace.MyEnum" /> or <see langword="null" /> if there was no match.</returns>
         public static MyTestNameSpace.MyEnum? GetValueOrDefault(in ReadOnlySpan<char> name, bool ignoreCase) =>
             TryParse(name, out MyTestNameSpace.MyEnum value, ignoreCase) ? value : null;
@@ -384,8 +386,10 @@ namespace MyTestNameSpace
         /// or <see langword="default" /> if there's no match.
         /// </summary>
         /// <param name="name">The value that should be matched.</param>
-        /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode; <see langword="false" /> to read value in case sensitive mode.</param>
-        /// <param name="allowMatchingMetadataAttribute">If <see langword="true" />, considers the value of metadata attributes,otherwise ignores them.</param>
+        /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode;
+        /// <see langword="false" /> to read value in case sensitive mode.</param>
+        /// <param name="allowMatchingMetadataAttribute">If <see langword="true" />,
+        /// considers the value of metadata attributes, otherwise ignores them.</param>
         /// <returns>The matching <see cref="MyTestNameSpace.MyEnum" /> or <see langword="null" /> if there was no match.</returns>
         public static MyTestNameSpace.MyEnum? GetValueOrDefault(string? name, bool ignoreCase, bool allowMatchingMetadataAttribute) =>
             TryParse(name, out MyTestNameSpace.MyEnum value, ignoreCase, allowMatchingMetadataAttribute) ? value : null;
@@ -395,8 +399,10 @@ namespace MyTestNameSpace
         /// or <see langword="default" /> if there's no match.
         /// </summary>
         /// <param name="name">The value that should be matched.</param>
-        /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode; <see langword="false" /> to read value in case sensitive mode.</param>
-        /// <param name="allowMatchingMetadataAttribute">If <see langword="true" />, considers the value of metadata attributes,otherwise ignores them.</param>
+        /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode;
+        /// <see langword="false" /> to read value in case sensitive mode.</param>
+        /// <param name="allowMatchingMetadataAttribute">If <see langword="true" />,
+        /// considers the value of metadata attributes, otherwise ignores them.</param>
         /// <returns>The matching <see cref="MyTestNameSpace.MyEnum" /> or <see langword="null" /> if there was no match.</returns>
         public static MyTestNameSpace.MyEnum? GetValueOrDefault(in ReadOnlySpan<char> name, bool ignoreCase, bool allowMatchingMetadataAttribute) =>
             TryParse(name, out MyTestNameSpace.MyEnum value, ignoreCase, allowMatchingMetadataAttribute) ? value : null;
@@ -415,7 +421,6 @@ namespace MyTestNameSpace
                 MyTestNameSpace.MyEnum.Second,
                 MyTestNameSpace.MyEnum.Third,
             };
-
 
         /// <summary>
         /// Retrieves an array of the names of the members defined in

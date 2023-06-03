@@ -64,7 +64,7 @@ using System;
         /// with the required name exists.
         /// </summary>
         /// <param name="name">The name to check if it's defined.</param>
-        /// <param name="allowMatchingMetadataAttribute">If <see langword="true" />, considers the value of metadata attributes,otherwise ignores them.</param>
+        /// <param name="allowMatchingMetadataAttribute">If <see langword="true" />, considers the value of metadata attributes, otherwise ignores them.</param>
         /// <returns><see langword="true" /> if a member with the name exists in the enumeration, or a member is decorated
         /// with a <c>[Display]</c> attribute with the name, <see langword="false" /> otherwise.</returns>
         public static bool IsDefined(string name, bool allowMatchingMetadataAttribute)
@@ -332,7 +332,8 @@ using System;
         /// or <see langword="default" /> if there's no match.
         /// </summary>
         /// <param name="name">The value that should be matched.</param>
-        /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode; <see langword="false" /> to read value in case sensitive mode.</param>
+        /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode;
+        /// <see langword="false" /> to read value in case sensitive mode.</param>
         /// <returns>The matching <see cref="MyEnum" /> or <see langword="null" /> if there was no match.</returns>
         public static MyEnum? GetValueOrDefault(string? name, bool ignoreCase) =>
             TryParse(name, out MyEnum value, ignoreCase) ? value : null;
@@ -342,7 +343,8 @@ using System;
         /// or <see langword="default" /> if there's no match.
         /// </summary>
         /// <param name="name">The value that should be matched.</param>
-        /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode; <see langword="false" /> to read value in case sensitive mode.</param>
+        /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode;
+        /// <see langword="false" /> to read value in case sensitive mode.</param>
         /// <returns>The matching <see cref="MyEnum" /> or <see langword="null" /> if there was no match.</returns>
         public static MyEnum? GetValueOrDefault(in ReadOnlySpan<char> name, bool ignoreCase) =>
             TryParse(name, out MyEnum value, ignoreCase) ? value : null;
@@ -352,8 +354,10 @@ using System;
         /// or <see langword="default" /> if there's no match.
         /// </summary>
         /// <param name="name">The value that should be matched.</param>
-        /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode; <see langword="false" /> to read value in case sensitive mode.</param>
-        /// <param name="allowMatchingMetadataAttribute">If <see langword="true" />, considers the value of metadata attributes,otherwise ignores them.</param>
+        /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode;
+        /// <see langword="false" /> to read value in case sensitive mode.</param>
+        /// <param name="allowMatchingMetadataAttribute">If <see langword="true" />,
+        /// considers the value of metadata attributes, otherwise ignores them.</param>
         /// <returns>The matching <see cref="MyEnum" /> or <see langword="null" /> if there was no match.</returns>
         public static MyEnum? GetValueOrDefault(string? name, bool ignoreCase, bool allowMatchingMetadataAttribute) =>
             TryParse(name, out MyEnum value, ignoreCase, allowMatchingMetadataAttribute) ? value : null;
@@ -363,8 +367,10 @@ using System;
         /// or <see langword="default" /> if there's no match.
         /// </summary>
         /// <param name="name">The value that should be matched.</param>
-        /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode; <see langword="false" /> to read value in case sensitive mode.</param>
-        /// <param name="allowMatchingMetadataAttribute">If <see langword="true" />, considers the value of metadata attributes,otherwise ignores them.</param>
+        /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode;
+        /// <see langword="false" /> to read value in case sensitive mode.</param>
+        /// <param name="allowMatchingMetadataAttribute">If <see langword="true" />,
+        /// considers the value of metadata attributes, otherwise ignores them.</param>
         /// <returns>The matching <see cref="MyEnum" /> or <see langword="null" /> if there was no match.</returns>
         public static MyEnum? GetValueOrDefault(in ReadOnlySpan<char> name, bool ignoreCase, bool allowMatchingMetadataAttribute) =>
             TryParse(name, out MyEnum value, ignoreCase, allowMatchingMetadataAttribute) ? value : null;
@@ -382,7 +388,6 @@ using System;
                 MyEnum.First,
                 MyEnum.Second,
             };
-
 
         /// <summary>
         /// Retrieves an array of the names of the members defined in

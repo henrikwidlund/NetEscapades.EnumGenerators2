@@ -5,7 +5,7 @@ internal static class StringHelper
     public static string? GetPrivateMemoryFieldName(this string? value)
         => GetPrivateMemoryFieldNamePrivate(value, "EnumMemory");
 
-    public static string? GetPrivateDisplayMemoryFieldName(this string? value)
+    public static string? GetPrivateMetadataMemoryFieldName(this string? value)
         => GetPrivateMemoryFieldNamePrivate(value, "EnumDisplayMemory");
 
     private static string? GetPrivateMemoryFieldNamePrivate(this string? value, string suffix)
