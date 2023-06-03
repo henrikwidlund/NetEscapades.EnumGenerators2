@@ -9,8 +9,6 @@
 
 #nullable enable
 
-using System;
-
 namespace MyTestNameSpace
 {
     /// <summary>
@@ -106,7 +104,7 @@ namespace MyTestNameSpace
         /// </summary>
         /// <param name="name">The name to check if it's defined.</param>
         /// <returns><see langword="true" /> if a member with the name exists in the enumeration, <see langword="false" /> otherwise.</returns>
-        public static bool IsDefined(in ReadOnlySpan<char> name) => IsDefined(name, false);
+        public static bool IsDefined(in global::System.ReadOnlySpan<char> name) => IsDefined(name, false);
 
         /// <summary>
         /// Returns a boolean telling whether an enum with the given name exists in the enumeration,
@@ -117,15 +115,15 @@ namespace MyTestNameSpace
         /// <param name="allowMatchingMetadataAttribute">If <see langword="true" />, considers the value of metadata attributes, otherwise ignores them.</param>
         /// <returns><see langword="true" /> if a member with the name exists in the enumeration, or a member is decorated
         /// with a <c>[Display]</c> attribute with the name, <see langword="false" /> otherwise.</returns>
-        public static bool IsDefined(in ReadOnlySpan<char> name, bool allowMatchingMetadataAttribute)
+        public static bool IsDefined(in global::System.ReadOnlySpan<char> name, bool allowMatchingMetadataAttribute)
         {
             var isDefinedInDisplayAttribute = false;
             if (allowMatchingMetadataAttribute)
             {
                 isDefinedInDisplayAttribute = name switch
                 {
-                    var current when current.Equals(_secondEnumDisplayMemory.Span, global::System.StringComparison.Ordinal) => true,
-                    var current when current.Equals(_fourthEnumDisplayMemory.Span, global::System.StringComparison.Ordinal) => true,
+                    var current when global::System.MemoryExtensions.Equals(current, _secondEnumDisplayMemory.Span, global::System.StringComparison.Ordinal) => true,
+                    var current when global::System.MemoryExtensions.Equals(current, _fourthEnumDisplayMemory.Span, global::System.StringComparison.Ordinal) => true,
                     _ => false
                 };
             }
@@ -137,20 +135,20 @@ namespace MyTestNameSpace
 
             return name switch
             {
-                var current when current.Equals(_firstEnumMemory.Span, global::System.StringComparison.Ordinal) => true,
-                var current when current.Equals(_secondEnumMemory.Span, global::System.StringComparison.Ordinal) => true,
-                var current when current.Equals(_thirdEnumMemory.Span, global::System.StringComparison.Ordinal) => true,
-                var current when current.Equals(_fourthEnumMemory.Span, global::System.StringComparison.Ordinal) => true,
+                var current when global::System.MemoryExtensions.Equals(current, _firstEnumMemory.Span, global::System.StringComparison.Ordinal) => true,
+                var current when global::System.MemoryExtensions.Equals(current, _secondEnumMemory.Span, global::System.StringComparison.Ordinal) => true,
+                var current when global::System.MemoryExtensions.Equals(current, _thirdEnumMemory.Span, global::System.StringComparison.Ordinal) => true,
+                var current when global::System.MemoryExtensions.Equals(current, _fourthEnumMemory.Span, global::System.StringComparison.Ordinal) => true,
                 _ => false
             };
         }
 
-        private static readonly ReadOnlyMemory<char> _firstEnumMemory = "First".AsMemory();
-        private static readonly ReadOnlyMemory<char> _secondEnumMemory = "Second".AsMemory();
-        private static readonly ReadOnlyMemory<char> _thirdEnumMemory = "Third".AsMemory();
-        private static readonly ReadOnlyMemory<char> _fourthEnumMemory = "Fourth".AsMemory();
-        private static readonly ReadOnlyMemory<char> _secondEnumDisplayMemory = "2nd".AsMemory();
-        private static readonly ReadOnlyMemory<char> _fourthEnumDisplayMemory = "4th".AsMemory();
+        private static readonly global::System.ReadOnlyMemory<char> _firstEnumMemory = global::System.MemoryExtensions.AsMemory("First");
+        private static readonly global::System.ReadOnlyMemory<char> _secondEnumMemory = global::System.MemoryExtensions.AsMemory("Second");
+        private static readonly global::System.ReadOnlyMemory<char> _thirdEnumMemory = global::System.MemoryExtensions.AsMemory("Third");
+        private static readonly global::System.ReadOnlyMemory<char> _fourthEnumMemory = global::System.MemoryExtensions.AsMemory("Fourth");
+        private static readonly global::System.ReadOnlyMemory<char> _secondEnumDisplayMemory = global::System.MemoryExtensions.AsMemory("2nd");
+        private static readonly global::System.ReadOnlyMemory<char> _fourthEnumDisplayMemory = global::System.MemoryExtensions.AsMemory("4th");
 
         /// <summary>
         /// Converts the string representation of the name or numeric value of
@@ -301,7 +299,7 @@ namespace MyTestNameSpace
         /// of <see cref="MyTestNameSpace.MyEnum" />. This parameter is passed uninitialized.</param>
         /// <returns><see langword="true" /> if the value parameter was converted successfully; otherwise, <see langword="false" />.</returns>
         public static bool TryParse(
-            in ReadOnlySpan<char> name,
+            in global::System.ReadOnlySpan<char> name,
             out MyTestNameSpace.MyEnum value)
             => TryParse(name, out value, false, false);
 
@@ -319,7 +317,7 @@ namespace MyTestNameSpace
         /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode; <see langword="false" /> to read value in case sensitive mode.</param>
         /// <returns><see langword="true" /> if the value parameter was converted successfully; otherwise, <see langword="false" />.</returns>
         public static bool TryParse(
-            in ReadOnlySpan<char> name,
+            in global::System.ReadOnlySpan<char> name,
             out MyTestNameSpace.MyEnum value,
             bool ignoreCase)
             => TryParse(name, out value, ignoreCase, false);
@@ -340,7 +338,7 @@ namespace MyTestNameSpace
         /// <c>[Display]</c> attribute when parsing, otherwise only considers the member names.</param>
         /// <returns><see langword="true" /> if the value parameter was converted successfully; otherwise, <see langword="false" />.</returns>
         public static bool TryParse(
-            in ReadOnlySpan<char> name,
+            in global::System.ReadOnlySpan<char> name,
             out MyTestNameSpace.MyEnum result,
             bool ignoreCase,
             bool allowMatchingMetadataAttribute)
@@ -351,10 +349,10 @@ namespace MyTestNameSpace
                 {
                     switch (name)
                     {
-                        case var current when current.Equals(_secondEnumDisplayMemory.Span, global::System.StringComparison.OrdinalIgnoreCase):
+                        case var current when global::System.MemoryExtensions.Equals(current, _secondEnumDisplayMemory.Span, global::System.StringComparison.OrdinalIgnoreCase):
                             result = MyTestNameSpace.MyEnum.Second;
                             return true;
-                        case var current when current.Equals(_fourthEnumDisplayMemory.Span, global::System.StringComparison.OrdinalIgnoreCase):
+                        case var current when global::System.MemoryExtensions.Equals(current, _fourthEnumDisplayMemory.Span, global::System.StringComparison.OrdinalIgnoreCase):
                             result = MyTestNameSpace.MyEnum.Fourth;
                             return true;
                     }
@@ -363,10 +361,10 @@ namespace MyTestNameSpace
                 {
                     switch (name)
                     {
-                        case var current when current.Equals(_secondEnumDisplayMemory.Span, global::System.StringComparison.Ordinal):
+                        case var current when global::System.MemoryExtensions.Equals(current, _secondEnumDisplayMemory.Span, global::System.StringComparison.Ordinal):
                             result = MyTestNameSpace.MyEnum.Second;
                             return true;
-                        case var current when current.Equals(_fourthEnumDisplayMemory.Span, global::System.StringComparison.Ordinal):
+                        case var current when global::System.MemoryExtensions.Equals(current, _fourthEnumDisplayMemory.Span, global::System.StringComparison.Ordinal):
                             result = MyTestNameSpace.MyEnum.Fourth;
                             return true;
                     }
@@ -377,16 +375,16 @@ namespace MyTestNameSpace
             {
                 switch (name)
                 {
-                    case var current when current.Equals(_firstEnumMemory.Span, global::System.StringComparison.OrdinalIgnoreCase):
+                    case var current when global::System.MemoryExtensions.Equals(current, _firstEnumMemory.Span, global::System.StringComparison.OrdinalIgnoreCase):
                         result = MyTestNameSpace.MyEnum.First;
                         return true;
-                    case var current when current.Equals(_secondEnumMemory.Span, global::System.StringComparison.OrdinalIgnoreCase):
+                    case var current when global::System.MemoryExtensions.Equals(current, _secondEnumMemory.Span, global::System.StringComparison.OrdinalIgnoreCase):
                         result = MyTestNameSpace.MyEnum.Second;
                         return true;
-                    case var current when current.Equals(_thirdEnumMemory.Span, global::System.StringComparison.OrdinalIgnoreCase):
+                    case var current when global::System.MemoryExtensions.Equals(current, _thirdEnumMemory.Span, global::System.StringComparison.OrdinalIgnoreCase):
                         result = MyTestNameSpace.MyEnum.Third;
                         return true;
-                    case var current when current.Equals(_fourthEnumMemory.Span, global::System.StringComparison.OrdinalIgnoreCase):
+                    case var current when global::System.MemoryExtensions.Equals(current, _fourthEnumMemory.Span, global::System.StringComparison.OrdinalIgnoreCase):
                         result = MyTestNameSpace.MyEnum.Fourth;
                         return true;
                     case { IsEmpty: false } when int.TryParse(name, out var numericResult):
@@ -400,16 +398,16 @@ namespace MyTestNameSpace
 
             switch (name)
             {
-                case var current when current.Equals(_firstEnumMemory.Span, global::System.StringComparison.Ordinal):
+                case var current when global::System.MemoryExtensions.Equals(current, _firstEnumMemory.Span, global::System.StringComparison.Ordinal):
                     result = MyTestNameSpace.MyEnum.First;
                     return true;
-                case var current when current.Equals(_secondEnumMemory.Span, global::System.StringComparison.Ordinal):
+                case var current when global::System.MemoryExtensions.Equals(current, _secondEnumMemory.Span, global::System.StringComparison.Ordinal):
                     result = MyTestNameSpace.MyEnum.Second;
                     return true;
-                case var current when current.Equals(_thirdEnumMemory.Span, global::System.StringComparison.Ordinal):
+                case var current when global::System.MemoryExtensions.Equals(current, _thirdEnumMemory.Span, global::System.StringComparison.Ordinal):
                     result = MyTestNameSpace.MyEnum.Third;
                     return true;
-                case var current when current.Equals(_fourthEnumMemory.Span, global::System.StringComparison.Ordinal):
+                case var current when global::System.MemoryExtensions.Equals(current, _fourthEnumMemory.Span, global::System.StringComparison.Ordinal):
                     result = MyTestNameSpace.MyEnum.Fourth;
                     return true;
                 case { IsEmpty: false } when int.TryParse(name, out var numericResult):
@@ -452,7 +450,7 @@ namespace MyTestNameSpace
         /// </summary>
         /// <param name="name">The value that should be matched.</param>
         /// <returns>The matching <see cref="MyTestNameSpace.MyEnum" /> or <see langword="null" /> if there was no match.</returns>
-        public static MyTestNameSpace.MyEnum? GetValueOrDefault(in ReadOnlySpan<char> name) =>
+        public static MyTestNameSpace.MyEnum? GetValueOrDefault(in global::System.ReadOnlySpan<char> name) =>
             TryParse(name, out MyTestNameSpace.MyEnum value) ? value : null;
 
         /// <summary>
@@ -474,7 +472,7 @@ namespace MyTestNameSpace
         /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode;
         /// <see langword="false" /> to read value in case sensitive mode.</param>
         /// <returns>The matching <see cref="MyTestNameSpace.MyEnum" /> or <see langword="null" /> if there was no match.</returns>
-        public static MyTestNameSpace.MyEnum? GetValueOrDefault(in ReadOnlySpan<char> name, bool ignoreCase) =>
+        public static MyTestNameSpace.MyEnum? GetValueOrDefault(in global::System.ReadOnlySpan<char> name, bool ignoreCase) =>
             TryParse(name, out MyTestNameSpace.MyEnum value, ignoreCase) ? value : null;
 
         /// <summary>
@@ -500,7 +498,7 @@ namespace MyTestNameSpace
         /// <param name="allowMatchingMetadataAttribute">If <see langword="true" />,
         /// considers the value of metadata attributes, otherwise ignores them.</param>
         /// <returns>The matching <see cref="MyTestNameSpace.MyEnum" /> or <see langword="null" /> if there was no match.</returns>
-        public static MyTestNameSpace.MyEnum? GetValueOrDefault(in ReadOnlySpan<char> name, bool ignoreCase, bool allowMatchingMetadataAttribute) =>
+        public static MyTestNameSpace.MyEnum? GetValueOrDefault(in global::System.ReadOnlySpan<char> name, bool ignoreCase, bool allowMatchingMetadataAttribute) =>
             TryParse(name, out MyTestNameSpace.MyEnum value, ignoreCase, allowMatchingMetadataAttribute) ? value : null;
 
         /// <summary>

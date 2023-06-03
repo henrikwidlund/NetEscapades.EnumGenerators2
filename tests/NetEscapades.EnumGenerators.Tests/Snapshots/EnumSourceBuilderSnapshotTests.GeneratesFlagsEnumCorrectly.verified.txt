@@ -9,8 +9,6 @@
 
 #nullable enable
 
-using System;
-
 namespace Something.Blah
 {
     /// <summary>
@@ -96,7 +94,7 @@ namespace Something.Blah
         /// </summary>
         /// <param name="name">The name to check if it's defined.</param>
         /// <returns><see langword="true" /> if a member with the name exists in the enumeration, <see langword="false" /> otherwise.</returns>
-        public static bool IsDefined(in ReadOnlySpan<char> name) => IsDefined(name, false);
+        public static bool IsDefined(in global::System.ReadOnlySpan<char> name) => IsDefined(name, false);
 
         /// <summary>
         /// Returns a boolean telling whether an enum with the given name exists in the enumeration,
@@ -107,18 +105,18 @@ namespace Something.Blah
         /// <param name="allowMatchingMetadataAttribute">If <see langword="true" />, considers the value of metadata attributes, otherwise ignores them.</param>
         /// <returns><see langword="true" /> if a member with the name exists in the enumeration, or a member is decorated
         /// with a <c>[Display]</c> attribute with the name, <see langword="false" /> otherwise.</returns>
-        public static bool IsDefined(in ReadOnlySpan<char> name, bool allowMatchingMetadataAttribute)
+        public static bool IsDefined(in global::System.ReadOnlySpan<char> name, bool allowMatchingMetadataAttribute)
         {
             return name switch
             {
-                var current when current.Equals(_firstEnumMemory.Span, global::System.StringComparison.Ordinal) => true,
-                var current when current.Equals(_secondEnumMemory.Span, global::System.StringComparison.Ordinal) => true,
+                var current when global::System.MemoryExtensions.Equals(current, _firstEnumMemory.Span, global::System.StringComparison.Ordinal) => true,
+                var current when global::System.MemoryExtensions.Equals(current, _secondEnumMemory.Span, global::System.StringComparison.Ordinal) => true,
                 _ => false
             };
         }
 
-        private static readonly ReadOnlyMemory<char> _firstEnumMemory = "First".AsMemory();
-        private static readonly ReadOnlyMemory<char> _secondEnumMemory = "Second".AsMemory();
+        private static readonly global::System.ReadOnlyMemory<char> _firstEnumMemory = global::System.MemoryExtensions.AsMemory("First");
+        private static readonly global::System.ReadOnlyMemory<char> _secondEnumMemory = global::System.MemoryExtensions.AsMemory("Second");
 
         /// <summary>
         /// Converts the string representation of the name or numeric value of
@@ -229,7 +227,7 @@ namespace Something.Blah
         /// of <see cref="Something.Blah.ShortName" />. This parameter is passed uninitialized.</param>
         /// <returns><see langword="true" /> if the value parameter was converted successfully; otherwise, <see langword="false" />.</returns>
         public static bool TryParse(
-            in ReadOnlySpan<char> name,
+            in global::System.ReadOnlySpan<char> name,
             out Something.Blah.ShortName value)
             => TryParse(name, out value, false, false);
 
@@ -247,7 +245,7 @@ namespace Something.Blah
         /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode; <see langword="false" /> to read value in case sensitive mode.</param>
         /// <returns><see langword="true" /> if the value parameter was converted successfully; otherwise, <see langword="false" />.</returns>
         public static bool TryParse(
-            in ReadOnlySpan<char> name,
+            in global::System.ReadOnlySpan<char> name,
             out Something.Blah.ShortName value,
             bool ignoreCase)
             => TryParse(name, out value, ignoreCase, false);
@@ -268,7 +266,7 @@ namespace Something.Blah
         /// <c>[Display]</c> attribute when parsing, otherwise only considers the member names.</param>
         /// <returns><see langword="true" /> if the value parameter was converted successfully; otherwise, <see langword="false" />.</returns>
         public static bool TryParse(
-            in ReadOnlySpan<char> name,
+            in global::System.ReadOnlySpan<char> name,
             out Something.Blah.ShortName result,
             bool ignoreCase,
             bool allowMatchingMetadataAttribute)
@@ -277,10 +275,10 @@ namespace Something.Blah
             {
                 switch (name)
                 {
-                    case var current when current.Equals(_firstEnumMemory.Span, global::System.StringComparison.OrdinalIgnoreCase):
+                    case var current when global::System.MemoryExtensions.Equals(current, _firstEnumMemory.Span, global::System.StringComparison.OrdinalIgnoreCase):
                         result = Something.Blah.ShortName.First;
                         return true;
-                    case var current when current.Equals(_secondEnumMemory.Span, global::System.StringComparison.OrdinalIgnoreCase):
+                    case var current when global::System.MemoryExtensions.Equals(current, _secondEnumMemory.Span, global::System.StringComparison.OrdinalIgnoreCase):
                         result = Something.Blah.ShortName.Second;
                         return true;
                     case { IsEmpty: false } when int.TryParse(name, out var numericResult):
@@ -294,10 +292,10 @@ namespace Something.Blah
 
             switch (name)
             {
-                case var current when current.Equals(_firstEnumMemory.Span, global::System.StringComparison.Ordinal):
+                case var current when global::System.MemoryExtensions.Equals(current, _firstEnumMemory.Span, global::System.StringComparison.Ordinal):
                     result = Something.Blah.ShortName.First;
                     return true;
-                case var current when current.Equals(_secondEnumMemory.Span, global::System.StringComparison.Ordinal):
+                case var current when global::System.MemoryExtensions.Equals(current, _secondEnumMemory.Span, global::System.StringComparison.Ordinal):
                     result = Something.Blah.ShortName.Second;
                     return true;
                 case { IsEmpty: false } when int.TryParse(name, out var numericResult):
@@ -338,7 +336,7 @@ namespace Something.Blah
         /// </summary>
         /// <param name="name">The value that should be matched.</param>
         /// <returns>The matching <see cref="Something.Blah.ShortName" /> or <see langword="null" /> if there was no match.</returns>
-        public static Something.Blah.ShortName? GetValueOrDefault(in ReadOnlySpan<char> name) =>
+        public static Something.Blah.ShortName? GetValueOrDefault(in global::System.ReadOnlySpan<char> name) =>
             TryParse(name, out Something.Blah.ShortName value) ? value : null;
 
         /// <summary>
@@ -360,7 +358,7 @@ namespace Something.Blah
         /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode;
         /// <see langword="false" /> to read value in case sensitive mode.</param>
         /// <returns>The matching <see cref="Something.Blah.ShortName" /> or <see langword="null" /> if there was no match.</returns>
-        public static Something.Blah.ShortName? GetValueOrDefault(in ReadOnlySpan<char> name, bool ignoreCase) =>
+        public static Something.Blah.ShortName? GetValueOrDefault(in global::System.ReadOnlySpan<char> name, bool ignoreCase) =>
             TryParse(name, out Something.Blah.ShortName value, ignoreCase) ? value : null;
 
         /// <summary>
@@ -386,7 +384,7 @@ namespace Something.Blah
         /// <param name="allowMatchingMetadataAttribute">If <see langword="true" />,
         /// considers the value of metadata attributes, otherwise ignores them.</param>
         /// <returns>The matching <see cref="Something.Blah.ShortName" /> or <see langword="null" /> if there was no match.</returns>
-        public static Something.Blah.ShortName? GetValueOrDefault(in ReadOnlySpan<char> name, bool ignoreCase, bool allowMatchingMetadataAttribute) =>
+        public static Something.Blah.ShortName? GetValueOrDefault(in global::System.ReadOnlySpan<char> name, bool ignoreCase, bool allowMatchingMetadataAttribute) =>
             TryParse(name, out Something.Blah.ShortName value, ignoreCase, allowMatchingMetadataAttribute) ? value : null;
 
         /// <summary>

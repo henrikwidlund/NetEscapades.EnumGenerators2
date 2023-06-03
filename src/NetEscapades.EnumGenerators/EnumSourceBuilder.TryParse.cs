@@ -209,7 +209,7 @@ public static partial class EnumSourceBuilder
                     /// of <see cref="{enumToGenerate.FullyQualifiedName}" />. This parameter is passed uninitialized.</param>
                     /// <returns><see langword="true" /> if the value parameter was converted successfully; otherwise, <see langword="false" />.</returns>
                     public static bool TryParse(
-                        in ReadOnlySpan<char> name,
+                        in global::System.ReadOnlySpan<char> name,
                         out {enumToGenerate.FullyQualifiedName} value)
                         => TryParse(name, out value, false, false);
             """);
@@ -233,7 +233,7 @@ public static partial class EnumSourceBuilder
                     /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode; <see langword="false" /> to read value in case sensitive mode.</param>
                     /// <returns><see langword="true" /> if the value parameter was converted successfully; otherwise, <see langword="false" />.</returns>
                     public static bool TryParse(
-                        in ReadOnlySpan<char> name,
+                        in global::System.ReadOnlySpan<char> name,
                         out {enumToGenerate.FullyQualifiedName} value,
                         bool ignoreCase)
                         => TryParse(name, out value, ignoreCase, false);
@@ -260,7 +260,7 @@ public static partial class EnumSourceBuilder
                     /// <c>[Display]</c> attribute when parsing, otherwise only considers the member names.</param>
                     /// <returns><see langword="true" /> if the value parameter was converted successfully; otherwise, <see langword="false" />.</returns>
                     public static bool TryParse(
-                        in ReadOnlySpan<char> name,
+                        in global::System.ReadOnlySpan<char> name,
                         out {{enumToGenerate.FullyQualifiedName}} result,
                         bool ignoreCase,
                         bool allowMatchingMetadataAttribute)
@@ -285,7 +285,7 @@ public static partial class EnumSourceBuilder
             {
                 sb.AppendLine().Append(
                     $"""
-                                            case var current when current.Equals({member.Key.GetPrivateMetadataMemoryFieldName()}.Span, global::System.StringComparison.OrdinalIgnoreCase):
+                                            case var current when global::System.MemoryExtensions.Equals(current, {member.Key.GetPrivateMetadataMemoryFieldName()}.Span, global::System.StringComparison.OrdinalIgnoreCase):
                                                 result = {enumToGenerate.FullyQualifiedName}.{member.Key};
                                                 return true;
                     """);
@@ -307,7 +307,7 @@ public static partial class EnumSourceBuilder
             {
                 sb.AppendLine().Append(
                     $"""
-                                            case var current when current.Equals({member.Key.GetPrivateMetadataMemoryFieldName()}.Span, global::System.StringComparison.Ordinal):
+                                            case var current when global::System.MemoryExtensions.Equals(current, {member.Key.GetPrivateMetadataMemoryFieldName()}.Span, global::System.StringComparison.Ordinal):
                                                 result = {enumToGenerate.FullyQualifiedName}.{member.Key};
                                                 return true;
                     """);
@@ -333,7 +333,7 @@ public static partial class EnumSourceBuilder
         {
             sb.AppendLine().Append(
                 $"""
-                                    case var current when current.Equals({member.Key.GetPrivateMemoryFieldName()}.Span, global::System.StringComparison.OrdinalIgnoreCase):
+                                    case var current when global::System.MemoryExtensions.Equals(current, {member.Key.GetPrivateMemoryFieldName()}.Span, global::System.StringComparison.OrdinalIgnoreCase):
                                         result = {enumToGenerate.FullyQualifiedName}.{member.Key};
                                         return true;
                 """);
@@ -358,7 +358,7 @@ public static partial class EnumSourceBuilder
         {
             sb.AppendLine().Append(
                 $"""
-                                case var current when current.Equals({member.Key.GetPrivateMemoryFieldName()}.Span, global::System.StringComparison.Ordinal):
+                                case var current when global::System.MemoryExtensions.Equals(current, {member.Key.GetPrivateMemoryFieldName()}.Span, global::System.StringComparison.Ordinal):
                                     result = {enumToGenerate.FullyQualifiedName}.{member.Key};
                                     return true;
                 """);

@@ -39,6 +39,8 @@ Adding the package will automatically add a marker attribute, `[EnumExtensions]`
 To use the generator, add the `[EnumExtensions]` attribute to an enum. For example:
 
 ```csharp
+using System.ComponentModel.DataAnnotations;
+
 [EnumExtensions]
 public enum MyEnum
 {
@@ -138,7 +140,7 @@ namespace NetEscapades.EnumGenerators.IntegrationTests
         /// </summary>
         /// <param name="name">The name to check if it's defined.</param>
         /// <returns><see langword="true" /> if a member with the name exists in the enumeration, <see langword="false" /> otherwise.</returns>
-        public static bool IsDefined(in ReadOnlySpan<char> name) => IsDefined(name, false);
+        public static bool IsDefined(in global::System.ReadOnlySpan<char> name) => IsDefined(name, false);
 
         /// <summary>
         /// Returns a boolean telling whether an enum with the given name exists in the enumeration,
@@ -149,14 +151,14 @@ namespace NetEscapades.EnumGenerators.IntegrationTests
         /// <param name="allowMatchingMetadataAttribute">If <see langword="true" />, considers the value of metadata attributes, otherwise ignores them.</param>
         /// <returns><see langword="true" /> if a member with the name exists in the enumeration, or a member is decorated
         /// with a <c>[Display]</c> attribute with the name, <see langword="false" /> otherwise.</returns>
-        public static bool IsDefined(in ReadOnlySpan<char> name, bool allowMatchingMetadataAttribute)
+        public static bool IsDefined(in global::System.ReadOnlySpan<char> name, bool allowMatchingMetadataAttribute)
         {
             var isDefinedInDisplayAttribute = false;
             if (allowMatchingMetadataAttribute)
             {
                 isDefinedInDisplayAttribute = name switch
                 {
-                    var current when current.Equals(_secondEnumDisplayMemory.Span, global::System.StringComparison.Ordinal) => true,
+                    var current when global::System.MemoryExtensions.Equals(current, _secondEnumDisplayMemory.Span, global::System.StringComparison.Ordinal) => true,
                     _ => false
                 };
             }
@@ -168,15 +170,15 @@ namespace NetEscapades.EnumGenerators.IntegrationTests
 
             return name switch
             {
-                var current when current.Equals(_firstEnumMemory.Span, global::System.StringComparison.Ordinal) => true,
-                var current when current.Equals(_secondEnumMemory.Span, global::System.StringComparison.Ordinal) => true,
+                var current when global::System.MemoryExtensions.Equals(current, _firstEnumMemory.Span, global::System.StringComparison.Ordinal) => true,
+                var current when global::System.MemoryExtensions.Equals(current, _secondEnumMemory.Span, global::System.StringComparison.Ordinal) => true,
                 _ => false
             };
         }
 
-        private static readonly ReadOnlyMemory<char> _firstEnumMemory = "First".AsMemory();
-        private static readonly ReadOnlyMemory<char> _secondEnumMemory = "Second".AsMemory();
-        private static readonly ReadOnlyMemory<char> _secondEnumDisplayMemory = "2nd".AsMemory();
+        private static readonly global::System.ReadOnlyMemory<char> _firstEnumMemory = global::System.MemoryExtensions.AsMemory("First");
+        private static readonly global::System.ReadOnlyMemory<char> _secondEnumMemory = global::System.MemoryExtensions.AsMemory("Second");
+        private static readonly global::System.ReadOnlyMemory<char> _secondEnumDisplayMemory = global::System.MemoryExtensions.AsMemory("2nd");
 
         /// <summary>
         /// Converts the string representation of the name or numeric value of
@@ -309,7 +311,7 @@ namespace NetEscapades.EnumGenerators.IntegrationTests
         /// of <see cref="NetEscapades.EnumGenerators.IntegrationTests.MyEnum" />. This parameter is passed uninitialized.</param>
         /// <returns><see langword="true" /> if the value parameter was converted successfully; otherwise, <see langword="false" />.</returns>
         public static bool TryParse(
-            in ReadOnlySpan<char> name,
+            in global::System.ReadOnlySpan<char> name,
             out NetEscapades.EnumGenerators.IntegrationTests.MyEnum value)
             => TryParse(name, out value, false, false);
 
@@ -327,7 +329,7 @@ namespace NetEscapades.EnumGenerators.IntegrationTests
         /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode; <see langword="false" /> to read value in case sensitive mode.</param>
         /// <returns><see langword="true" /> if the value parameter was converted successfully; otherwise, <see langword="false" />.</returns>
         public static bool TryParse(
-            in ReadOnlySpan<char> name,
+            in global::System.ReadOnlySpan<char> name,
             out NetEscapades.EnumGenerators.IntegrationTests.MyEnum value,
             bool ignoreCase)
             => TryParse(name, out value, ignoreCase, false);
@@ -348,7 +350,7 @@ namespace NetEscapades.EnumGenerators.IntegrationTests
         /// <c>[Display]</c> attribute when parsing, otherwise only considers the member names.</param>
         /// <returns><see langword="true" /> if the value parameter was converted successfully; otherwise, <see langword="false" />.</returns>
         public static bool TryParse(
-            in ReadOnlySpan<char> name,
+            in global::System.ReadOnlySpan<char> name,
             out NetEscapades.EnumGenerators.IntegrationTests.MyEnum result,
             bool ignoreCase,
             bool allowMatchingMetadataAttribute)
@@ -359,7 +361,7 @@ namespace NetEscapades.EnumGenerators.IntegrationTests
                 {
                     switch (name)
                     {
-                        case var current when current.Equals(_secondEnumDisplayMemory.Span, global::System.StringComparison.OrdinalIgnoreCase):
+                        case var current when global::System.MemoryExtensions.Equals(current, _secondEnumDisplayMemory.Span, global::System.StringComparison.OrdinalIgnoreCase):
                             result = NetEscapades.EnumGenerators.IntegrationTests.MyEnum.Second;
                             return true;
                     }
@@ -368,7 +370,7 @@ namespace NetEscapades.EnumGenerators.IntegrationTests
                 {
                     switch (name)
                     {
-                        case var current when current.Equals(_secondEnumDisplayMemory.Span, global::System.StringComparison.Ordinal):
+                        case var current when global::System.MemoryExtensions.Equals(current, _secondEnumDisplayMemory.Span, global::System.StringComparison.Ordinal):
                             result = NetEscapades.EnumGenerators.IntegrationTests.MyEnum.Second;
                             return true;
                     }
@@ -379,10 +381,10 @@ namespace NetEscapades.EnumGenerators.IntegrationTests
             {
                 switch (name)
                 {
-                    case var current when current.Equals(_firstEnumMemory.Span, global::System.StringComparison.OrdinalIgnoreCase):
+                    case var current when global::System.MemoryExtensions.Equals(current, _firstEnumMemory.Span, global::System.StringComparison.OrdinalIgnoreCase):
                         result = NetEscapades.EnumGenerators.IntegrationTests.MyEnum.First;
                         return true;
-                    case var current when current.Equals(_secondEnumMemory.Span, global::System.StringComparison.OrdinalIgnoreCase):
+                    case var current when global::System.MemoryExtensions.Equals(current, _secondEnumMemory.Span, global::System.StringComparison.OrdinalIgnoreCase):
                         result = NetEscapades.EnumGenerators.IntegrationTests.MyEnum.Second;
                         return true;
                     case { IsEmpty: false } when int.TryParse(name, out var numericResult):
@@ -396,10 +398,10 @@ namespace NetEscapades.EnumGenerators.IntegrationTests
 
             switch (name)
             {
-                case var current when current.Equals(_firstEnumMemory.Span, global::System.StringComparison.Ordinal):
+                case var current when global::System.MemoryExtensions.Equals(current, _firstEnumMemory.Span, global::System.StringComparison.Ordinal):
                     result = NetEscapades.EnumGenerators.IntegrationTests.MyEnum.First;
                     return true;
-                case var current when current.Equals(_secondEnumMemory.Span, global::System.StringComparison.Ordinal):
+                case var current when global::System.MemoryExtensions.Equals(current, _secondEnumMemory.Span, global::System.StringComparison.Ordinal):
                     result = NetEscapades.EnumGenerators.IntegrationTests.MyEnum.Second;
                     return true;
                 case { IsEmpty: false } when int.TryParse(name, out var numericResult):
@@ -440,7 +442,7 @@ namespace NetEscapades.EnumGenerators.IntegrationTests
         /// </summary>
         /// <param name="name">The value that should be matched.</param>
         /// <returns>The matching <see cref="NetEscapades.EnumGenerators.IntegrationTests.MyEnum" /> or <see langword="null" /> if there was no match.</returns>
-        public static NetEscapades.EnumGenerators.IntegrationTests.MyEnum? GetValueOrDefault(in ReadOnlySpan<char> name) =>
+        public static NetEscapades.EnumGenerators.IntegrationTests.MyEnum? GetValueOrDefault(in global::System.ReadOnlySpan<char> name) =>
             TryParse(name, out NetEscapades.EnumGenerators.IntegrationTests.MyEnum value) ? value : null;
 
         /// <summary>
@@ -462,7 +464,7 @@ namespace NetEscapades.EnumGenerators.IntegrationTests
         /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode;
         /// <see langword="false" /> to read value in case sensitive mode.</param>
         /// <returns>The matching <see cref="NetEscapades.EnumGenerators.IntegrationTests.MyEnum" /> or <see langword="null" /> if there was no match.</returns>
-        public static NetEscapades.EnumGenerators.IntegrationTests.MyEnum? GetValueOrDefault(in ReadOnlySpan<char> name, bool ignoreCase) =>
+        public static NetEscapades.EnumGenerators.IntegrationTests.MyEnum? GetValueOrDefault(in global::System.ReadOnlySpan<char> name, bool ignoreCase) =>
             TryParse(name, out NetEscapades.EnumGenerators.IntegrationTests.MyEnum value, ignoreCase) ? value : null;
 
         /// <summary>
@@ -488,7 +490,7 @@ namespace NetEscapades.EnumGenerators.IntegrationTests
         /// <param name="allowMatchingMetadataAttribute">If <see langword="true" />,
         /// considers the value of metadata attributes, otherwise ignores them.</param>
         /// <returns>The matching <see cref="NetEscapades.EnumGenerators.IntegrationTests.MyEnum" /> or <see langword="null" /> if there was no match.</returns>
-        public static NetEscapades.EnumGenerators.IntegrationTests.MyEnum? GetValueOrDefault(in ReadOnlySpan<char> name, bool ignoreCase, bool allowMatchingMetadataAttribute) =>
+        public static NetEscapades.EnumGenerators.IntegrationTests.MyEnum? GetValueOrDefault(in global::System.ReadOnlySpan<char> name, bool ignoreCase, bool allowMatchingMetadataAttribute) =>
             TryParse(name, out NetEscapades.EnumGenerators.IntegrationTests.MyEnum value, ignoreCase, allowMatchingMetadataAttribute) ? value : null;
 
         /// <summary>
@@ -526,6 +528,9 @@ You can override the name of the extension class by setting `ExtensionClassName`
 
 If you want a `JsonConverter` that uses the generated extensions for efficient serialization and deserialization you can add the `EnumJsonConverter` and `JsonConverter` to the enum. For example:
 ```csharp
+using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
+
 [EnumExtensions]
 [EnumJsonConverter(typeof(MyEnumConverter))]
 [JsonConverter(typeof(MyEnumConverter))]

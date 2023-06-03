@@ -58,11 +58,7 @@ namespace NetEscapades.EnumGenerators
     {
         sb
             .Append(Constants.GeneratedCodeHeader)
-            .AppendLine()
-            .AppendLine()
-            .AppendLine("""
-            using System;
-            """);
+            .AppendLine();
 
         if (!string.IsNullOrEmpty(enumToGenerate.Namespace))
         {
@@ -173,7 +169,7 @@ namespace NetEscapades.EnumGenerators
         {
             sb.AppendLine()
                 .Append(
-                    $"""        private static readonly ReadOnlyMemory<char> {member.Key.GetPrivateMemoryFieldName()} = "{member.Key}".AsMemory();""");
+                    $"""        private static readonly global::System.ReadOnlyMemory<char> {member.Key.GetPrivateMemoryFieldName()} = global::System.MemoryExtensions.AsMemory("{member.Key}");""");
         }
 
         foreach (var member in enumToGenerate.Names.Where(static m =>
@@ -181,7 +177,7 @@ namespace NetEscapades.EnumGenerators
         {
             sb.AppendLine()
                 .Append(
-                    $"""        private static readonly ReadOnlyMemory<char> {member.Key.GetPrivateMetadataMemoryFieldName()} = "{member.Value.DisplayName}".AsMemory();""");
+                    $"""        private static readonly global::System.ReadOnlyMemory<char> {member.Key.GetPrivateMetadataMemoryFieldName()} = global::System.MemoryExtensions.AsMemory("{member.Value.DisplayName}");""");
         }
     }
 
@@ -247,7 +243,7 @@ namespace NetEscapades.EnumGenerators
                         /// </summary>
                         /// <param name="name">The value that should be matched.</param>
                         /// <returns>The matching <see cref="{enumToGenerate.FullyQualifiedName}" /> or <see langword="null" /> if there was no match.</returns>
-                        public static {enumToGenerate.FullyQualifiedName}? GetValueOrDefault(in ReadOnlySpan<char> name) =>
+                        public static {enumToGenerate.FullyQualifiedName}? GetValueOrDefault(in global::System.ReadOnlySpan<char> name) =>
                             TryParse(name, out {enumToGenerate.FullyQualifiedName} value) ? value : null;
                 """);
 
@@ -275,7 +271,7 @@ namespace NetEscapades.EnumGenerators
                     /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode;
                     /// <see langword="false" /> to read value in case sensitive mode.</param>
                     /// <returns>The matching <see cref="{enumToGenerate.FullyQualifiedName}" /> or <see langword="null" /> if there was no match.</returns>
-                    public static {enumToGenerate.FullyQualifiedName}? GetValueOrDefault(in ReadOnlySpan<char> name, bool ignoreCase) =>
+                    public static {enumToGenerate.FullyQualifiedName}? GetValueOrDefault(in global::System.ReadOnlySpan<char> name, bool ignoreCase) =>
                         TryParse(name, out {enumToGenerate.FullyQualifiedName} value, ignoreCase) ? value : null;
             """);
 
@@ -307,7 +303,7 @@ namespace NetEscapades.EnumGenerators
                     /// <param name="allowMatchingMetadataAttribute">If <see langword="true" />,
                     /// considers the value of metadata attributes, otherwise ignores them.</param>
                     /// <returns>The matching <see cref="{enumToGenerate.FullyQualifiedName}" /> or <see langword="null" /> if there was no match.</returns>
-                    public static {enumToGenerate.FullyQualifiedName}? GetValueOrDefault(in ReadOnlySpan<char> name, bool ignoreCase, bool allowMatchingMetadataAttribute) =>
+                    public static {enumToGenerate.FullyQualifiedName}? GetValueOrDefault(in global::System.ReadOnlySpan<char> name, bool ignoreCase, bool allowMatchingMetadataAttribute) =>
                         TryParse(name, out {enumToGenerate.FullyQualifiedName} value, ignoreCase, allowMatchingMetadataAttribute) ? value : null;
             """);
     }
