@@ -382,5 +382,7 @@ namespace NetEscapades.EnumGenerators
                 }
                 """);
         }
+
+        sb.AppendLine();
     }
 }
