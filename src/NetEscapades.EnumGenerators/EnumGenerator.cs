@@ -131,6 +131,10 @@ public class EnumGenerator : IIncrementalGenerator
             addDisplayName:
             if (displayName is not null)
             {
+                // Handle cases where contains a quote or a backslash
+                displayName = displayName
+                    .Replace(@"\", @"\\")
+                    .Replace("\"", "\\\"");
                 displayNames ??= new();
                 isDisplayNameTheFirstPresence = displayNames.Add(displayName);
             }

@@ -6,14 +6,16 @@ public class EnumGeneratorTests
     [Fact]
     public Task CanGenerateEnumExtensionsInGlobalNamespace()
     {
-        const string input = @"using NetEscapades.EnumGenerators;
-
-[EnumExtensions]
-public enum MyEnum
-{
-    First,
-    Second
-}";
+        const string input = """
+            using NetEscapades.EnumGenerators;
+            
+            [EnumExtensions]
+            public enum MyEnum
+            {
+                First,
+                Second
+            }
+            """;
         var (diagnostics, output) = TestHelpers.GetGeneratedOutput<EnumGenerator>(input);
 
         Assert.Empty(diagnostics);
@@ -23,17 +25,19 @@ public enum MyEnum
     [Fact]
     public Task CanGenerateEnumExtensionsInChildNamespace()
     {
-        const string input = @"using NetEscapades.EnumGenerators;
-
-namespace MyTestNameSpace
-{
-    [EnumExtensions]
-    public enum MyEnum
-    {
-        First = 0,
-        Second = 1
-    }
-}";
+        const string input = """
+            using NetEscapades.EnumGenerators;
+            
+            namespace MyTestNameSpace
+            {
+                [EnumExtensions]
+                public enum MyEnum
+                {
+                    First = 0,
+                    Second = 1
+                }
+            }
+            """;
         var (diagnostics, output) = TestHelpers.GetGeneratedOutput<EnumGenerator>(input);
 
         Assert.Empty(diagnostics);
@@ -43,20 +47,22 @@ namespace MyTestNameSpace
     [Fact]
     public Task CanGenerateEnumExtensionsInNestedClass()
     {
-        const string input = @"using NetEscapades.EnumGenerators;
-
-namespace MyTestNameSpace
-{
-    public class InnerClass
-    {
-        [EnumExtensions]
-        internal enum MyEnum
-        {
-            First = 0,
-            Second = 1
-        }
-    }
-}";
+        const string input = """
+            using NetEscapades.EnumGenerators;
+            
+            namespace MyTestNameSpace
+            {
+                public class InnerClass
+                {
+                    [EnumExtensions]
+                    internal enum MyEnum
+                    {
+                        First = 0,
+                        Second = 1
+                    }
+                }
+            }
+            """;
         var (diagnostics, output) = TestHelpers.GetGeneratedOutput<EnumGenerator>(input);
 
         Assert.Empty(diagnostics);
@@ -66,17 +72,19 @@ namespace MyTestNameSpace
     [Fact]
     public Task CanGenerateEnumExtensionsWithCustomName()
     {
-        const string input = @"using NetEscapades.EnumGenerators;
-
-namespace MyTestNameSpace
-{
-    [EnumExtensions(ExtensionClassName = ""A"")]
-    internal enum MyEnum
-    {
-        First = 0,
-        Second = 1
-    }
-}";
+        const string input = """
+            using NetEscapades.EnumGenerators;
+            
+            namespace MyTestNameSpace
+            {
+                [EnumExtensions(ExtensionClassName = "A")]
+                internal enum MyEnum
+                {
+                    First = 0,
+                    Second = 1
+                }
+            }
+            """;
         var (diagnostics, output) = TestHelpers.GetGeneratedOutput<EnumGenerator>(input);
 
         Assert.Empty(diagnostics);
@@ -86,17 +94,19 @@ namespace MyTestNameSpace
     [Fact]
     public Task CanGenerateEnumExtensionsWithCustomNamespace()
     {
-        const string input = @"using NetEscapades.EnumGenerators;
-
-namespace MyTestNameSpace
-{
-    [EnumExtensions(ExtensionClassNamespace = ""A.B"")]
-    internal enum MyEnum
-    {
-        First = 0,
-        Second = 1
-    }
-}";
+        const string input = """
+            using NetEscapades.EnumGenerators;
+            
+            namespace MyTestNameSpace
+            {
+                [EnumExtensions(ExtensionClassNamespace = "A.B")]
+                internal enum MyEnum
+                {
+                    First = 0,
+                    Second = 1
+                }
+            }
+            """;
         var (diagnostics, output) = TestHelpers.GetGeneratedOutput<EnumGenerator>(input);
 
         Assert.Empty(diagnostics);
@@ -106,17 +116,19 @@ namespace MyTestNameSpace
     [Fact]
     public Task CanGenerateEnumExtensionsWithCustomNamespaceAndName()
     {
-        const string input = @"using NetEscapades.EnumGenerators;
-
-namespace MyTestNameSpace
-{
-    [EnumExtensions(ExtensionClassNamespace = ""A.B"", ExtensionClassName = ""C"")]
-    internal enum MyEnum
-    {
-        First = 0,
-        Second = 1
-    }
-}";
+        const string input = """
+            using NetEscapades.EnumGenerators;
+            
+            namespace MyTestNameSpace
+            {
+                [EnumExtensions(ExtensionClassNamespace = "A.B", ExtensionClassName = "C")]
+                internal enum MyEnum
+                {
+                    First = 0,
+                    Second = 1
+                }
+            }
+            """;
         var (diagnostics, output) = TestHelpers.GetGeneratedOutput<EnumGenerator>(input);
 
         Assert.Empty(diagnostics);
@@ -126,24 +138,26 @@ namespace MyTestNameSpace
     [Fact]
     public Task CanGenerateEnumExtensionsWithDisplayName()
     {
-        const string input = @"using NetEscapades.EnumGenerators;
-using System.ComponentModel.DataAnnotations;
-
-namespace MyTestNameSpace
-{
-    [EnumExtensions]
-    public enum MyEnum
-    {
-        First = 0,
-
-        [Display(Name = ""2nd"")]
-        Second = 1,
-        Third = 2,
-
-        [Display(Name = ""4th"")]
-        Fourth = 3
-    }
-}";
+        const string input = """
+            using NetEscapades.EnumGenerators;
+            using System.ComponentModel.DataAnnotations;
+            
+            namespace MyTestNameSpace
+            {
+                [EnumExtensions]
+                public enum MyEnum
+                {
+                    First = 0,
+            
+                    [Display(Name = "2nd")]
+                    Second = 1,
+                    Third = 2,
+            
+                    [Display(Name = "4th")]
+                    Fourth = 3
+                }
+            }
+            """;
         var (diagnostics, output) = TestHelpers.GetGeneratedOutput<EnumGenerator>(input);
 
         Assert.Empty(diagnostics);
@@ -156,7 +170,7 @@ namespace MyTestNameSpace
     [Fact]
     public Task CanGenerateEnumExtensionsWithDescription()
     {
-        var input = """
+        const string input = """
         using NetEscapades.EnumGenerators;
         using System.ComponentModel;
 
@@ -189,7 +203,7 @@ namespace MyTestNameSpace
     [Fact]
     public Task CanGenerateEnumExtensionsWithDescriptionAndDisplayName()
     {
-        var input = """
+        const string input = """
         using NetEscapades.EnumGenerators;
         using System.ComponentModel;
         using System.ComponentModel.DataAnnotations;
@@ -225,24 +239,26 @@ namespace MyTestNameSpace
     [Fact]
     public Task CanGenerateEnumExtensionsWithSameDisplayName()
     {
-        const string input = @"using NetEscapades.EnumGenerators;
-using System.ComponentModel.DataAnnotations;
-
-namespace MyTestNameSpace
-{
-    [EnumExtensions]
-    public enum MyEnum
-    {
-        First = 0,
-
-        [Display(Name = ""2nd"")]
-        Second = 1,
-        Third = 2,
-
-        [Display(Name = ""2nd"")]
-        Fourth = 3
-    }
-}";
+        const string input = """
+            using NetEscapades.EnumGenerators;
+            using System.ComponentModel.DataAnnotations;
+            
+            namespace MyTestNameSpace
+            {
+                [EnumExtensions]
+                public enum MyEnum
+                {
+                    First = 0,
+            
+                    [Display(Name = "2nd")]
+                    Second = 1,
+                    Third = 2,
+            
+                    [Display(Name = "2nd")]
+                    Fourth = 3
+                }
+            }
+            """;
         var (diagnostics, output) = TestHelpers.GetGeneratedOutput<EnumGenerator>(input);
 
         Assert.Empty(diagnostics);
@@ -279,5 +295,31 @@ namespace MyTestNameSpace
             .UseTextForParameters($"{usings}_{attribute}".Replace(" ", "").Replace(";", "").Replace('.', '-'))
             .DisableRequireUniquePrefix()
             .UseDirectory("Snapshots");
+    }
+
+    [Fact]
+    public Task HandlesStringsWithQuotesAndSlashesInDescription()
+    {
+        const string input =
+            """"
+            using NetEscapades.EnumGenerators;
+            using System.ComponentModel.DataAnnotations;
+
+            namespace Test;
+
+            [EnumExtensions]
+            public enum StringTesting
+            {
+            [System.ComponentModel.Description("Quotes \"")]   Quotes,
+            [System.ComponentModel.Description(@"Literal Quotes """)]   LiteralQuotes,
+            [System.ComponentModel.Description("Backslash \\")]   Backslash,
+            [System.ComponentModel.Description(@"LiteralBackslash \")]   BackslashLiteral,
+            }
+            """";
+
+        var (diagnostics, output) = TestHelpers.GetGeneratedOutput<EnumGenerator>(input);
+
+        Assert.Empty(diagnostics);
+        return Verify(output).UseDirectory("Snapshots");
     }
 }
