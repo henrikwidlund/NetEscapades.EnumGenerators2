@@ -13,7 +13,7 @@ public static partial class EnumSourceBuilder
                 /// </summary>
                 /// <param name="value">The value to check if it's defined.</param>
                 /// <returns><see langword="true" /> if the value exists in the enumeration, <see langword="false" /> otherwise.</returns>
-                public static bool IsDefined({{enumToGenerate.FullyQualifiedName}} value)
+                public static bool IsDefined(global::{{enumToGenerate.FullyQualifiedName}} value)
                     => value switch
                     {
             """);
@@ -22,7 +22,7 @@ public static partial class EnumSourceBuilder
         {
             sb.AppendLine()
                 .Append(
-                    $"""            {enumToGenerate.FullyQualifiedName}.{member.Key} => true,""");
+                    $"""            global::{enumToGenerate.FullyQualifiedName}.{member.Key} => true,""");
         }
 
         sb.AppendLine().Append(
@@ -105,7 +105,7 @@ public static partial class EnumSourceBuilder
         foreach (var member in enumToGenerate.Names)
         {
             sb.AppendLine().Append(
-                $"""            nameof({enumToGenerate.FullyQualifiedName}.{member.Key}) => true,""");
+                $"""            nameof(global::{enumToGenerate.FullyQualifiedName}.{member.Key}) => true,""");
         }
 
         sb.AppendLine().Append(

@@ -12,7 +12,7 @@
 namespace MyTestNameSpace;
 
 /// <summary>
-/// Extension methods for <see cref="MyTestNameSpace.MyEnum" />.
+/// Extension methods for <see cref="global::MyTestNameSpace.MyEnum" />.
 /// </summary>
 internal static partial class A
 {
@@ -23,18 +23,18 @@ internal static partial class A
     public const int Length = 2;
 
     /// <summary>
-    /// Returns the string representation of the <see cref="MyTestNameSpace.MyEnum"/> value.
+    /// Returns the string representation of the <see cref="global::MyTestNameSpace.MyEnum"/> value.
     /// If the attribute is decorated with a <c>[Display]</c>/<c>[Description]</c> attribute, then
     /// uses the provided value. Otherwise uses the name of the member, equivalent to
     /// calling <c>ToString()</c> on <paramref name="value"/>.
     /// </summary>
     /// <param name="value">The value to retrieve the string value for.</param>
     /// <returns>The string representation of the value.</returns>
-    public static string ToStringFast(this MyTestNameSpace.MyEnum value)
+    public static string ToStringFast(this global::MyTestNameSpace.MyEnum value)
         => value switch
         {
-            MyTestNameSpace.MyEnum.First => nameof(MyTestNameSpace.MyEnum.First),
-            MyTestNameSpace.MyEnum.Second => nameof(MyTestNameSpace.MyEnum.Second),
+            global::MyTestNameSpace.MyEnum.First => nameof(global::MyTestNameSpace.MyEnum.First),
+            global::MyTestNameSpace.MyEnum.Second => nameof(global::MyTestNameSpace.MyEnum.Second),
             _ => value.ToString()
         };
 
@@ -43,11 +43,11 @@ internal static partial class A
     /// </summary>
     /// <param name="value">The value to check if it's defined.</param>
     /// <returns><see langword="true" /> if the value exists in the enumeration, <see langword="false" /> otherwise.</returns>
-    public static bool IsDefined(MyTestNameSpace.MyEnum value)
+    public static bool IsDefined(global::MyTestNameSpace.MyEnum value)
         => value switch
         {
-            MyTestNameSpace.MyEnum.First => true,
-            MyTestNameSpace.MyEnum.Second => true,
+            global::MyTestNameSpace.MyEnum.First => true,
+            global::MyTestNameSpace.MyEnum.Second => true,
             _ => false
         };
 
@@ -71,8 +71,8 @@ internal static partial class A
     {
         return name switch
         {
-            nameof(MyTestNameSpace.MyEnum.First) => true,
-            nameof(MyTestNameSpace.MyEnum.Second) => true,
+            nameof(global::MyTestNameSpace.MyEnum.First) => true,
+            nameof(global::MyTestNameSpace.MyEnum.Second) => true,
             _ => false
         };
     }
@@ -108,53 +108,53 @@ internal static partial class A
 
     /// <summary>
     /// Converts the string representation of the name or numeric value of
-    /// an <see cref="MyTestNameSpace.MyEnum" /> to the equivalent instance.
+    /// an <see cref="global::MyTestNameSpace.MyEnum" /> to the equivalent instance.
     /// The return value indicates whether the conversion succeeded.
     /// </summary>
     /// <param name="name">The case-sensitive string representation of the enumeration name or underlying value to convert.</param>
     /// <param name="value">When this method returns, contains an object of type
-    /// <see cref="MyTestNameSpace.MyEnum" /> whose
+    /// <see cref="global::MyTestNameSpace.MyEnum" /> whose
     /// value is represented by <paramref name="value"/> if the parse operation succeeds.
     /// If the parse operation fails, contains the default value of the underlying type
-    /// of <see cref="MyTestNameSpace.MyEnum" />. This parameter is passed uninitialized.</param>
+    /// of <see cref="global::MyTestNameSpace.MyEnum" />. This parameter is passed uninitialized.</param>
     /// <returns><see langword="true" /> if the value parameter was converted successfully; otherwise, <see langword="false" />.</returns>
     public static bool TryParse(
         [global::System.Diagnostics.CodeAnalysis.NotNullWhen(true)]
         string? name,
-        out MyTestNameSpace.MyEnum value)
+        out global::MyTestNameSpace.MyEnum value)
         => TryParse(name, out value, false, false);
 
     /// <summary>
     /// Converts the string representation of the name or numeric value of
-    /// an <see cref="MyTestNameSpace.MyEnum" /> to the equivalent instance.
+    /// an <see cref="global::MyTestNameSpace.MyEnum" /> to the equivalent instance.
     /// The return value indicates whether the conversion succeeded.
     /// </summary>
     /// <param name="name">The string representation of the enumeration name or underlying value to convert.</param>
     /// <param name="value">When this method returns, contains an object of type
-    /// <see cref="MyTestNameSpace.MyEnum" /> whose
+    /// <see cref="global::MyTestNameSpace.MyEnum" /> whose
     /// value is represented by <paramref name="value"/> if the parse operation succeeds.
     /// If the parse operation fails, contains the default value of the underlying type
-    /// of <see cref="MyTestNameSpace.MyEnum" />. This parameter is passed uninitialized.</param>
+    /// of <see cref="global::MyTestNameSpace.MyEnum" />. This parameter is passed uninitialized.</param>
     /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode; <see langword="false" /> to read value in case sensitive mode.</param>
     /// <returns><see langword="true" /> if the value parameter was converted successfully; otherwise, <see langword="false" />.</returns>
     public static bool TryParse(
         [global::System.Diagnostics.CodeAnalysis.NotNullWhen(true)]
         string? name,
-        out MyTestNameSpace.MyEnum value,
+        out global::MyTestNameSpace.MyEnum value,
         bool ignoreCase)
         => TryParse(name, out value, ignoreCase, false);
 
     /// <summary>
     /// Converts the string representation of the name or numeric value of
-    /// an <see cref="MyTestNameSpace.MyEnum" /> to the equivalent instance.
+    /// an <see cref="global::MyTestNameSpace.MyEnum" /> to the equivalent instance.
     /// The return value indicates whether the conversion succeeded.
     /// </summary>
     /// <param name="name">The string representation of the enumeration name or underlying value to convert.</param>
     /// <param name="value">When this method returns, contains an object of type
-    /// <see cref="MyTestNameSpace.MyEnum" /> whose
+    /// <see cref="global::MyTestNameSpace.MyEnum" /> whose
     /// value is represented by <paramref name="value"/> if the parse operation succeeds.
     /// If the parse operation fails, contains the default value of the underlying type
-    /// of <see cref="MyTestNameSpace.MyEnum" />. This parameter is passed uninitialized.</param>
+    /// of <see cref="global::MyTestNameSpace.MyEnum" />. This parameter is passed uninitialized.</param>
     /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode; <see langword="false" /> to read value in case sensitive mode.</param>
     /// <param name="allowMatchingMetadataAttribute">If <see langword="true" />, considers the value included in metadata attributes such as
     /// <c>[Display]</c>/<c>[Description]</c> attribute when parsing, otherwise only considers the member names.</param>
@@ -162,7 +162,7 @@ internal static partial class A
     public static bool TryParse(
         [global::System.Diagnostics.CodeAnalysis.NotNullWhen(true)]
         string? name,
-        out MyTestNameSpace.MyEnum value,
+        out global::MyTestNameSpace.MyEnum value,
         bool ignoreCase,
         bool allowMatchingMetadataAttribute)
     {
@@ -170,14 +170,14 @@ internal static partial class A
         {
             switch (name)
             {
-                case not null when name.Equals(nameof(MyTestNameSpace.MyEnum.First), global::System.StringComparison.OrdinalIgnoreCase):
-                    value = MyTestNameSpace.MyEnum.First;
+                case not null when name.Equals(nameof(global::MyTestNameSpace.MyEnum.First), global::System.StringComparison.OrdinalIgnoreCase):
+                    value = global::MyTestNameSpace.MyEnum.First;
                     return true;
-                case not null when name.Equals(nameof(MyTestNameSpace.MyEnum.Second), global::System.StringComparison.OrdinalIgnoreCase):
-                    value = MyTestNameSpace.MyEnum.Second;
+                case not null when name.Equals(nameof(global::MyTestNameSpace.MyEnum.Second), global::System.StringComparison.OrdinalIgnoreCase):
+                    value = global::MyTestNameSpace.MyEnum.Second;
                     return true;
                 case { Length: > 0 } when int.TryParse(name, out var val):
-                    value = (MyTestNameSpace.MyEnum)val;
+                    value = (global::MyTestNameSpace.MyEnum)val;
                     return true;
                 default:
                     value = default;
@@ -187,14 +187,14 @@ internal static partial class A
 
         switch (name)
         {
-            case nameof(MyTestNameSpace.MyEnum.First):
-                value = MyTestNameSpace.MyEnum.First;
+            case nameof(global::MyTestNameSpace.MyEnum.First):
+                value = global::MyTestNameSpace.MyEnum.First;
                 return true;
-            case nameof(MyTestNameSpace.MyEnum.Second):
-                value = MyTestNameSpace.MyEnum.Second;
+            case nameof(global::MyTestNameSpace.MyEnum.Second):
+                value = global::MyTestNameSpace.MyEnum.Second;
                 return true;
             case { Length: > 0 } when int.TryParse(name, out var val):
-                value = (MyTestNameSpace.MyEnum)val;
+                value = (global::MyTestNameSpace.MyEnum)val;
                 return true;
             default:
                 value = default;
@@ -204,58 +204,58 @@ internal static partial class A
 
     /// <summary>
     /// Converts the span representation of the name or numeric value of
-    /// an <see cref="MyTestNameSpace.MyEnum" /> to the equivalent instance.
+    /// an <see cref="global::MyTestNameSpace.MyEnum" /> to the equivalent instance.
     /// The return value indicates whether the conversion succeeded.
     /// </summary>
     /// <param name="name">The span representation of the enumeration name or underlying value to convert.</param>
     /// <param name="value">When this method returns, contains an object of type
-    /// <see cref="MyTestNameSpace.MyEnum" /> whose
+    /// <see cref="global::MyTestNameSpace.MyEnum" /> whose
     /// value is represented by <paramref name="value"/> if the parse operation succeeds.
     /// If the parse operation fails, contains the default value of the underlying type
-    /// of <see cref="MyTestNameSpace.MyEnum" />. This parameter is passed uninitialized.</param>
+    /// of <see cref="global::MyTestNameSpace.MyEnum" />. This parameter is passed uninitialized.</param>
     /// <returns><see langword="true" /> if the value parameter was converted successfully; otherwise, <see langword="false" />.</returns>
     public static bool TryParse(
         in global::System.ReadOnlySpan<char> name,
-        out MyTestNameSpace.MyEnum value)
+        out global::MyTestNameSpace.MyEnum value)
         => TryParse(name, out value, false, false);
 
     /// <summary>
     /// Converts the span representation of the name or numeric value of
-    /// an <see cref="MyTestNameSpace.MyEnum" /> to the equivalent instance.
+    /// an <see cref="global::MyTestNameSpace.MyEnum" /> to the equivalent instance.
     /// The return value indicates whether the conversion succeeded.
     /// </summary>
     /// <param name="name">The span representation of the enumeration name or underlying value to convert.</param>
     /// <param name="value">When this method returns, contains an object of type
-    /// <see cref="MyTestNameSpace.MyEnum" /> whose
+    /// <see cref="global::MyTestNameSpace.MyEnum" /> whose
     /// value is represented by <paramref name="value"/> if the parse operation succeeds.
     /// If the parse operation fails, contains the default value of the underlying type
-    /// of <see cref="MyTestNameSpace.MyEnum" />. This parameter is passed uninitialized.</param>
+    /// of <see cref="global::MyTestNameSpace.MyEnum" />. This parameter is passed uninitialized.</param>
     /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode; <see langword="false" /> to read value in case sensitive mode.</param>
     /// <returns><see langword="true" /> if the value parameter was converted successfully; otherwise, <see langword="false" />.</returns>
     public static bool TryParse(
         in global::System.ReadOnlySpan<char> name,
-        out MyTestNameSpace.MyEnum value,
+        out global::MyTestNameSpace.MyEnum value,
         bool ignoreCase)
         => TryParse(name, out value, ignoreCase, false);
 
     /// <summary>
     /// Converts the span representation of the name or numeric value of
-    /// an <see cref="MyTestNameSpace.MyEnum" /> to the equivalent instance.
+    /// an <see cref="global::MyTestNameSpace.MyEnum" /> to the equivalent instance.
     /// The return value indicates whether the conversion succeeded.
     /// </summary>
     /// <param name="name">The span representation of the enumeration name or underlying value to convert.</param>
     /// <param name="result">When this method returns, contains an object of type
-    /// <see cref="MyTestNameSpace.MyEnum" /> whose
+    /// <see cref="global::MyTestNameSpace.MyEnum" /> whose
     /// value is represented by <paramref name="result"/> if the parse operation succeeds.
     /// If the parse operation fails, contains the default value of the underlying type
-    /// of <see cref="MyTestNameSpace.MyEnum" />. This parameter is passed uninitialized.</param>
+    /// of <see cref="global::MyTestNameSpace.MyEnum" />. This parameter is passed uninitialized.</param>
     /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode; <see langword="false" /> to read value in case sensitive mode.</param>
     /// <param name="allowMatchingMetadataAttribute">If <see langword="true" />, considers the value included in metadata attributes such as
     /// <c>[Display]</c>/<c>[Description]</c> attribute when parsing, otherwise only considers the member names.</param>
     /// <returns><see langword="true" /> if the value parameter was converted successfully; otherwise, <see langword="false" />.</returns>
     public static bool TryParse(
         in global::System.ReadOnlySpan<char> name,
-        out MyTestNameSpace.MyEnum result,
+        out global::MyTestNameSpace.MyEnum result,
         bool ignoreCase,
         bool allowMatchingMetadataAttribute)
     {
@@ -264,13 +264,13 @@ internal static partial class A
             switch (name)
             {
                 case var current when global::System.MemoryExtensions.Equals(current, _firstEnumMemory.Span, global::System.StringComparison.OrdinalIgnoreCase):
-                    result = MyTestNameSpace.MyEnum.First;
+                    result = global::MyTestNameSpace.MyEnum.First;
                     return true;
                 case var current when global::System.MemoryExtensions.Equals(current, _secondEnumMemory.Span, global::System.StringComparison.OrdinalIgnoreCase):
-                    result = MyTestNameSpace.MyEnum.Second;
+                    result = global::MyTestNameSpace.MyEnum.Second;
                     return true;
                 case { IsEmpty: false } when int.TryParse(name, out var numericResult):
-                    result = (MyTestNameSpace.MyEnum)numericResult;
+                    result = (global::MyTestNameSpace.MyEnum)numericResult;
                     return true;
                 default:
                     result = default;
@@ -281,13 +281,13 @@ internal static partial class A
         switch (name)
         {
             case var current when global::System.MemoryExtensions.Equals(current, _firstEnumMemory.Span, global::System.StringComparison.Ordinal):
-                result = MyTestNameSpace.MyEnum.First;
+                result = global::MyTestNameSpace.MyEnum.First;
                 return true;
             case var current when global::System.MemoryExtensions.Equals(current, _secondEnumMemory.Span, global::System.StringComparison.Ordinal):
-                result = MyTestNameSpace.MyEnum.Second;
+                result = global::MyTestNameSpace.MyEnum.Second;
                 return true;
             case { IsEmpty: false } when int.TryParse(name, out var numericResult):
-                result = (MyTestNameSpace.MyEnum)numericResult;
+                result = (global::MyTestNameSpace.MyEnum)numericResult;
                 return true;
             default:
                 result = default;
@@ -297,73 +297,60 @@ internal static partial class A
 
     /// <summary>
     /// Retrieves an array of the metadata or <see langword="default" /> values of the members defined in
-    /// <see cref="MyTestNameSpace.MyEnum" />.
+    /// <see cref="global::MyTestNameSpace.MyEnum" />.
     /// Note that this returns a new array with every invocation, so
     /// should be cached if appropriate.
     /// </summary>
-    /// <returns>An array of the metadata or <see langword="default" /> values defined in <see cref="MyTestNameSpace.MyEnum" />.</returns>
+    /// <returns>An array of the metadata or <see langword="default" /> values defined in <see cref="global::MyTestNameSpace.MyEnum" />.</returns>
     public static string[] GetMetadataNamesOrDefault() =>
         new[]
         {
-            nameof(MyTestNameSpace.MyEnum.First),
-            nameof(MyTestNameSpace.MyEnum.Second),
+            nameof(global::MyTestNameSpace.MyEnum.First),
+            nameof(global::MyTestNameSpace.MyEnum.Second),
         };
 
     /// <summary>
-    /// Gets the <see cref="MyTestNameSpace.MyEnum" /> representation of the <paramref name="name"/>
+    /// Gets the <see cref="global::MyTestNameSpace.MyEnum" /> representation of the <paramref name="name"/>
     /// or <see langword="default" /> if there's no match.
     /// </summary>
     /// <param name="name">The value that should be matched.</param>
-    /// <returns>The matching <see cref="MyTestNameSpace.MyEnum" /> or <see langword="null" /> if there was no match.</returns>
-    public static MyTestNameSpace.MyEnum? GetValueOrDefault(string? name) =>
-        TryParse(name, out MyTestNameSpace.MyEnum value) ? value : null;
+    /// <returns>The matching <see cref="global::MyTestNameSpace.MyEnum" /> or <see langword="null" /> if there was no match.</returns>
+    public static global::MyTestNameSpace.MyEnum? GetValueOrDefault(string? name) =>
+        TryParse(name, out global::MyTestNameSpace.MyEnum value) ? value : null;
 
     /// <summary>
-    /// Gets the <see cref="MyTestNameSpace.MyEnum" /> representation of the <paramref name="name"/>
+    /// Gets the <see cref="global::MyTestNameSpace.MyEnum" /> representation of the <paramref name="name"/>
     /// or <see langword="default" /> if there's no match.
     /// </summary>
     /// <param name="name">The value that should be matched.</param>
-    /// <returns>The matching <see cref="MyTestNameSpace.MyEnum" /> or <see langword="null" /> if there was no match.</returns>
-    public static MyTestNameSpace.MyEnum? GetValueOrDefault(in global::System.ReadOnlySpan<char> name) =>
-        TryParse(name, out MyTestNameSpace.MyEnum value) ? value : null;
+    /// <returns>The matching <see cref="global::MyTestNameSpace.MyEnum" /> or <see langword="null" /> if there was no match.</returns>
+    public static global::MyTestNameSpace.MyEnum? GetValueOrDefault(in global::System.ReadOnlySpan<char> name) =>
+        TryParse(name, out global::MyTestNameSpace.MyEnum value) ? value : null;
 
     /// <summary>
-    /// Gets the <see cref="MyTestNameSpace.MyEnum" /> representation of the <paramref name="name"/>
-    /// or <see langword="default" /> if there's no match.
-    /// </summary>
-    /// <param name="name">The value that should be matched.</param>
-    /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode;
-    /// <see langword="false" /> to read value in case sensitive mode.</param>
-    /// <returns>The matching <see cref="MyTestNameSpace.MyEnum" /> or <see langword="null" /> if there was no match.</returns>
-    public static MyTestNameSpace.MyEnum? GetValueOrDefault(string? name, bool ignoreCase) =>
-        TryParse(name, out MyTestNameSpace.MyEnum value, ignoreCase) ? value : null;
-
-    /// <summary>
-    /// Gets the <see cref="MyTestNameSpace.MyEnum" /> representation of the <paramref name="name"/>
+    /// Gets the <see cref="global::MyTestNameSpace.MyEnum" /> representation of the <paramref name="name"/>
     /// or <see langword="default" /> if there's no match.
     /// </summary>
     /// <param name="name">The value that should be matched.</param>
     /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode;
     /// <see langword="false" /> to read value in case sensitive mode.</param>
-    /// <returns>The matching <see cref="MyTestNameSpace.MyEnum" /> or <see langword="null" /> if there was no match.</returns>
-    public static MyTestNameSpace.MyEnum? GetValueOrDefault(in global::System.ReadOnlySpan<char> name, bool ignoreCase) =>
-        TryParse(name, out MyTestNameSpace.MyEnum value, ignoreCase) ? value : null;
+    /// <returns>The matching <see cref="global::MyTestNameSpace.MyEnum" /> or <see langword="null" /> if there was no match.</returns>
+    public static global::MyTestNameSpace.MyEnum? GetValueOrDefault(string? name, bool ignoreCase) =>
+        TryParse(name, out global::MyTestNameSpace.MyEnum value, ignoreCase) ? value : null;
 
     /// <summary>
-    /// Gets the <see cref="MyTestNameSpace.MyEnum" /> representation of the <paramref name="name"/>
+    /// Gets the <see cref="global::MyTestNameSpace.MyEnum" /> representation of the <paramref name="name"/>
     /// or <see langword="default" /> if there's no match.
     /// </summary>
     /// <param name="name">The value that should be matched.</param>
     /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode;
     /// <see langword="false" /> to read value in case sensitive mode.</param>
-    /// <param name="allowMatchingMetadataAttribute">If <see langword="true" />,
-    /// considers the value of metadata attributes, otherwise ignores them.</param>
-    /// <returns>The matching <see cref="MyTestNameSpace.MyEnum" /> or <see langword="null" /> if there was no match.</returns>
-    public static MyTestNameSpace.MyEnum? GetValueOrDefault(string? name, bool ignoreCase, bool allowMatchingMetadataAttribute) =>
-        TryParse(name, out MyTestNameSpace.MyEnum value, ignoreCase, allowMatchingMetadataAttribute) ? value : null;
+    /// <returns>The matching <see cref="global::MyTestNameSpace.MyEnum" /> or <see langword="null" /> if there was no match.</returns>
+    public static global::MyTestNameSpace.MyEnum? GetValueOrDefault(in global::System.ReadOnlySpan<char> name, bool ignoreCase) =>
+        TryParse(name, out global::MyTestNameSpace.MyEnum value, ignoreCase) ? value : null;
 
     /// <summary>
-    /// Gets the <see cref="MyTestNameSpace.MyEnum" /> representation of the <paramref name="name"/>
+    /// Gets the <see cref="global::MyTestNameSpace.MyEnum" /> representation of the <paramref name="name"/>
     /// or <see langword="default" /> if there's no match.
     /// </summary>
     /// <param name="name">The value that should be matched.</param>
@@ -371,35 +358,48 @@ internal static partial class A
     /// <see langword="false" /> to read value in case sensitive mode.</param>
     /// <param name="allowMatchingMetadataAttribute">If <see langword="true" />,
     /// considers the value of metadata attributes, otherwise ignores them.</param>
-    /// <returns>The matching <see cref="MyTestNameSpace.MyEnum" /> or <see langword="null" /> if there was no match.</returns>
-    public static MyTestNameSpace.MyEnum? GetValueOrDefault(in global::System.ReadOnlySpan<char> name, bool ignoreCase, bool allowMatchingMetadataAttribute) =>
-        TryParse(name, out MyTestNameSpace.MyEnum value, ignoreCase, allowMatchingMetadataAttribute) ? value : null;
+    /// <returns>The matching <see cref="global::MyTestNameSpace.MyEnum" /> or <see langword="null" /> if there was no match.</returns>
+    public static global::MyTestNameSpace.MyEnum? GetValueOrDefault(string? name, bool ignoreCase, bool allowMatchingMetadataAttribute) =>
+        TryParse(name, out global::MyTestNameSpace.MyEnum value, ignoreCase, allowMatchingMetadataAttribute) ? value : null;
+
+    /// <summary>
+    /// Gets the <see cref="global::MyTestNameSpace.MyEnum" /> representation of the <paramref name="name"/>
+    /// or <see langword="default" /> if there's no match.
+    /// </summary>
+    /// <param name="name">The value that should be matched.</param>
+    /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode;
+    /// <see langword="false" /> to read value in case sensitive mode.</param>
+    /// <param name="allowMatchingMetadataAttribute">If <see langword="true" />,
+    /// considers the value of metadata attributes, otherwise ignores them.</param>
+    /// <returns>The matching <see cref="global::MyTestNameSpace.MyEnum" /> or <see langword="null" /> if there was no match.</returns>
+    public static global::MyTestNameSpace.MyEnum? GetValueOrDefault(in global::System.ReadOnlySpan<char> name, bool ignoreCase, bool allowMatchingMetadataAttribute) =>
+        TryParse(name, out global::MyTestNameSpace.MyEnum value, ignoreCase, allowMatchingMetadataAttribute) ? value : null;
 
     /// <summary>
     /// Retrieves an array of the values of the members defined in
-    /// <see cref="MyTestNameSpace.MyEnum" />.
+    /// <see cref="global::MyTestNameSpace.MyEnum" />.
     /// Note that this returns a new array with every invocation, so
     /// should be cached if appropriate.
     /// </summary>
-    /// <returns>An array of the values defined in <see cref="MyTestNameSpace.MyEnum" />.</returns>
-    public static MyTestNameSpace.MyEnum[] GetValues() =>
+    /// <returns>An array of the values defined in <see cref="global::MyTestNameSpace.MyEnum" />.</returns>
+    public static global::MyTestNameSpace.MyEnum[] GetValues() =>
         new[]
         {
-            MyTestNameSpace.MyEnum.First,
-            MyTestNameSpace.MyEnum.Second,
+            global::MyTestNameSpace.MyEnum.First,
+            global::MyTestNameSpace.MyEnum.Second,
         };
 
     /// <summary>
     /// Retrieves an array of the names of the members defined in
-    /// <see cref="MyTestNameSpace.MyEnum" />.
+    /// <see cref="global::MyTestNameSpace.MyEnum" />.
     /// Note that this returns a new array with every invocation, so
     /// should be cached if appropriate.
     /// </summary>
-    /// <returns>An array of the names of the members defined in <see cref="MyTestNameSpace.MyEnum" />.</returns>
+    /// <returns>An array of the names of the members defined in <see cref="global::MyTestNameSpace.MyEnum" />.</returns>
     public static string[] GetNames() =>
         new[]
         {
-            nameof(MyTestNameSpace.MyEnum.First),
-            nameof(MyTestNameSpace.MyEnum.Second),
+            nameof(global::MyTestNameSpace.MyEnum.First),
+            nameof(global::MyTestNameSpace.MyEnum.Second),
         };
 }

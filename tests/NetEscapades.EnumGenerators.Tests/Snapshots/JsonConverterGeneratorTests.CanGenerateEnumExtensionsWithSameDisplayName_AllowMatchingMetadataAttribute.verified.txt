@@ -10,18 +10,18 @@
 #nullable enable
 
 /// <summary>
-/// Converts a <see cref="MyTestNameSpace.MyEnum" /> to or from JSON.
+/// Converts a <see cref="global::MyTestNameSpace.MyEnum" /> to or from JSON.
 /// </summary>
 public sealed class MyEnumConverter : global::System.Text.Json.Serialization.JsonConverter<MyTestNameSpace.MyEnum>
 {
     /// <inheritdoc />
     /// <summary>
-    /// Read and convert the JSON to <see cref="MyTestNameSpace.MyEnum" />.
+    /// Read and convert the JSON to <see cref="global::MyTestNameSpace.MyEnum" />.
     /// </summary>
     /// <remarks>
     /// A converter may throw any Exception, but should throw <see cref="global::System.Text.Json.JsonException" /> when the JSON is invalid.
     /// </remarks>
-    public override MyTestNameSpace.MyEnum Read(ref global::System.Text.Json.Utf8JsonReader reader, global::System.Type typeToConvert, global::System.Text.Json.JsonSerializerOptions options)
+    public override global::MyTestNameSpace.MyEnum Read(ref global::System.Text.Json.Utf8JsonReader reader, global::System.Type typeToConvert, global::System.Text.Json.JsonSerializerOptions options)
     {
         char[]? rentedBuffer = null;
         var bufferLength = reader.HasValueSequence ? checked((int)reader.ValueSequence.Length) : reader.ValueSpan.Length;
@@ -34,7 +34,7 @@ public sealed class MyEnumConverter : global::System.Text.Json.Serialization.Jso
         global::System.ReadOnlySpan<char> source = charBuffer[..charsWritten];
         try
         {
-            if (MyTestNameSpace.MyEnumExtensions.TryParse(source, out var enumValue, true, true))
+            if (global::MyTestNameSpace.MyEnumExtensions.TryParse(source, out var enumValue, true, true))
                 return enumValue;
 
             throw new global::System.Text.Json.JsonException($"{source.ToString()} is not a valid value.", null, null, null);
@@ -50,6 +50,6 @@ public sealed class MyEnumConverter : global::System.Text.Json.Serialization.Jso
     }
 
     /// <inheritdoc />
-    public override void Write(global::System.Text.Json.Utf8JsonWriter writer, MyTestNameSpace.MyEnum value, global::System.Text.Json.JsonSerializerOptions options)
-        => writer.WriteStringValue(MyTestNameSpace.MyEnumExtensions.ToStringFast(value));
+    public override void Write(global::System.Text.Json.Utf8JsonWriter writer, global::MyTestNameSpace.MyEnum value, global::System.Text.Json.JsonSerializerOptions options)
+        => writer.WriteStringValue(global::MyTestNameSpace.MyEnumExtensions.ToStringFast(value));
 }

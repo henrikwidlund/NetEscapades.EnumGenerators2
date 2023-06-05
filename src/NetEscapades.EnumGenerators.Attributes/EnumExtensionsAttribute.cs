@@ -15,7 +15,7 @@ public sealed class EnumExtensionsAttribute : Attribute
 
     /// <summary>
     /// The name to use for the extension class.
-    /// If not provided, the enum name with ""Extensions"" will be used.
+    /// If not provided, the enum name with "Extensions" will be used.
     /// For example for an Enum called StatusCodes, the default name
     /// will be StatusCodesExtensions.
     /// </summary>

@@ -11,7 +11,7 @@
 namespace Something.Blah;
 
 /// <summary>
-/// Converts a <see cref="Something.Blah.ShortName" /> to or from JSON.
+/// Converts a <see cref="global::Something.Blah.ShortName" /> to or from JSON.
 /// </summary>
 public sealed class ShortNameConverter : global::System.Text.Json.Serialization.JsonConverter<Something.Blah.ShortName>
 {
@@ -19,12 +19,12 @@ public sealed class ShortNameConverter : global::System.Text.Json.Serialization.
 
     /// <inheritdoc />
     /// <summary>
-    /// Read and convert the JSON to <see cref="Something.Blah.ShortName" />.
+    /// Read and convert the JSON to <see cref="global::Something.Blah.ShortName" />.
     /// </summary>
     /// <remarks>
     /// A converter may throw any Exception, but should throw <see cref="global::System.Text.Json.JsonException" /> when the JSON is invalid.
     /// </remarks>
-    public override Something.Blah.ShortName Read(ref global::System.Text.Json.Utf8JsonReader reader, global::System.Type typeToConvert, global::System.Text.Json.JsonSerializerOptions options)
+    public override global::Something.Blah.ShortName Read(ref global::System.Text.Json.Utf8JsonReader reader, global::System.Type typeToConvert, global::System.Text.Json.JsonSerializerOptions options)
     {
         char[]? rentedBuffer = null;
         var bufferLength = reader.HasValueSequence ? checked((int)reader.ValueSequence.Length) : reader.ValueSpan.Length;
@@ -37,7 +37,7 @@ public sealed class ShortNameConverter : global::System.Text.Json.Serialization.
         global::System.ReadOnlySpan<char> source = charBuffer[..charsWritten];
         try
         {
-            if (Something.Blah.ShortNameExtensions.TryParse(source, out var enumValue, true, true))
+            if (global::Something.Blah.ShortNameExtensions.TryParse(source, out var enumValue, true, true))
                 return enumValue;
 
             throw new global::System.Text.Json.JsonException($"{source.ToString()} is not a valid value.", PropertyName, null, null);
@@ -53,6 +53,6 @@ public sealed class ShortNameConverter : global::System.Text.Json.Serialization.
     }
 
     /// <inheritdoc />
-    public override void Write(global::System.Text.Json.Utf8JsonWriter writer, Something.Blah.ShortName value, global::System.Text.Json.JsonSerializerOptions options)
-        => writer.WriteStringValue(Something.Blah.ShortNameExtensions.ToStringFast(value));
+    public override void Write(global::System.Text.Json.Utf8JsonWriter writer, global::Something.Blah.ShortName value, global::System.Text.Json.JsonSerializerOptions options)
+        => writer.WriteStringValue(global::Something.Blah.ShortNameExtensions.ToStringFast(value));
 }
