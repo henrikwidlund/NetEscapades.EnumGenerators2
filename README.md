@@ -52,245 +52,226 @@ public enum MyEnum
 This will generate a class called `MyEnumExtensions` (by default), which contains a number of helper methods. For example:
 
 ```csharp
-namespace NetEscapades.EnumGenerators.IntegrationTests
+/// <summary>
+/// Extension methods for <see cref="MyEnum" />.
+/// </summary>
+public static partial class MyEnumExtensions
 {
     /// <summary>
-    /// Extension methods for <see cref="NetEscapades.EnumGenerators.IntegrationTests.MyEnum" />.
+    /// The number of members in the enum.
+    /// This is a non-distinct count of defined names.
     /// </summary>
-    public static partial class MyEnumExtensions
+    public const int Length = 2;
+
+    /// <summary>
+    /// Returns the string representation of the <see cref="MyEnum"/> value.
+    /// If the attribute is decorated with a <c>[Display]</c>/<c>[Description]</c> attribute, then
+    /// uses the provided value. Otherwise uses the name of the member, equivalent to
+    /// calling <c>ToString()</c> on <paramref name="value"/>.
+    /// </summary>
+    /// <param name="value">The value to retrieve the string value for.</param>
+    /// <returns>The string representation of the value.</returns>
+    public static string ToStringFast(this MyEnum value)
+        => value switch
+        {
+            MyEnum.First => nameof(MyEnum.First),
+            MyEnum.Second => "2nd",
+            _ => value.ToString()
+        };
+
+    /// <summary>
+    /// Returns a boolean telling whether the given enum value exists in the enumeration.
+    /// </summary>
+    /// <param name="value">The value to check if it's defined.</param>
+    /// <returns><see langword="true" /> if the value exists in the enumeration, <see langword="false" /> otherwise.</returns>
+    public static bool IsDefined(MyEnum value)
+        => value switch
+        {
+            MyEnum.First => true,
+            MyEnum.Second => true,
+            _ => false
+        };
+
+    /// <summary>
+    /// Returns a boolean telling whether an enum with the given name exists in the enumeration.
+    /// </summary>
+    /// <param name="name">The name to check if it's defined.</param>
+    /// <returns><see langword="true" /> if a member with the name exists in the enumeration, <see langword="false" /> otherwise.</returns>
+    public static bool IsDefined(string name) => IsDefined(name, false);
+
+    /// <summary>
+    /// Returns a boolean telling whether an enum with the given name exists in the enumeration,
+    /// or if a member decorated with a <c>[Display]</c>/<c>[Description]</c> attribute
+    /// with the required name exists.
+    /// </summary>
+    /// <param name="name">The name to check if it's defined.</param>
+    /// <param name="allowMatchingMetadataAttribute">If <see langword="true" />, considers the value of metadata attributes, otherwise ignores them.</param>
+    /// <returns><see langword="true" /> if a member with the name exists in the enumeration, or a member is decorated
+    /// with a <c>[Display]</c>/<c>[Description]</c> attribute with the name, <see langword="false" /> otherwise.</returns>
+    public static bool IsDefined(string name, bool allowMatchingMetadataAttribute)
     {
-        /// <summary>
-        /// The number of members in the enum.
-        /// This is a non-distinct count of defined names.
-        /// </summary>
-        public const int Length = 2;
-
-        /// <summary>
-        /// Returns the string representation of the <see cref="NetEscapades.EnumGenerators.IntegrationTests.MyEnum"/> value.
-        /// If the attribute is decorated with a <c>[Display]</c> attribute, then
-        /// uses the provided value. Otherwise uses the name of the member, equivalent to
-        /// calling <c>ToString()</c> on <paramref name="value"/>.
-        /// </summary>
-        /// <param name="value">The value to retrieve the string value for.</param>
-        /// <returns>The string representation of the value.</returns>
-        public static string ToStringFast(this NetEscapades.EnumGenerators.IntegrationTests.MyEnum value)
-            => value switch
-            {
-                NetEscapades.EnumGenerators.IntegrationTests.MyEnum.First => nameof(NetEscapades.EnumGenerators.IntegrationTests.MyEnum.First),
-                NetEscapades.EnumGenerators.IntegrationTests.MyEnum.Second => "2nd",
-                _ => value.ToString()
-            };
-
-        /// <summary>
-        /// Returns a boolean telling whether the given enum value exists in the enumeration.
-        /// </summary>
-        /// <param name="value">The value to check if it's defined.</param>
-        /// <returns><see langword="true" /> if the value exists in the enumeration, <see langword="false" /> otherwise.</returns>
-        public static bool IsDefined(NetEscapades.EnumGenerators.IntegrationTests.MyEnum value)
-            => value switch
-            {
-                NetEscapades.EnumGenerators.IntegrationTests.MyEnum.First => true,
-                NetEscapades.EnumGenerators.IntegrationTests.MyEnum.Second => true,
-                _ => false
-            };
-
-        /// <summary>
-        /// Returns a boolean telling whether an enum with the given name exists in the enumeration.
-        /// </summary>
-        /// <param name="name">The name to check if it's defined.</param>
-        /// <returns><see langword="true" /> if a member with the name exists in the enumeration, <see langword="false" /> otherwise.</returns>
-        public static bool IsDefined(string name) => IsDefined(name, false);
-
-        /// <summary>
-        /// Returns a boolean telling whether an enum with the given name exists in the enumeration,
-        /// or if a member decorated with a <c>[Display]</c> attribute
-        /// with the required name exists.
-        /// </summary>
-        /// <param name="name">The name to check if it's defined.</param>
-        /// <param name="allowMatchingMetadataAttribute">If <see langword="true" />, considers the value of metadata attributes, otherwise ignores them.</param>
-        /// <returns><see langword="true" /> if a member with the name exists in the enumeration, or a member is decorated
-        /// with a <c>[Display]</c> attribute with the name, <see langword="false" /> otherwise.</returns>
-        public static bool IsDefined(string name, bool allowMatchingMetadataAttribute)
+        var isDefinedInDisplayAttribute = false;
+        if (allowMatchingMetadataAttribute)
         {
-            var isDefinedInDisplayAttribute = false;
-            if (allowMatchingMetadataAttribute)
+            isDefinedInDisplayAttribute = name switch
             {
-                isDefinedInDisplayAttribute = name switch
-                {
-                    "2nd" => true,
-                    _ => false
-                };
-            }
-
-            if (isDefinedInDisplayAttribute)
-            {
-                return true;
-            }
-
-            return name switch
-            {
-                nameof(NetEscapades.EnumGenerators.IntegrationTests.MyEnum.First) => true,
-                nameof(NetEscapades.EnumGenerators.IntegrationTests.MyEnum.Second) => true,
+                "2nd" => true,
                 _ => false
             };
         }
 
-        /// <summary>
-        /// Returns a boolean telling whether an enum with the given name exists in the enumeration.
-        /// </summary>
-        /// <param name="name">The name to check if it's defined.</param>
-        /// <returns><see langword="true" /> if a member with the name exists in the enumeration, <see langword="false" /> otherwise.</returns>
-        public static bool IsDefined(in global::System.ReadOnlySpan<char> name) => IsDefined(name, false);
-
-        /// <summary>
-        /// Returns a boolean telling whether an enum with the given name exists in the enumeration,
-        /// or optionally if a member decorated with a <c>[Display]</c> attribute
-        /// with the required name exists.
-        /// </summary>
-        /// <param name="name">The name to check if it's defined.</param>
-        /// <param name="allowMatchingMetadataAttribute">If <see langword="true" />, considers the value of metadata attributes, otherwise ignores them.</param>
-        /// <returns><see langword="true" /> if a member with the name exists in the enumeration, or a member is decorated
-        /// with a <c>[Display]</c> attribute with the name, <see langword="false" /> otherwise.</returns>
-        public static bool IsDefined(in global::System.ReadOnlySpan<char> name, bool allowMatchingMetadataAttribute)
+        if (isDefinedInDisplayAttribute)
         {
-            var isDefinedInDisplayAttribute = false;
-            if (allowMatchingMetadataAttribute)
-            {
-                isDefinedInDisplayAttribute = name switch
-                {
-                    var current when global::System.MemoryExtensions.Equals(current, _secondEnumDisplayMemory.Span, global::System.StringComparison.Ordinal) => true,
-                    _ => false
-                };
-            }
+            return true;
+        }
 
-            if (isDefinedInDisplayAttribute)
-            {
-                return true;
-            }
+        return name switch
+        {
+            nameof(MyEnum.First) => true,
+            nameof(MyEnum.Second) => true,
+            _ => false
+        };
+    }
 
-            return name switch
+    /// <summary>
+    /// Returns a boolean telling whether an enum with the given name exists in the enumeration.
+    /// </summary>
+    /// <param name="name">The name to check if it's defined.</param>
+    /// <returns><see langword="true" /> if a member with the name exists in the enumeration, <see langword="false" /> otherwise.</returns>
+    public static bool IsDefined(in global::System.ReadOnlySpan<char> name) => IsDefined(name, false);
+
+    /// <summary>
+    /// Returns a boolean telling whether an enum with the given name exists in the enumeration,
+    /// or optionally if a member decorated with a <c>[Display]</c>/<c>[Description]</c> attribute
+    /// with the required name exists.
+    /// </summary>
+    /// <param name="name">The name to check if it's defined.</param>
+    /// <param name="allowMatchingMetadataAttribute">If <see langword="true" />, considers the value of metadata attributes, otherwise ignores them.</param>
+    /// <returns><see langword="true" /> if a member with the name exists in the enumeration, or a member is decorated
+    /// with a <c>[Display]</c>/<c>[Description]</c> attribute with the name, <see langword="false" /> otherwise.</returns>
+    public static bool IsDefined(in global::System.ReadOnlySpan<char> name, bool allowMatchingMetadataAttribute)
+    {
+        var isDefinedInDisplayAttribute = false;
+        if (allowMatchingMetadataAttribute)
+        {
+            isDefinedInDisplayAttribute = name switch
             {
-                var current when global::System.MemoryExtensions.Equals(current, _firstEnumMemory.Span, global::System.StringComparison.Ordinal) => true,
-                var current when global::System.MemoryExtensions.Equals(current, _secondEnumMemory.Span, global::System.StringComparison.Ordinal) => true,
+                var current when global::System.MemoryExtensions.Equals(current, _secondEnumMetadataMemory.Span, global::System.StringComparison.Ordinal) => true,
                 _ => false
             };
         }
 
-        private static readonly global::System.ReadOnlyMemory<char> _firstEnumMemory = global::System.MemoryExtensions.AsMemory("First");
-        private static readonly global::System.ReadOnlyMemory<char> _secondEnumMemory = global::System.MemoryExtensions.AsMemory("Second");
-        private static readonly global::System.ReadOnlyMemory<char> _secondEnumDisplayMemory = global::System.MemoryExtensions.AsMemory("2nd");
-
-        /// <summary>
-        /// Converts the string representation of the name or numeric value of
-        /// an <see cref="NetEscapades.EnumGenerators.IntegrationTests.MyEnum" /> to the equivalent instance.
-        /// The return value indicates whether the conversion succeeded.
-        /// </summary>
-        /// <param name="name">The case-sensitive string representation of the enumeration name or underlying value to convert.</param>
-        /// <param name="value">When this method returns, contains an object of type
-        /// <see cref="NetEscapades.EnumGenerators.IntegrationTests.MyEnum" /> whose
-        /// value is represented by <paramref name="value"/> if the parse operation succeeds.
-        /// If the parse operation fails, contains the default value of the underlying type
-        /// of <see cref="NetEscapades.EnumGenerators.IntegrationTests.MyEnum" />. This parameter is passed uninitialized.</param>
-        /// <returns><see langword="true" /> if the value parameter was converted successfully; otherwise, <see langword="false" />.</returns>
-        public static bool TryParse(
-            [global::System.Diagnostics.CodeAnalysis.NotNullWhen(true)]
-            string? name,
-            out NetEscapades.EnumGenerators.IntegrationTests.MyEnum value)
-            => TryParse(name, out value, false, false);
-
-        /// <summary>
-        /// Converts the string representation of the name or numeric value of
-        /// an <see cref="NetEscapades.EnumGenerators.IntegrationTests.MyEnum" /> to the equivalent instance.
-        /// The return value indicates whether the conversion succeeded.
-        /// </summary>
-        /// <param name="name">The string representation of the enumeration name or underlying value to convert.</param>
-        /// <param name="value">When this method returns, contains an object of type
-        /// <see cref="NetEscapades.EnumGenerators.IntegrationTests.MyEnum" /> whose
-        /// value is represented by <paramref name="value"/> if the parse operation succeeds.
-        /// If the parse operation fails, contains the default value of the underlying type
-        /// of <see cref="NetEscapades.EnumGenerators.IntegrationTests.MyEnum" />. This parameter is passed uninitialized.</param>
-        /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode; <see langword="false" /> to read value in case sensitive mode.</param>
-        /// <returns><see langword="true" /> if the value parameter was converted successfully; otherwise, <see langword="false" />.</returns>
-        public static bool TryParse(
-            [global::System.Diagnostics.CodeAnalysis.NotNullWhen(true)]
-            string? name,
-            out NetEscapades.EnumGenerators.IntegrationTests.MyEnum value,
-            bool ignoreCase)
-            => TryParse(name, out value, ignoreCase, false);
-
-        /// <summary>
-        /// Converts the string representation of the name or numeric value of
-        /// an <see cref="NetEscapades.EnumGenerators.IntegrationTests.MyEnum" /> to the equivalent instance.
-        /// The return value indicates whether the conversion succeeded.
-        /// </summary>
-        /// <param name="name">The string representation of the enumeration name or underlying value to convert.</param>
-        /// <param name="value">When this method returns, contains an object of type
-        /// <see cref="NetEscapades.EnumGenerators.IntegrationTests.MyEnum" /> whose
-        /// value is represented by <paramref name="value"/> if the parse operation succeeds.
-        /// If the parse operation fails, contains the default value of the underlying type
-        /// of <see cref="NetEscapades.EnumGenerators.IntegrationTests.MyEnum" />. This parameter is passed uninitialized.</param>
-        /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode; <see langword="false" /> to read value in case sensitive mode.</param>
-        /// <param name="allowMatchingMetadataAttribute">If <see langword="true" />, considers the value included in metadata attributes such as
-        /// <c>[Display]</c> attribute when parsing, otherwise only considers the member names.</param>
-        /// <returns><see langword="true" /> if the value parameter was converted successfully; otherwise, <see langword="false" />.</returns>
-        public static bool TryParse(
-            [global::System.Diagnostics.CodeAnalysis.NotNullWhen(true)]
-            string? name,
-            out NetEscapades.EnumGenerators.IntegrationTests.MyEnum value,
-            bool ignoreCase,
-            bool allowMatchingMetadataAttribute)
+        if (isDefinedInDisplayAttribute)
         {
-            if (allowMatchingMetadataAttribute)
-            {
-                if (ignoreCase)
-                {
-                    switch (name)
-                    {
-                        case not null when name.Equals("2nd", global::System.StringComparison.OrdinalIgnoreCase):
-                            value = NetEscapades.EnumGenerators.IntegrationTests.MyEnum.Second;
-                            return true;
-                    }
-                }
-                else
-                {
-                    switch (name)
-                    {
-                        case "2nd":
-                            value = NetEscapades.EnumGenerators.IntegrationTests.MyEnum.Second;
-                            return true;
-                    }
-                }
-            }
+            return true;
+        }
 
+        return name switch
+        {
+            var current when global::System.MemoryExtensions.Equals(current, _firstEnumMemory.Span, global::System.StringComparison.Ordinal) => true,
+            var current when global::System.MemoryExtensions.Equals(current, _secondEnumMemory.Span, global::System.StringComparison.Ordinal) => true,
+            _ => false
+        };
+    }
+
+    private static readonly global::System.ReadOnlyMemory<char> _firstEnumMemory = global::System.MemoryExtensions.AsMemory("First");
+    private static readonly global::System.ReadOnlyMemory<char> _secondEnumMemory = global::System.MemoryExtensions.AsMemory("Second");
+    private static readonly global::System.ReadOnlyMemory<char> _secondEnumMetadataMemory = global::System.MemoryExtensions.AsMemory("2nd");
+
+    /// <summary>
+    /// Converts the string representation of the name or numeric value of
+    /// an <see cref="MyEnum" /> to the equivalent instance.
+    /// The return value indicates whether the conversion succeeded.
+    /// </summary>
+    /// <param name="name">The case-sensitive string representation of the enumeration name or underlying value to convert.</param>
+    /// <param name="value">When this method returns, contains an object of type
+    /// <see cref="MyEnum" /> whose
+    /// value is represented by <paramref name="value"/> if the parse operation succeeds.
+    /// If the parse operation fails, contains the default value of the underlying type
+    /// of <see cref="MyEnum" />. This parameter is passed uninitialized.</param>
+    /// <returns><see langword="true" /> if the value parameter was converted successfully; otherwise, <see langword="false" />.</returns>
+    public static bool TryParse(
+        [global::System.Diagnostics.CodeAnalysis.NotNullWhen(true)]
+        string? name,
+        out MyEnum value)
+        => TryParse(name, out value, false, false);
+
+    /// <summary>
+    /// Converts the string representation of the name or numeric value of
+    /// an <see cref="MyEnum" /> to the equivalent instance.
+    /// The return value indicates whether the conversion succeeded.
+    /// </summary>
+    /// <param name="name">The string representation of the enumeration name or underlying value to convert.</param>
+    /// <param name="value">When this method returns, contains an object of type
+    /// <see cref="MyEnum" /> whose
+    /// value is represented by <paramref name="value"/> if the parse operation succeeds.
+    /// If the parse operation fails, contains the default value of the underlying type
+    /// of <see cref="MyEnum" />. This parameter is passed uninitialized.</param>
+    /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode; <see langword="false" /> to read value in case sensitive mode.</param>
+    /// <returns><see langword="true" /> if the value parameter was converted successfully; otherwise, <see langword="false" />.</returns>
+    public static bool TryParse(
+        [global::System.Diagnostics.CodeAnalysis.NotNullWhen(true)]
+        string? name,
+        out MyEnum value,
+        bool ignoreCase)
+        => TryParse(name, out value, ignoreCase, false);
+
+    /// <summary>
+    /// Converts the string representation of the name or numeric value of
+    /// an <see cref="MyEnum" /> to the equivalent instance.
+    /// The return value indicates whether the conversion succeeded.
+    /// </summary>
+    /// <param name="name">The string representation of the enumeration name or underlying value to convert.</param>
+    /// <param name="value">When this method returns, contains an object of type
+    /// <see cref="MyEnum" /> whose
+    /// value is represented by <paramref name="value"/> if the parse operation succeeds.
+    /// If the parse operation fails, contains the default value of the underlying type
+    /// of <see cref="MyEnum" />. This parameter is passed uninitialized.</param>
+    /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode; <see langword="false" /> to read value in case sensitive mode.</param>
+    /// <param name="allowMatchingMetadataAttribute">If <see langword="true" />, considers the value included in metadata attributes such as
+    /// <c>[Display]</c>/<c>[Description]</c> attribute when parsing, otherwise only considers the member names.</param>
+    /// <returns><see langword="true" /> if the value parameter was converted successfully; otherwise, <see langword="false" />.</returns>
+    public static bool TryParse(
+        [global::System.Diagnostics.CodeAnalysis.NotNullWhen(true)]
+        string? name,
+        out MyEnum value,
+        bool ignoreCase,
+        bool allowMatchingMetadataAttribute)
+    {
+        if (allowMatchingMetadataAttribute)
+        {
             if (ignoreCase)
             {
                 switch (name)
                 {
-                    case not null when name.Equals(nameof(NetEscapades.EnumGenerators.IntegrationTests.MyEnum.First), global::System.StringComparison.OrdinalIgnoreCase):
-                        value = NetEscapades.EnumGenerators.IntegrationTests.MyEnum.First;
+                    case not null when name.Equals("2nd", global::System.StringComparison.OrdinalIgnoreCase):
+                        value = MyEnum.Second;
                         return true;
-                    case not null when name.Equals(nameof(NetEscapades.EnumGenerators.IntegrationTests.MyEnum.Second), global::System.StringComparison.OrdinalIgnoreCase):
-                        value = NetEscapades.EnumGenerators.IntegrationTests.MyEnum.Second;
-                        return true;
-                    case { Length: > 0 } when int.TryParse(name, out var val):
-                        value = (NetEscapades.EnumGenerators.IntegrationTests.MyEnum)val;
-                        return true;
-                    default:
-                        value = default;
-                        return false;
                 }
             }
+            else
+            {
+                switch (name)
+                {
+                    case "2nd":
+                        value = MyEnum.Second;
+                        return true;
+                }
+            }
+        }
 
+        if (ignoreCase)
+        {
             switch (name)
             {
-                case nameof(NetEscapades.EnumGenerators.IntegrationTests.MyEnum.First):
-                    value = NetEscapades.EnumGenerators.IntegrationTests.MyEnum.First;
+                case not null when name.Equals(nameof(MyEnum.First), global::System.StringComparison.OrdinalIgnoreCase):
+                    value = MyEnum.First;
                     return true;
-                case nameof(NetEscapades.EnumGenerators.IntegrationTests.MyEnum.Second):
-                    value = NetEscapades.EnumGenerators.IntegrationTests.MyEnum.Second;
+                case not null when name.Equals(nameof(MyEnum.Second), global::System.StringComparison.OrdinalIgnoreCase):
+                    value = MyEnum.Second;
                     return true;
                 case { Length: > 0 } when int.TryParse(name, out var val):
-                    value = (NetEscapades.EnumGenerators.IntegrationTests.MyEnum)val;
+                    value = (MyEnum)val;
                     return true;
                 default:
                     value = default;
@@ -298,114 +279,114 @@ namespace NetEscapades.EnumGenerators.IntegrationTests
             }
         }
 
-        /// <summary>
-        /// Converts the span representation of the name or numeric value of
-        /// an <see cref="NetEscapades.EnumGenerators.IntegrationTests.MyEnum" /> to the equivalent instance.
-        /// The return value indicates whether the conversion succeeded.
-        /// </summary>
-        /// <param name="name">The span representation of the enumeration name or underlying value to convert.</param>
-        /// <param name="value">When this method returns, contains an object of type
-        /// <see cref="NetEscapades.EnumGenerators.IntegrationTests.MyEnum" /> whose
-        /// value is represented by <paramref name="value"/> if the parse operation succeeds.
-        /// If the parse operation fails, contains the default value of the underlying type
-        /// of <see cref="NetEscapades.EnumGenerators.IntegrationTests.MyEnum" />. This parameter is passed uninitialized.</param>
-        /// <returns><see langword="true" /> if the value parameter was converted successfully; otherwise, <see langword="false" />.</returns>
-        public static bool TryParse(
-            in global::System.ReadOnlySpan<char> name,
-            out NetEscapades.EnumGenerators.IntegrationTests.MyEnum value)
-            => TryParse(name, out value, false, false);
-
-        /// <summary>
-        /// Converts the span representation of the name or numeric value of
-        /// an <see cref="NetEscapades.EnumGenerators.IntegrationTests.MyEnum" /> to the equivalent instance.
-        /// The return value indicates whether the conversion succeeded.
-        /// </summary>
-        /// <param name="name">The span representation of the enumeration name or underlying value to convert.</param>
-        /// <param name="value">When this method returns, contains an object of type
-        /// <see cref="NetEscapades.EnumGenerators.IntegrationTests.MyEnum" /> whose
-        /// value is represented by <paramref name="value"/> if the parse operation succeeds.
-        /// If the parse operation fails, contains the default value of the underlying type
-        /// of <see cref="NetEscapades.EnumGenerators.IntegrationTests.MyEnum" />. This parameter is passed uninitialized.</param>
-        /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode; <see langword="false" /> to read value in case sensitive mode.</param>
-        /// <returns><see langword="true" /> if the value parameter was converted successfully; otherwise, <see langword="false" />.</returns>
-        public static bool TryParse(
-            in global::System.ReadOnlySpan<char> name,
-            out NetEscapades.EnumGenerators.IntegrationTests.MyEnum value,
-            bool ignoreCase)
-            => TryParse(name, out value, ignoreCase, false);
-
-        /// <summary>
-        /// Converts the span representation of the name or numeric value of
-        /// an <see cref="NetEscapades.EnumGenerators.IntegrationTests.MyEnum" /> to the equivalent instance.
-        /// The return value indicates whether the conversion succeeded.
-        /// </summary>
-        /// <param name="name">The span representation of the enumeration name or underlying value to convert.</param>
-        /// <param name="result">When this method returns, contains an object of type
-        /// <see cref="NetEscapades.EnumGenerators.IntegrationTests.MyEnum" /> whose
-        /// value is represented by <paramref name="result"/> if the parse operation succeeds.
-        /// If the parse operation fails, contains the default value of the underlying type
-        /// of <see cref="NetEscapades.EnumGenerators.IntegrationTests.MyEnum" />. This parameter is passed uninitialized.</param>
-        /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode; <see langword="false" /> to read value in case sensitive mode.</param>
-        /// <param name="allowMatchingMetadataAttribute">If <see langword="true" />, considers the value included in metadata attributes such as
-        /// <c>[Display]</c> attribute when parsing, otherwise only considers the member names.</param>
-        /// <returns><see langword="true" /> if the value parameter was converted successfully; otherwise, <see langword="false" />.</returns>
-        public static bool TryParse(
-            in global::System.ReadOnlySpan<char> name,
-            out NetEscapades.EnumGenerators.IntegrationTests.MyEnum result,
-            bool ignoreCase,
-            bool allowMatchingMetadataAttribute)
+        switch (name)
         {
-            if (allowMatchingMetadataAttribute)
-            {
-                if (ignoreCase)
-                {
-                    switch (name)
-                    {
-                        case var current when global::System.MemoryExtensions.Equals(current, _secondEnumDisplayMemory.Span, global::System.StringComparison.OrdinalIgnoreCase):
-                            result = NetEscapades.EnumGenerators.IntegrationTests.MyEnum.Second;
-                            return true;
-                    }
-                }
-                else
-                {
-                    switch (name)
-                    {
-                        case var current when global::System.MemoryExtensions.Equals(current, _secondEnumDisplayMemory.Span, global::System.StringComparison.Ordinal):
-                            result = NetEscapades.EnumGenerators.IntegrationTests.MyEnum.Second;
-                            return true;
-                    }
-                }
-            }
+            case nameof(MyEnum.First):
+                value = MyEnum.First;
+                return true;
+            case nameof(MyEnum.Second):
+                value = MyEnum.Second;
+                return true;
+            case { Length: > 0 } when int.TryParse(name, out var val):
+                value = (MyEnum)val;
+                return true;
+            default:
+                value = default;
+                return false;
+        }
+    }
 
+    /// <summary>
+    /// Converts the span representation of the name or numeric value of
+    /// an <see cref="MyEnum" /> to the equivalent instance.
+    /// The return value indicates whether the conversion succeeded.
+    /// </summary>
+    /// <param name="name">The span representation of the enumeration name or underlying value to convert.</param>
+    /// <param name="value">When this method returns, contains an object of type
+    /// <see cref="MyEnum" /> whose
+    /// value is represented by <paramref name="value"/> if the parse operation succeeds.
+    /// If the parse operation fails, contains the default value of the underlying type
+    /// of <see cref="MyEnum" />. This parameter is passed uninitialized.</param>
+    /// <returns><see langword="true" /> if the value parameter was converted successfully; otherwise, <see langword="false" />.</returns>
+    public static bool TryParse(
+        in global::System.ReadOnlySpan<char> name,
+        out MyEnum value)
+        => TryParse(name, out value, false, false);
+
+    /// <summary>
+    /// Converts the span representation of the name or numeric value of
+    /// an <see cref="MyEnum" /> to the equivalent instance.
+    /// The return value indicates whether the conversion succeeded.
+    /// </summary>
+    /// <param name="name">The span representation of the enumeration name or underlying value to convert.</param>
+    /// <param name="value">When this method returns, contains an object of type
+    /// <see cref="MyEnum" /> whose
+    /// value is represented by <paramref name="value"/> if the parse operation succeeds.
+    /// If the parse operation fails, contains the default value of the underlying type
+    /// of <see cref="MyEnum" />. This parameter is passed uninitialized.</param>
+    /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode; <see langword="false" /> to read value in case sensitive mode.</param>
+    /// <returns><see langword="true" /> if the value parameter was converted successfully; otherwise, <see langword="false" />.</returns>
+    public static bool TryParse(
+        in global::System.ReadOnlySpan<char> name,
+        out MyEnum value,
+        bool ignoreCase)
+        => TryParse(name, out value, ignoreCase, false);
+
+    /// <summary>
+    /// Converts the span representation of the name or numeric value of
+    /// an <see cref="MyEnum" /> to the equivalent instance.
+    /// The return value indicates whether the conversion succeeded.
+    /// </summary>
+    /// <param name="name">The span representation of the enumeration name or underlying value to convert.</param>
+    /// <param name="result">When this method returns, contains an object of type
+    /// <see cref="MyEnum" /> whose
+    /// value is represented by <paramref name="result"/> if the parse operation succeeds.
+    /// If the parse operation fails, contains the default value of the underlying type
+    /// of <see cref="MyEnum" />. This parameter is passed uninitialized.</param>
+    /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode; <see langword="false" /> to read value in case sensitive mode.</param>
+    /// <param name="allowMatchingMetadataAttribute">If <see langword="true" />, considers the value included in metadata attributes such as
+    /// <c>[Display]</c>/<c>[Description]</c> attribute when parsing, otherwise only considers the member names.</param>
+    /// <returns><see langword="true" /> if the value parameter was converted successfully; otherwise, <see langword="false" />.</returns>
+    public static bool TryParse(
+        in global::System.ReadOnlySpan<char> name,
+        out MyEnum result,
+        bool ignoreCase,
+        bool allowMatchingMetadataAttribute)
+    {
+        if (allowMatchingMetadataAttribute)
+        {
             if (ignoreCase)
             {
                 switch (name)
                 {
-                    case var current when global::System.MemoryExtensions.Equals(current, _firstEnumMemory.Span, global::System.StringComparison.OrdinalIgnoreCase):
-                        result = NetEscapades.EnumGenerators.IntegrationTests.MyEnum.First;
+                    case var current when global::System.MemoryExtensions.Equals(current, _secondEnumMetadataMemory.Span, global::System.StringComparison.OrdinalIgnoreCase):
+                        result = MyEnum.Second;
                         return true;
-                    case var current when global::System.MemoryExtensions.Equals(current, _secondEnumMemory.Span, global::System.StringComparison.OrdinalIgnoreCase):
-                        result = NetEscapades.EnumGenerators.IntegrationTests.MyEnum.Second;
-                        return true;
-                    case { IsEmpty: false } when int.TryParse(name, out var numericResult):
-                        result = (NetEscapades.EnumGenerators.IntegrationTests.MyEnum)numericResult;
-                        return true;
-                    default:
-                        result = default;
-                        return false;
                 }
             }
+            else
+            {
+                switch (name)
+                {
+                    case var current when global::System.MemoryExtensions.Equals(current, _secondEnumMetadataMemory.Span, global::System.StringComparison.Ordinal):
+                        result = MyEnum.Second;
+                        return true;
+                }
+            }
+        }
 
+        if (ignoreCase)
+        {
             switch (name)
             {
-                case var current when global::System.MemoryExtensions.Equals(current, _firstEnumMemory.Span, global::System.StringComparison.Ordinal):
-                    result = NetEscapades.EnumGenerators.IntegrationTests.MyEnum.First;
+                case var current when global::System.MemoryExtensions.Equals(current, _firstEnumMemory.Span, global::System.StringComparison.OrdinalIgnoreCase):
+                    result = MyEnum.First;
                     return true;
-                case var current when global::System.MemoryExtensions.Equals(current, _secondEnumMemory.Span, global::System.StringComparison.Ordinal):
-                    result = NetEscapades.EnumGenerators.IntegrationTests.MyEnum.Second;
+                case var current when global::System.MemoryExtensions.Equals(current, _secondEnumMemory.Span, global::System.StringComparison.OrdinalIgnoreCase):
+                    result = MyEnum.Second;
                     return true;
                 case { IsEmpty: false } when int.TryParse(name, out var numericResult):
-                    result = (NetEscapades.EnumGenerators.IntegrationTests.MyEnum)numericResult;
+                    result = (MyEnum)numericResult;
                     return true;
                 default:
                     result = default;
@@ -413,114 +394,130 @@ namespace NetEscapades.EnumGenerators.IntegrationTests
             }
         }
 
-        /// <summary>
-        /// Retrieves an array of the metadata or <see langword="default" /> values of the members defined in
-        /// <see cref="NetEscapades.EnumGenerators.IntegrationTests.MyEnum" />.
-        /// Note that this returns a new array with every invocation, so
-        /// should be cached if appropriate.
-        /// </summary>
-        /// <returns>An array of the metadata or <see langword="default" /> values defined in <see cref="NetEscapades.EnumGenerators.IntegrationTests.MyEnum" />.</returns>
-        public static string[] GetMetadataNamesOrDefault() =>
-            new[]
-            {
-                nameof(NetEscapades.EnumGenerators.IntegrationTests.MyEnum.First),
-                "2nd",
-            };
-
-        /// <summary>
-        /// Gets the <see cref="NetEscapades.EnumGenerators.IntegrationTests.MyEnum" /> representation of the <paramref name="name"/>
-        /// or <see langword="default" /> if there's no match.
-        /// </summary>
-        /// <param name="name">The value that should be matched.</param>
-        /// <returns>The matching <see cref="NetEscapades.EnumGenerators.IntegrationTests.MyEnum" /> or <see langword="null" /> if there was no match.</returns>
-        public static NetEscapades.EnumGenerators.IntegrationTests.MyEnum? GetValueOrDefault(string? name) =>
-            TryParse(name, out NetEscapades.EnumGenerators.IntegrationTests.MyEnum value) ? value : null;
-
-        /// <summary>
-        /// Gets the <see cref="NetEscapades.EnumGenerators.IntegrationTests.MyEnum" /> representation of the <paramref name="name"/>
-        /// or <see langword="default" /> if there's no match.
-        /// </summary>
-        /// <param name="name">The value that should be matched.</param>
-        /// <returns>The matching <see cref="NetEscapades.EnumGenerators.IntegrationTests.MyEnum" /> or <see langword="null" /> if there was no match.</returns>
-        public static NetEscapades.EnumGenerators.IntegrationTests.MyEnum? GetValueOrDefault(in global::System.ReadOnlySpan<char> name) =>
-            TryParse(name, out NetEscapades.EnumGenerators.IntegrationTests.MyEnum value) ? value : null;
-
-        /// <summary>
-        /// Gets the <see cref="NetEscapades.EnumGenerators.IntegrationTests.MyEnum" /> representation of the <paramref name="name"/>
-        /// or <see langword="default" /> if there's no match.
-        /// </summary>
-        /// <param name="name">The value that should be matched.</param>
-        /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode;
-        /// <see langword="false" /> to read value in case sensitive mode.</param>
-        /// <returns>The matching <see cref="NetEscapades.EnumGenerators.IntegrationTests.MyEnum" /> or <see langword="null" /> if there was no match.</returns>
-        public static NetEscapades.EnumGenerators.IntegrationTests.MyEnum? GetValueOrDefault(string? name, bool ignoreCase) =>
-            TryParse(name, out NetEscapades.EnumGenerators.IntegrationTests.MyEnum value, ignoreCase) ? value : null;
-
-        /// <summary>
-        /// Gets the <see cref="NetEscapades.EnumGenerators.IntegrationTests.MyEnum" /> representation of the <paramref name="name"/>
-        /// or <see langword="default" /> if there's no match.
-        /// </summary>
-        /// <param name="name">The value that should be matched.</param>
-        /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode;
-        /// <see langword="false" /> to read value in case sensitive mode.</param>
-        /// <returns>The matching <see cref="NetEscapades.EnumGenerators.IntegrationTests.MyEnum" /> or <see langword="null" /> if there was no match.</returns>
-        public static NetEscapades.EnumGenerators.IntegrationTests.MyEnum? GetValueOrDefault(in global::System.ReadOnlySpan<char> name, bool ignoreCase) =>
-            TryParse(name, out NetEscapades.EnumGenerators.IntegrationTests.MyEnum value, ignoreCase) ? value : null;
-
-        /// <summary>
-        /// Gets the <see cref="NetEscapades.EnumGenerators.IntegrationTests.MyEnum" /> representation of the <paramref name="name"/>
-        /// or <see langword="default" /> if there's no match.
-        /// </summary>
-        /// <param name="name">The value that should be matched.</param>
-        /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode;
-        /// <see langword="false" /> to read value in case sensitive mode.</param>
-        /// <param name="allowMatchingMetadataAttribute">If <see langword="true" />,
-        /// considers the value of metadata attributes, otherwise ignores them.</param>
-        /// <returns>The matching <see cref="NetEscapades.EnumGenerators.IntegrationTests.MyEnum" /> or <see langword="null" /> if there was no match.</returns>
-        public static NetEscapades.EnumGenerators.IntegrationTests.MyEnum? GetValueOrDefault(string? name, bool ignoreCase, bool allowMatchingMetadataAttribute) =>
-            TryParse(name, out NetEscapades.EnumGenerators.IntegrationTests.MyEnum value, ignoreCase, allowMatchingMetadataAttribute) ? value : null;
-
-        /// <summary>
-        /// Gets the <see cref="NetEscapades.EnumGenerators.IntegrationTests.MyEnum" /> representation of the <paramref name="name"/>
-        /// or <see langword="default" /> if there's no match.
-        /// </summary>
-        /// <param name="name">The value that should be matched.</param>
-        /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode;
-        /// <see langword="false" /> to read value in case sensitive mode.</param>
-        /// <param name="allowMatchingMetadataAttribute">If <see langword="true" />,
-        /// considers the value of metadata attributes, otherwise ignores them.</param>
-        /// <returns>The matching <see cref="NetEscapades.EnumGenerators.IntegrationTests.MyEnum" /> or <see langword="null" /> if there was no match.</returns>
-        public static NetEscapades.EnumGenerators.IntegrationTests.MyEnum? GetValueOrDefault(in global::System.ReadOnlySpan<char> name, bool ignoreCase, bool allowMatchingMetadataAttribute) =>
-            TryParse(name, out NetEscapades.EnumGenerators.IntegrationTests.MyEnum value, ignoreCase, allowMatchingMetadataAttribute) ? value : null;
-
-        /// <summary>
-        /// Retrieves an array of the values of the members defined in
-        /// <see cref="NetEscapades.EnumGenerators.IntegrationTests.MyEnum" />.
-        /// Note that this returns a new array with every invocation, so
-        /// should be cached if appropriate.
-        /// </summary>
-        /// <returns>An array of the values defined in <see cref="NetEscapades.EnumGenerators.IntegrationTests.MyEnum" />.</returns>
-        public static NetEscapades.EnumGenerators.IntegrationTests.MyEnum[] GetValues() =>
-            new[]
-            {
-                NetEscapades.EnumGenerators.IntegrationTests.MyEnum.First,
-                NetEscapades.EnumGenerators.IntegrationTests.MyEnum.Second,
-            };
-
-        /// <summary>
-        /// Retrieves an array of the names of the members defined in
-        /// <see cref="NetEscapades.EnumGenerators.IntegrationTests.MyEnum" />.
-        /// Note that this returns a new array with every invocation, so
-        /// should be cached if appropriate.
-        /// </summary>
-        /// <returns>An array of the names of the members defined in <see cref="NetEscapades.EnumGenerators.IntegrationTests.MyEnum" />.</returns>
-        public static string[] GetNames() =>
-            new[]
-            {
-                nameof(NetEscapades.EnumGenerators.IntegrationTests.MyEnum.First),
-                nameof(NetEscapades.EnumGenerators.IntegrationTests.MyEnum.Second),
-            };
+        switch (name)
+        {
+            case var current when global::System.MemoryExtensions.Equals(current, _firstEnumMemory.Span, global::System.StringComparison.Ordinal):
+                result = MyEnum.First;
+                return true;
+            case var current when global::System.MemoryExtensions.Equals(current, _secondEnumMemory.Span, global::System.StringComparison.Ordinal):
+                result = MyEnum.Second;
+                return true;
+            case { IsEmpty: false } when int.TryParse(name, out var numericResult):
+                result = (MyEnum)numericResult;
+                return true;
+            default:
+                result = default;
+                return false;
+        }
     }
+
+    /// <summary>
+    /// Retrieves an array of the metadata or <see langword="default" /> values of the members defined in
+    /// <see cref="MyEnum" />.
+    /// Note that this returns a new array with every invocation, so
+    /// should be cached if appropriate.
+    /// </summary>
+    /// <returns>An array of the metadata or <see langword="default" /> values defined in <see cref="MyEnum" />.</returns>
+    public static string[] GetMetadataNamesOrDefault() =>
+        new[]
+        {
+            nameof(MyEnum.First),
+            "2nd",
+        };
+
+    /// <summary>
+    /// Gets the <see cref="MyEnum" /> representation of the <paramref name="name"/>
+    /// or <see langword="default" /> if there's no match.
+    /// </summary>
+    /// <param name="name">The value that should be matched.</param>
+    /// <returns>The matching <see cref="MyEnum" /> or <see langword="null" /> if there was no match.</returns>
+    public static MyEnum? GetValueOrDefault(string? name) =>
+        TryParse(name, out MyEnum value) ? value : null;
+
+    /// <summary>
+    /// Gets the <see cref="MyEnum" /> representation of the <paramref name="name"/>
+    /// or <see langword="default" /> if there's no match.
+    /// </summary>
+    /// <param name="name">The value that should be matched.</param>
+    /// <returns>The matching <see cref="MyEnum" /> or <see langword="null" /> if there was no match.</returns>
+    public static MyEnum? GetValueOrDefault(in global::System.ReadOnlySpan<char> name) =>
+        TryParse(name, out MyEnum value) ? value : null;
+
+    /// <summary>
+    /// Gets the <see cref="MyEnum" /> representation of the <paramref name="name"/>
+    /// or <see langword="default" /> if there's no match.
+    /// </summary>
+    /// <param name="name">The value that should be matched.</param>
+    /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode;
+    /// <see langword="false" /> to read value in case sensitive mode.</param>
+    /// <returns>The matching <see cref="MyEnum" /> or <see langword="null" /> if there was no match.</returns>
+    public static MyEnum? GetValueOrDefault(string? name, bool ignoreCase) =>
+        TryParse(name, out MyEnum value, ignoreCase) ? value : null;
+
+    /// <summary>
+    /// Gets the <see cref="MyEnum" /> representation of the <paramref name="name"/>
+    /// or <see langword="default" /> if there's no match.
+    /// </summary>
+    /// <param name="name">The value that should be matched.</param>
+    /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode;
+    /// <see langword="false" /> to read value in case sensitive mode.</param>
+    /// <returns>The matching <see cref="MyEnum" /> or <see langword="null" /> if there was no match.</returns>
+    public static MyEnum? GetValueOrDefault(in global::System.ReadOnlySpan<char> name, bool ignoreCase) =>
+        TryParse(name, out MyEnum value, ignoreCase) ? value : null;
+
+    /// <summary>
+    /// Gets the <see cref="MyEnum" /> representation of the <paramref name="name"/>
+    /// or <see langword="default" /> if there's no match.
+    /// </summary>
+    /// <param name="name">The value that should be matched.</param>
+    /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode;
+    /// <see langword="false" /> to read value in case sensitive mode.</param>
+    /// <param name="allowMatchingMetadataAttribute">If <see langword="true" />,
+    /// considers the value of metadata attributes, otherwise ignores them.</param>
+    /// <returns>The matching <see cref="MyEnum" /> or <see langword="null" /> if there was no match.</returns>
+    public static MyEnum? GetValueOrDefault(string? name, bool ignoreCase, bool allowMatchingMetadataAttribute) =>
+        TryParse(name, out MyEnum value, ignoreCase, allowMatchingMetadataAttribute) ? value : null;
+
+    /// <summary>
+    /// Gets the <see cref="MyEnum" /> representation of the <paramref name="name"/>
+    /// or <see langword="default" /> if there's no match.
+    /// </summary>
+    /// <param name="name">The value that should be matched.</param>
+    /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode;
+    /// <see langword="false" /> to read value in case sensitive mode.</param>
+    /// <param name="allowMatchingMetadataAttribute">If <see langword="true" />,
+    /// considers the value of metadata attributes, otherwise ignores them.</param>
+    /// <returns>The matching <see cref="MyEnum" /> or <see langword="null" /> if there was no match.</returns>
+    public static MyEnum? GetValueOrDefault(in global::System.ReadOnlySpan<char> name, bool ignoreCase, bool allowMatchingMetadataAttribute) =>
+        TryParse(name, out MyEnum value, ignoreCase, allowMatchingMetadataAttribute) ? value : null;
+
+    /// <summary>
+    /// Retrieves an array of the values of the members defined in
+    /// <see cref="MyEnum" />.
+    /// Note that this returns a new array with every invocation, so
+    /// should be cached if appropriate.
+    /// </summary>
+    /// <returns>An array of the values defined in <see cref="MyEnum" />.</returns>
+    public static MyEnum[] GetValues() =>
+        new[]
+        {
+            MyEnum.First,
+            MyEnum.Second,
+        };
+
+    /// <summary>
+    /// Retrieves an array of the names of the members defined in
+    /// <see cref="MyEnum" />.
+    /// Note that this returns a new array with every invocation, so
+    /// should be cached if appropriate.
+    /// </summary>
+    /// <returns>An array of the names of the members defined in <see cref="MyEnum" />.</returns>
+    public static string[] GetNames() =>
+        new[]
+        {
+            nameof(MyEnum.First),
+            nameof(MyEnum.Second),
+        };
 }
 ```
 
@@ -541,38 +538,58 @@ public enum MyEnum
 }
 ```
 
-This will generate a class called `MyEnumConverterAttribute`. For example:
+This will generate a class called `MyEnumConverter`. For example:
 ```csharp
 /// <summary>
-/// Converts a <see cref="NetEscapades.EnumGenerators.IntegrationTests.MyEnum" /> to or from JSON.
+/// Converts a <see cref="MyEnum" /> to or from JSON.
 /// </summary>
-public sealed class MyEnumConverter : global::System.Text.Json.Serialization.JsonConverter<NetEscapades.EnumGenerators.IntegrationTests.MyEnum>
+public sealed class MyEnumConverter : global::System.Text.Json.Serialization.JsonConverter<MyEnum>
 {
-     /// <inheritdoc />
-     /// <summary>
-     /// Read and convert the JSON to <see cref="NetEscapades.EnumGenerators.IntegrationTests.MyEnum" />.
-     /// </summary>
-     /// <remarks>
-     /// A converter may throw any Exception, but should throw <see cref="global::System.Text.Json.JsonException" /> when the JSON is invalid.
-     /// </remarks>
-     public override NetEscapades.EnumGenerators.IntegrationTests.MyEnum Read(ref global::System.Text.Json.Utf8JsonReader reader, global::System.Type typeToConvert, global::System.Text.Json.JsonSerializerOptions options)
-     {
-         var value = reader.GetString();
-         if (NetEscapades.EnumGenerators.IntegrationTests.MyEnumExtensions.TryParse(value, out var enumValue, true, true))
-            return enumValue;
+    /// <inheritdoc />
+    /// <summary>
+    /// Read and convert the JSON to <see cref="MyEnum" />.
+    /// </summary>
+    /// <remarks>
+    /// A converter may throw any Exception, but should throw <see cref="global::System.Text.Json.JsonException" /> when the JSON is invalid.
+    /// </remarks>
+    public override MyEnum Read(ref global::System.Text.Json.Utf8JsonReader reader, global::System.Type typeToConvert, global::System.Text.Json.JsonSerializerOptions options)
+    {
+        char[]? rentedBuffer = null;
+        var bufferLength = reader.HasValueSequence ? checked((int)reader.ValueSequence.Length) : reader.ValueSpan.Length;
 
-         throw new global::System.Text.Json.JsonException($"{value} is not a valid value.", null, null, null);
-     }
+        var charBuffer = bufferLength <= 128
+            ? stackalloc char[128]
+            : rentedBuffer = global::System.Buffers.ArrayPool<char>.Shared.Rent(bufferLength);
 
-     /// <inheritdoc />
-     public override void Write(global::System.Text.Json.Utf8JsonWriter writer, NetEscapades.EnumGenerators.IntegrationTests.MyEnum value, global::System.Text.Json.JsonSerializerOptions options)
-         => writer.WriteStringValue(NetEscapades.EnumGenerators.IntegrationTests.MyEnumExtensions.ToStringFast(value));
+        var charsWritten = reader.CopyString(charBuffer);
+        global::System.ReadOnlySpan<char> source = charBuffer[..charsWritten];
+        try
+        {
+            if (MyEnumExtensions.TryParse(source, out var enumValue, true, false))
+                return enumValue;
+
+            throw new global::System.Text.Json.JsonException($"{source.ToString()} is not a valid value.", null, null, null);
+        }
+        finally
+        {
+            if (rentedBuffer is not null)
+            {
+                charBuffer[..charsWritten].Clear();
+                global::System.Buffers.ArrayPool<char>.Shared.Return(rentedBuffer);
+            }
+        }
+    }
+
+    /// <inheritdoc />
+    public override void Write(global::System.Text.Json.Utf8JsonWriter writer, MyEnum value, global::System.Text.Json.JsonSerializerOptions options)
+        => writer.WriteStringValue(MyEnumExtensions.ToStringFast(value));
 }
 ```
 
 You can customize the generated code for the converter by setting the following values:
 - `CaseSensitive` - Indicates if the string representation is case sensitive when deserializing it as an enum.
 - `CamelCase` - Indicates if the value of `PropertyName` should be camel cased.
+- `AllowMatchingMetadataAttribute` - If `true`, considers the value of metadata attributes, otherwise ignores them.
 - `PropertyName` - If set, this value will be used in messages when there are problems with validation and/or serialization/deserialization occurs.
 And a class called `MyEnumJsonConverter` that uses the extensions generated by the `EnumExtensions` attribute. For example:
 

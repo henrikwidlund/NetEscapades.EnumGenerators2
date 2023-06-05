@@ -23,6 +23,11 @@ public sealed class EnumJsonConverterAttribute : Attribute
     public bool CamelCase { get; set; }
 
     /// <summary>
+    /// If <see langword="true" />, considers the value of metadata attributes, otherwise ignores them.
+    /// </summary>
+    public bool AllowMatchingMetadataAttribute { get; set; }
+
+    /// <summary>
     /// If set, this value will be used in messages when there are problems with validation and/or serialization/deserialization occurs.
     /// </summary>
     public string? PropertyName { get; set; }

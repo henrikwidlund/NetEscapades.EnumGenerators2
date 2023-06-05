@@ -256,7 +256,7 @@ namespace MyTestNameSpace
     [InlineData("using System;", "Flags")]
     public Task CanGenerateEnumExtensionsForFlagsEnum(string usings, string attribute)
     {
-        string input = $$"""
+        var input = $$"""
         using NetEscapades.EnumGenerators;
         {{usings}}
 
@@ -276,7 +276,7 @@ namespace MyTestNameSpace
 
         Assert.Empty(diagnostics);
         return Verify(output)
-            .UseTextForParameters("Params")
+            .UseTextForParameters($"{usings}_{attribute}".Replace(" ", "").Replace(";", "").Replace('.', '-'))
             .DisableRequireUniquePrefix()
             .UseDirectory("Snapshots");
     }

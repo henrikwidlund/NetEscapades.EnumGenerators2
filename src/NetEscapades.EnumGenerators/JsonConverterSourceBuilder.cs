@@ -54,76 +54,71 @@ namespace NetEscapades.EnumGenerators
             .AppendLine();
 
         if (!string.IsNullOrEmpty(jsonConverterToGenerate.ConverterNamespace))
-        {
-            sb
-                .Append("namespace ")
-                .Append(jsonConverterToGenerate.ConverterNamespace)
-                .Append(";")
+            sb.AppendLine($"namespace {jsonConverterToGenerate.ConverterNamespace};");
+
+        sb.AppendLine()
+            .AppendLine($$"""
+            /// <summary>
+            /// Converts a <see cref="{{jsonConverterToGenerate.FullyQualifiedName}}" /> to or from JSON.
+            /// </summary>
+            {{(jsonConverterToGenerate.IsPublic ? "public" : "internal")}} sealed class {{jsonConverterToGenerate.ConverterType}} : global::System.Text.Json.Serialization.JsonConverter<{{jsonConverterToGenerate.FullyQualifiedName}}>
+            {
+            """);
+
+        var propertyName = jsonConverterToGenerate.PropertyName;
+        if (!string.IsNullOrEmpty(propertyName) && jsonConverterToGenerate.CamelCase)
+            propertyName = propertyName.ToCamelCase();
+
+        if (!string.IsNullOrEmpty(propertyName))
+            sb.AppendLine($"""    private const string PropertyName = "{propertyName}";""")
                 .AppendLine();
-        }
 
         var fullyQualifiedExtension = string.IsNullOrEmpty(jsonConverterToGenerate.ExtensionNamespace)
             ? jsonConverterToGenerate.ExtensionName
             : $"{jsonConverterToGenerate.ExtensionNamespace}.{jsonConverterToGenerate.ExtensionName}";
 
-        sb.AppendLine()
-            .AppendLine($"""
-            /// <summary>
-            /// Converts a <see cref="{jsonConverterToGenerate.FullyQualifiedName}" /> to or from JSON.
-            /// </summary>
+        sb.AppendLine($$"""
+                /// <inheritdoc />
+                /// <summary>
+                /// Read and convert the JSON to <see cref="{{jsonConverterToGenerate.FullyQualifiedName}}" />.
+                /// </summary>
+                /// <remarks>
+                /// A converter may throw any Exception, but should throw <see cref="global::System.Text.Json.JsonException" /> when the JSON is invalid.
+                /// </remarks>
+                public override {{jsonConverterToGenerate.FullyQualifiedName}} Read(ref global::System.Text.Json.Utf8JsonReader reader, global::System.Type typeToConvert, global::System.Text.Json.JsonSerializerOptions options)
+                {
+                    char[]? rentedBuffer = null;
+                    var bufferLength = reader.HasValueSequence ? checked((int)reader.ValueSequence.Length) : reader.ValueSpan.Length;
+
+                    var charBuffer = bufferLength <= 128
+                        ? stackalloc char[128]
+                        : rentedBuffer = global::System.Buffers.ArrayPool<char>.Shared.Rent(bufferLength);
+
+                    var charsWritten = reader.CopyString(charBuffer);
+                    global::System.ReadOnlySpan<char> source = charBuffer[..charsWritten];
+                    try
+                    {
+                        if ({{fullyQualifiedExtension}}.TryParse(source, out var enumValue, {{(jsonConverterToGenerate.CaseSensitive ? "false" : "true")}}, {{(jsonConverterToGenerate.AllowMatchingMetadataAttribute ? "true))" : "false))")}}
+                            return enumValue;
+
+                        throw new global::System.Text.Json.JsonException($"{source.ToString()} is not a valid value.", {{(string.IsNullOrEmpty(propertyName) ? "null" : "PropertyName")}}, null, null);
+                    }
+                    finally
+                    {
+                        if (rentedBuffer is not null)
+                        {
+                            charBuffer[..charsWritten].Clear();
+                            global::System.Buffers.ArrayPool<char>.Shared.Return(rentedBuffer);
+                        }
+                    }
+                }
             """)
-            .Append(jsonConverterToGenerate.IsPublic ? "public" : "internal").Append(" sealed class ")
-            .Append(jsonConverterToGenerate.ConverterType)
-            .Append(" : global::System.Text.Json.Serialization.JsonConverter<")
-            .Append(jsonConverterToGenerate.FullyQualifiedName)
-            .AppendLine(">")
-            .AppendLine("{");
-
-        var propertyName = jsonConverterToGenerate.PropertyName;
-        if (!string.IsNullOrEmpty(propertyName) && jsonConverterToGenerate.CamelCase)
-        {
-            propertyName = propertyName.ToCamelCase();
-        }
-
-        if (!string.IsNullOrEmpty(propertyName))
-            sb.Append("     private const string PropertyName = \"")
-                .Append(propertyName)
-                .AppendLine("\";")
-                .AppendLine();
-
-        sb.AppendLine($"""
-                 /// <inheritdoc />
-                 /// <summary>
-                 /// Read and convert the JSON to <see cref="{jsonConverterToGenerate.FullyQualifiedName}" />.
-                 /// </summary>
-                 /// <remarks>
-                 /// A converter may throw any Exception, but should throw <see cref="global::System.Text.Json.JsonException" /> when the JSON is invalid.
-                 /// </remarks>
-            """)
-            .Append("     public override ")
-            .Append(jsonConverterToGenerate.FullyQualifiedName)
-            .AppendLine(" Read(ref global::System.Text.Json.Utf8JsonReader reader, global::System.Type typeToConvert, global::System.Text.Json.JsonSerializerOptions options)")
-            .AppendLine("     {")
-            .AppendLine("         var value = reader.GetString();")
-            .Append("         if (")
-            .Append(fullyQualifiedExtension)
-            .Append(".TryParse(value, out var enumValue, ")
-            .Append(jsonConverterToGenerate.CaseSensitive ? "false" : "true")
-            .AppendLine(", true))")
-            .AppendLine("            return enumValue;")
             .AppendLine()
-            .Append("         throw new global::System.Text.Json.JsonException($\"{value} is not a valid value.\", ")
-            .Append(string.IsNullOrEmpty(propertyName) ? "null" : "PropertyName")
-            .AppendLine(", null, null);")
-            .AppendLine("     }")
-            .AppendLine()
-            .AppendLine("""
-                 /// <inheritdoc />
+            .AppendLine($$"""
+                /// <inheritdoc />
+                public override void Write(global::System.Text.Json.Utf8JsonWriter writer, {{jsonConverterToGenerate.FullyQualifiedName}} value, global::System.Text.Json.JsonSerializerOptions options)
+                    => writer.WriteStringValue({{fullyQualifiedExtension}}.ToStringFast(value));
             """)
-            .Append("     public override void Write(global::System.Text.Json.Utf8JsonWriter writer, ")
-            .Append(jsonConverterToGenerate.FullyQualifiedName)
-            .AppendLine(" value, global::System.Text.Json.JsonSerializerOptions options)")
-            .Append("         => writer.WriteStringValue(").Append(fullyQualifiedExtension).AppendLine(".ToStringFast(value));")
             .AppendLine("}");
 
         return sb.ToString();

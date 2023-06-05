@@ -18,7 +18,8 @@ public class JsonConverterSourceBuilderSnapshotTests
             ExtensionNamespace = "Something.Blah",
             IsPublic = true,
             PropertyName = "ShortName",
-            FullyQualifiedName = "Something.Blah.ShortNameConverter"
+            FullyQualifiedName = "Something.Blah.ShortName",
+            AllowMatchingMetadataAttribute = true
         };
 
         var sb = new StringBuilder();

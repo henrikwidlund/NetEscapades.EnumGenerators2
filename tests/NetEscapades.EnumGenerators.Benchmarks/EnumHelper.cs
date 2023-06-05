@@ -3,9 +3,10 @@ using System.Reflection;
 
 namespace NetEscapades.EnumGenerators.Benchmarks;
 
-internal static class EnumHelper<T> where T : struct
+internal static class EnumHelper
 {
-    internal static bool TryParseByDisplayName(string name, bool ignoreCase, out T enumValue)
+    internal static bool TryParseByDisplayName<T>(string name, bool ignoreCase, out T enumValue)
+        where T : struct
     {
         enumValue = default;
 
@@ -13,7 +14,7 @@ internal static class EnumHelper<T> where T : struct
         var enumValues = (T[])Enum.GetValues(typeof(T));
         foreach (var value in enumValues)
         {
-            if (TryGetDisplayName(value.ToString(), out var displayName) && displayName.Equals(name, stringComparisonOption))
+            if (TryGetDisplayName<T>(value.ToString(), out var displayName) && displayName.Equals(name, stringComparisonOption))
             {
                 enumValue = value;
                 return true;
@@ -23,10 +24,11 @@ internal static class EnumHelper<T> where T : struct
         return false;
     }
 
-    private static bool TryGetDisplayName(
+    private static bool TryGetDisplayName<T>(
         string? value,
         [System.Diagnostics.CodeAnalysis.NotNullWhen(true)]
         out string? displayName)
+        where T : struct
     {
         displayName = default;
 
@@ -38,12 +40,34 @@ internal static class EnumHelper<T> where T : struct
         return displayName is not null;
     }
 
-    internal static string GetDisplayName(T value)
+    internal static string? GetDisplayName<T>(T value)
+        where T : struct
     {
-        if (!typeof(T).IsEnum) return string.Empty;
+        if (!typeof(T).IsEnum) return null;
         var memberInfo = typeof(T).GetMember(value.ToString()!);
-        if (memberInfo.Length <= 0) return string.Empty;
+        if (memberInfo.Length <= 0) return null;
         var displayName = memberInfo[0].GetCustomAttribute<DisplayAttribute>()!.GetName();
-        return displayName ?? string.Empty;
+        return displayName;
+    }
+
+    internal static string[] GetMetadataNamesOrDefault<T>()
+        where T : struct, Enum
+    {
+        var values = Enum.GetValues<T>();
+        var names = new string[values.Length];
+        for (var i = 0; i < values.Length; i++)
+        {
+            var displayName = GetDisplayName(values[i]);
+            if (displayName is not null)
+            {
+                names[i] = displayName;
+            }
+            else
+            {
+                names[i] = values[i].ToString();
+            }
+        }
+
+        return names;
     }
 }

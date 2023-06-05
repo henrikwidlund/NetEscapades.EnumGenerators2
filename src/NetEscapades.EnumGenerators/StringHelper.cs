@@ -6,7 +6,7 @@ internal static class StringHelper
         => GetPrivateMemoryFieldNamePrivate(value, "EnumMemory");
 
     public static string? GetPrivateMetadataMemoryFieldName(this string? value)
-        => GetPrivateMemoryFieldNamePrivate(value, "EnumDisplayMemory");
+        => GetPrivateMemoryFieldNamePrivate(value, "EnumMetadataMemory");
 
     private static string? GetPrivateMemoryFieldNamePrivate(this string? value, string suffix)
     {

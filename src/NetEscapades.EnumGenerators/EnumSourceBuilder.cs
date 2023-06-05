@@ -49,7 +49,7 @@ namespace NetEscapades.EnumGenerators
         GenerateGetValueOrDefault(sb, enumToGenerate);
         GenerateGetValues(sb, enumToGenerate);
         GenerateGetNames(sb, enumToGenerate);
-        GenerateEnumExtensionClassEnd(sb, enumToGenerate);
+        GenerateEnumExtensionClassEnd(sb);
 
         return sb.ToString();
     }
@@ -64,32 +64,28 @@ namespace NetEscapades.EnumGenerators
         {
             sb
                 .AppendLine()
-                .Append($$"""
-                    namespace {{enumToGenerate.Namespace}}
-                    {
-                    """);
+                .AppendLine($"namespace {enumToGenerate.Namespace};");
         }
 
-        sb.AppendLine().Append(
+        sb.AppendLine().AppendLine(
                 $$"""
-                    /// <summary>
-                    /// Extension methods for <see cref="{{enumToGenerate.FullyQualifiedName}}" />.
-                    /// </summary>
-                    {{(enumToGenerate.IsPublic ? "public" : "internal")}} static partial class {{enumToGenerate.Name}}
-                    {
+                /// <summary>
+                /// Extension methods for <see cref="{{enumToGenerate.FullyQualifiedName}}" />.
+                /// </summary>
+                {{(enumToGenerate.IsPublic ? "public" : "internal")}} static partial class {{enumToGenerate.Name}}
+                {
                 """);
     }
 
     private static void GenerateEnumLengthConst(StringBuilder sb, in EnumToGenerate enumToGenerate)
     {
-        sb.Append(
+        sb.AppendLine(
             $"""
-
-                    /// <summary>
-                    /// The number of members in the enum.
-                    /// This is a non-distinct count of defined names.
-                    /// </summary>
-                    public const int Length = {enumToGenerate.Names.Count.ToString()};
+                /// <summary>
+                /// The number of members in the enum.
+                /// This is a non-distinct count of defined names.
+                /// </summary>
+                public const int Length = {enumToGenerate.Names.Count.ToString()};
             """);
     }
 
@@ -97,23 +93,22 @@ namespace NetEscapades.EnumGenerators
     {
         sb.AppendLine().Append(
             $$"""
-            
-                    /// <summary>
-                    /// Returns the string representation of the <see cref="{{enumToGenerate.FullyQualifiedName}}"/> value.
-                    /// If the attribute is decorated with a <c>[Display]</c> attribute, then
-                    /// uses the provided value. Otherwise uses the name of the member, equivalent to
-                    /// calling <c>ToString()</c> on <paramref name="value"/>.
-                    /// </summary>
-                    /// <param name="value">The value to retrieve the string value for.</param>
-                    /// <returns>The string representation of the value.</returns>
-                    public static string ToStringFast(this {{enumToGenerate.FullyQualifiedName}} value)
-                        => value switch
-                        {
+                /// <summary>
+                /// Returns the string representation of the <see cref="{{enumToGenerate.FullyQualifiedName}}"/> value.
+                /// If the attribute is decorated with a <c>[Display]</c>/<c>[Description]</c> attribute, then
+                /// uses the provided value. Otherwise uses the name of the member, equivalent to
+                /// calling <c>ToString()</c> on <paramref name="value"/>.
+                /// </summary>
+                /// <param name="value">The value to retrieve the string value for.</param>
+                /// <returns>The string representation of the value.</returns>
+                public static string ToStringFast(this {{enumToGenerate.FullyQualifiedName}} value)
+                    => value switch
+                    {
             """);
         foreach (var member in enumToGenerate.Names)
         {
             sb.AppendLine().Append(
-                $"""                {enumToGenerate.FullyQualifiedName}.{member.Key} => """);
+                $"""            {enumToGenerate.FullyQualifiedName}.{member.Key} => """);
 
             sb.Append(member.Value.DisplayName is null
                 ? $"nameof({enumToGenerate.FullyQualifiedName}.{member.Key}),"
@@ -124,8 +119,8 @@ namespace NetEscapades.EnumGenerators
 
         sb.AppendLine().Append(
             """
-                            _ => value.ToString()
-                        };
+                        _ => value.ToString()
+                    };
             """);
     }
 
@@ -138,17 +133,17 @@ namespace NetEscapades.EnumGenerators
                 .AppendLine()
                 .Append(
                 $"""
-                        /// <summary>
-                        /// Determines whether one or more bit fields are set in the current instance.
-                        /// Equivalent to calling <see cref="global::System.Enum.HasFlag" /> on <paramref name="value"/>.
-                        /// </summary>
-                        /// <param name="value">The value of the instance to investigate.</param>
-                        /// <param name="flag">The flag to check for.</param>
-                        /// <returns><see langword="true" /> if the fields set in the flag are also set in the current instance; otherwise <see langword="false" />.</returns>
-                        /// <remarks>If the underlying value of <paramref name="flag"/> is zero, the method returns <see langword="true" />.
-                        /// This is consistent with the behaviour of <see cref="global::System.Enum.HasFlag" />.</remarks>
-                        public static bool HasFlagFast(this {enumToGenerate.FullyQualifiedName} value, {enumToGenerate.FullyQualifiedName} flag)
-                            => flag == 0 || (value & flag) == flag;
+                    /// <summary>
+                    /// Determines whether one or more bit fields are set in the current instance.
+                    /// Equivalent to calling <see cref="global::System.Enum.HasFlag" /> on <paramref name="value"/>.
+                    /// </summary>
+                    /// <param name="value">The value of the instance to investigate.</param>
+                    /// <param name="flag">The flag to check for.</param>
+                    /// <returns><see langword="true" /> if the fields set in the flag are also set in the current instance; otherwise <see langword="false" />.</returns>
+                    /// <remarks>If the underlying value of <paramref name="flag"/> is zero, the method returns <see langword="true" />.
+                    /// This is consistent with the behaviour of <see cref="global::System.Enum.HasFlag" />.</remarks>
+                    public static bool HasFlagFast(this {enumToGenerate.FullyQualifiedName} value, {enumToGenerate.FullyQualifiedName} flag)
+                        => flag == 0 || (value & flag) == flag;
                 """);
         }
     }
@@ -169,7 +164,7 @@ namespace NetEscapades.EnumGenerators
         {
             sb.AppendLine()
                 .Append(
-                    $"""        private static readonly global::System.ReadOnlyMemory<char> {member.Key.GetPrivateMemoryFieldName()} = global::System.MemoryExtensions.AsMemory("{member.Key}");""");
+                    $"""    private static readonly global::System.ReadOnlyMemory<char> {member.Key.GetPrivateMemoryFieldName()} = global::System.MemoryExtensions.AsMemory("{member.Key}");""");
         }
 
         foreach (var member in enumToGenerate.Names.Where(static m =>
@@ -177,7 +172,7 @@ namespace NetEscapades.EnumGenerators
         {
             sb.AppendLine()
                 .Append(
-                    $"""        private static readonly global::System.ReadOnlyMemory<char> {member.Key.GetPrivateMetadataMemoryFieldName()} = global::System.MemoryExtensions.AsMemory("{member.Value.DisplayName}");""");
+                    $"""    private static readonly global::System.ReadOnlyMemory<char> {member.Key.GetPrivateMetadataMemoryFieldName()} = global::System.MemoryExtensions.AsMemory("{member.Value.DisplayName}");""");
         }
     }
 
@@ -195,29 +190,29 @@ namespace NetEscapades.EnumGenerators
     {
         sb.AppendLine().AppendLine().Append(
             $$"""
-                    /// <summary>
-                    /// Retrieves an array of the metadata or <see langword="default" /> values of the members defined in
-                    /// <see cref="{{enumToGenerate.FullyQualifiedName}}" />.
-                    /// Note that this returns a new array with every invocation, so
-                    /// should be cached if appropriate.
-                    /// </summary>
-                    /// <returns>An array of the metadata or <see langword="default" /> values defined in <see cref="{{enumToGenerate.FullyQualifiedName}}" />.</returns>
-                    public static string[] GetMetadataNamesOrDefault() =>
-                        new[]
-                        {
+                /// <summary>
+                /// Retrieves an array of the metadata or <see langword="default" /> values of the members defined in
+                /// <see cref="{{enumToGenerate.FullyQualifiedName}}" />.
+                /// Note that this returns a new array with every invocation, so
+                /// should be cached if appropriate.
+                /// </summary>
+                /// <returns>An array of the metadata or <see langword="default" /> values defined in <see cref="{{enumToGenerate.FullyQualifiedName}}" />.</returns>
+                public static string[] GetMetadataNamesOrDefault() =>
+                    new[]
+                    {
             """);
 
         foreach (var member in enumToGenerate.Names)
         {
             sb.AppendLine().Append(
                 member.Value.DisplayName is not null
-                    ? $"""                "{member.Value.DisplayName}","""
-                    : $"""                nameof({enumToGenerate.FullyQualifiedName}.{member.Key}),""");
+                    ? $"""            "{member.Value.DisplayName}","""
+                    : $"""            nameof({enumToGenerate.FullyQualifiedName}.{member.Key}),""");
         }
 
         sb.AppendLine().Append(
             """
-                        };
+                    };
             """);
     }
 
@@ -225,86 +220,86 @@ namespace NetEscapades.EnumGenerators
     {
         sb.AppendLine().AppendLine().Append(
             $"""
-                    /// <summary>
-                    /// Gets the <see cref="{enumToGenerate.FullyQualifiedName}" /> representation of the <paramref name="name"/>
-                    /// or <see langword="default" /> if there's no match.
-                    /// </summary>
-                    /// <param name="name">The value that should be matched.</param>
-                    /// <returns>The matching <see cref="{enumToGenerate.FullyQualifiedName}" /> or <see langword="null" /> if there was no match.</returns>
-                    public static {enumToGenerate.FullyQualifiedName}? GetValueOrDefault(string? name) =>
-                        TryParse(name, out {enumToGenerate.FullyQualifiedName} value) ? value : null;
+                /// <summary>
+                /// Gets the <see cref="{enumToGenerate.FullyQualifiedName}" /> representation of the <paramref name="name"/>
+                /// or <see langword="default" /> if there's no match.
+                /// </summary>
+                /// <param name="name">The value that should be matched.</param>
+                /// <returns>The matching <see cref="{enumToGenerate.FullyQualifiedName}" /> or <see langword="null" /> if there was no match.</returns>
+                public static {enumToGenerate.FullyQualifiedName}? GetValueOrDefault(string? name) =>
+                    TryParse(name, out {enumToGenerate.FullyQualifiedName} value) ? value : null;
             """);
 
         sb.AppendLine().AppendLine().Append(
                 $"""
-                        /// <summary>
-                        /// Gets the <see cref="{enumToGenerate.FullyQualifiedName}" /> representation of the <paramref name="name"/>
-                        /// or <see langword="default" /> if there's no match.
-                        /// </summary>
-                        /// <param name="name">The value that should be matched.</param>
-                        /// <returns>The matching <see cref="{enumToGenerate.FullyQualifiedName}" /> or <see langword="null" /> if there was no match.</returns>
-                        public static {enumToGenerate.FullyQualifiedName}? GetValueOrDefault(in global::System.ReadOnlySpan<char> name) =>
-                            TryParse(name, out {enumToGenerate.FullyQualifiedName} value) ? value : null;
+                    /// <summary>
+                    /// Gets the <see cref="{enumToGenerate.FullyQualifiedName}" /> representation of the <paramref name="name"/>
+                    /// or <see langword="default" /> if there's no match.
+                    /// </summary>
+                    /// <param name="name">The value that should be matched.</param>
+                    /// <returns>The matching <see cref="{enumToGenerate.FullyQualifiedName}" /> or <see langword="null" /> if there was no match.</returns>
+                    public static {enumToGenerate.FullyQualifiedName}? GetValueOrDefault(in global::System.ReadOnlySpan<char> name) =>
+                        TryParse(name, out {enumToGenerate.FullyQualifiedName} value) ? value : null;
                 """);
 
         sb.AppendLine().AppendLine().Append(
             $"""
-                    /// <summary>
-                    /// Gets the <see cref="{enumToGenerate.FullyQualifiedName}" /> representation of the <paramref name="name"/>
-                    /// or <see langword="default" /> if there's no match.
-                    /// </summary>
-                    /// <param name="name">The value that should be matched.</param>
-                    /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode;
-                    /// <see langword="false" /> to read value in case sensitive mode.</param>
-                    /// <returns>The matching <see cref="{enumToGenerate.FullyQualifiedName}" /> or <see langword="null" /> if there was no match.</returns>
-                    public static {enumToGenerate.FullyQualifiedName}? GetValueOrDefault(string? name, bool ignoreCase) =>
-                        TryParse(name, out {enumToGenerate.FullyQualifiedName} value, ignoreCase) ? value : null;
+                /// <summary>
+                /// Gets the <see cref="{enumToGenerate.FullyQualifiedName}" /> representation of the <paramref name="name"/>
+                /// or <see langword="default" /> if there's no match.
+                /// </summary>
+                /// <param name="name">The value that should be matched.</param>
+                /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode;
+                /// <see langword="false" /> to read value in case sensitive mode.</param>
+                /// <returns>The matching <see cref="{enumToGenerate.FullyQualifiedName}" /> or <see langword="null" /> if there was no match.</returns>
+                public static {enumToGenerate.FullyQualifiedName}? GetValueOrDefault(string? name, bool ignoreCase) =>
+                    TryParse(name, out {enumToGenerate.FullyQualifiedName} value, ignoreCase) ? value : null;
             """);
 
         sb.AppendLine().AppendLine().Append(
             $"""
-                    /// <summary>
-                    /// Gets the <see cref="{enumToGenerate.FullyQualifiedName}" /> representation of the <paramref name="name"/>
-                    /// or <see langword="default" /> if there's no match.
-                    /// </summary>
-                    /// <param name="name">The value that should be matched.</param>
-                    /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode;
-                    /// <see langword="false" /> to read value in case sensitive mode.</param>
-                    /// <returns>The matching <see cref="{enumToGenerate.FullyQualifiedName}" /> or <see langword="null" /> if there was no match.</returns>
-                    public static {enumToGenerate.FullyQualifiedName}? GetValueOrDefault(in global::System.ReadOnlySpan<char> name, bool ignoreCase) =>
-                        TryParse(name, out {enumToGenerate.FullyQualifiedName} value, ignoreCase) ? value : null;
+                /// <summary>
+                /// Gets the <see cref="{enumToGenerate.FullyQualifiedName}" /> representation of the <paramref name="name"/>
+                /// or <see langword="default" /> if there's no match.
+                /// </summary>
+                /// <param name="name">The value that should be matched.</param>
+                /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode;
+                /// <see langword="false" /> to read value in case sensitive mode.</param>
+                /// <returns>The matching <see cref="{enumToGenerate.FullyQualifiedName}" /> or <see langword="null" /> if there was no match.</returns>
+                public static {enumToGenerate.FullyQualifiedName}? GetValueOrDefault(in global::System.ReadOnlySpan<char> name, bool ignoreCase) =>
+                    TryParse(name, out {enumToGenerate.FullyQualifiedName} value, ignoreCase) ? value : null;
             """);
 
         sb.AppendLine().AppendLine().Append(
             $"""
-                    /// <summary>
-                    /// Gets the <see cref="{enumToGenerate.FullyQualifiedName}" /> representation of the <paramref name="name"/>
-                    /// or <see langword="default" /> if there's no match.
-                    /// </summary>
-                    /// <param name="name">The value that should be matched.</param>
-                    /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode;
-                    /// <see langword="false" /> to read value in case sensitive mode.</param>
-                    /// <param name="allowMatchingMetadataAttribute">If <see langword="true" />,
-                    /// considers the value of metadata attributes, otherwise ignores them.</param>
-                    /// <returns>The matching <see cref="{enumToGenerate.FullyQualifiedName}" /> or <see langword="null" /> if there was no match.</returns>
-                    public static {enumToGenerate.FullyQualifiedName}? GetValueOrDefault(string? name, bool ignoreCase, bool allowMatchingMetadataAttribute) =>
-                        TryParse(name, out {enumToGenerate.FullyQualifiedName} value, ignoreCase, allowMatchingMetadataAttribute) ? value : null;
+                /// <summary>
+                /// Gets the <see cref="{enumToGenerate.FullyQualifiedName}" /> representation of the <paramref name="name"/>
+                /// or <see langword="default" /> if there's no match.
+                /// </summary>
+                /// <param name="name">The value that should be matched.</param>
+                /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode;
+                /// <see langword="false" /> to read value in case sensitive mode.</param>
+                /// <param name="allowMatchingMetadataAttribute">If <see langword="true" />,
+                /// considers the value of metadata attributes, otherwise ignores them.</param>
+                /// <returns>The matching <see cref="{enumToGenerate.FullyQualifiedName}" /> or <see langword="null" /> if there was no match.</returns>
+                public static {enumToGenerate.FullyQualifiedName}? GetValueOrDefault(string? name, bool ignoreCase, bool allowMatchingMetadataAttribute) =>
+                    TryParse(name, out {enumToGenerate.FullyQualifiedName} value, ignoreCase, allowMatchingMetadataAttribute) ? value : null;
             """);
 
         sb.AppendLine().AppendLine().Append(
             $"""
-                    /// <summary>
-                    /// Gets the <see cref="{enumToGenerate.FullyQualifiedName}" /> representation of the <paramref name="name"/>
-                    /// or <see langword="default" /> if there's no match.
-                    /// </summary>
-                    /// <param name="name">The value that should be matched.</param>
-                    /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode;
-                    /// <see langword="false" /> to read value in case sensitive mode.</param>
-                    /// <param name="allowMatchingMetadataAttribute">If <see langword="true" />,
-                    /// considers the value of metadata attributes, otherwise ignores them.</param>
-                    /// <returns>The matching <see cref="{enumToGenerate.FullyQualifiedName}" /> or <see langword="null" /> if there was no match.</returns>
-                    public static {enumToGenerate.FullyQualifiedName}? GetValueOrDefault(in global::System.ReadOnlySpan<char> name, bool ignoreCase, bool allowMatchingMetadataAttribute) =>
-                        TryParse(name, out {enumToGenerate.FullyQualifiedName} value, ignoreCase, allowMatchingMetadataAttribute) ? value : null;
+                /// <summary>
+                /// Gets the <see cref="{enumToGenerate.FullyQualifiedName}" /> representation of the <paramref name="name"/>
+                /// or <see langword="default" /> if there's no match.
+                /// </summary>
+                /// <param name="name">The value that should be matched.</param>
+                /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode;
+                /// <see langword="false" /> to read value in case sensitive mode.</param>
+                /// <param name="allowMatchingMetadataAttribute">If <see langword="true" />,
+                /// considers the value of metadata attributes, otherwise ignores them.</param>
+                /// <returns>The matching <see cref="{enumToGenerate.FullyQualifiedName}" /> or <see langword="null" /> if there was no match.</returns>
+                public static {enumToGenerate.FullyQualifiedName}? GetValueOrDefault(in global::System.ReadOnlySpan<char> name, bool ignoreCase, bool allowMatchingMetadataAttribute) =>
+                    TryParse(name, out {enumToGenerate.FullyQualifiedName} value, ignoreCase, allowMatchingMetadataAttribute) ? value : null;
             """);
     }
 
@@ -312,27 +307,27 @@ namespace NetEscapades.EnumGenerators
     {
         sb.AppendLine().AppendLine().Append(
             $$"""
-                    /// <summary>
-                    /// Retrieves an array of the values of the members defined in
-                    /// <see cref="{{enumToGenerate.FullyQualifiedName}}" />.
-                    /// Note that this returns a new array with every invocation, so
-                    /// should be cached if appropriate.
-                    /// </summary>
-                    /// <returns>An array of the values defined in <see cref="{{enumToGenerate.FullyQualifiedName}}" />.</returns>
-                    public static {{enumToGenerate.FullyQualifiedName}}[] GetValues() =>
-                        new[]
-                        {
+                /// <summary>
+                /// Retrieves an array of the values of the members defined in
+                /// <see cref="{{enumToGenerate.FullyQualifiedName}}" />.
+                /// Note that this returns a new array with every invocation, so
+                /// should be cached if appropriate.
+                /// </summary>
+                /// <returns>An array of the values defined in <see cref="{{enumToGenerate.FullyQualifiedName}}" />.</returns>
+                public static {{enumToGenerate.FullyQualifiedName}}[] GetValues() =>
+                    new[]
+                    {
             """);
 
         foreach (var member in enumToGenerate.Names)
         {
             sb.AppendLine().Append(
-                $"""                {enumToGenerate.FullyQualifiedName}.{member.Key},""");
+                $"""            {enumToGenerate.FullyQualifiedName}.{member.Key},""");
         }
 
         sb.AppendLine().Append(
             """
-                        };
+                    };
             """);
     }
 
@@ -340,45 +335,31 @@ namespace NetEscapades.EnumGenerators
     {
         sb.AppendLine().AppendLine().Append(
             $$"""
-                    /// <summary>
-                    /// Retrieves an array of the names of the members defined in
-                    /// <see cref="{{enumToGenerate.FullyQualifiedName}}" />.
-                    /// Note that this returns a new array with every invocation, so
-                    /// should be cached if appropriate.
-                    /// </summary>
-                    /// <returns>An array of the names of the members defined in <see cref="{{enumToGenerate.FullyQualifiedName}}" />.</returns>
-                    public static string[] GetNames() =>
-                        new[]
-                        {
+                /// <summary>
+                /// Retrieves an array of the names of the members defined in
+                /// <see cref="{{enumToGenerate.FullyQualifiedName}}" />.
+                /// Note that this returns a new array with every invocation, so
+                /// should be cached if appropriate.
+                /// </summary>
+                /// <returns>An array of the names of the members defined in <see cref="{{enumToGenerate.FullyQualifiedName}}" />.</returns>
+                public static string[] GetNames() =>
+                    new[]
+                    {
             """);
 
         foreach (var member in enumToGenerate.Names)
         {
-            sb.Append(
+            sb.AppendLine().Append(
                 $"""
-                
-                                nameof({enumToGenerate.FullyQualifiedName}.{member.Key}),
+                            nameof({enumToGenerate.FullyQualifiedName}.{member.Key}),
                 """);
         }
 
-        sb.AppendLine().Append("            };");
+        sb.AppendLine().Append("        };");
     }
 
-    private static void GenerateEnumExtensionClassEnd(StringBuilder sb, in EnumToGenerate enumToGenerate)
+    private static void GenerateEnumExtensionClassEnd(StringBuilder sb)
     {
-        sb.AppendLine().Append(
-            """
-                }
-            """);
-
-        if (!string.IsNullOrEmpty(enumToGenerate.Namespace))
-        {
-            sb.AppendLine().Append(
-                """
-                }
-                """);
-        }
-
-        sb.AppendLine();
+        sb.AppendLine().Append('}').AppendLine();
     }
 }

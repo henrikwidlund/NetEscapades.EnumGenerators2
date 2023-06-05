@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 namespace NetEscapades.EnumGenerators.IntegrationTests;
 
 [EnumExtensions]
-[EnumJsonConverter(typeof(EnumInNamespaceConverter), CamelCase = true, CaseSensitive = false, PropertyName = nameof(EnumInNamespace))]
+[EnumJsonConverter(typeof(EnumInNamespaceConverter), CamelCase = true, CaseSensitive = false, AllowMatchingMetadataAttribute = true, PropertyName = nameof(EnumInNamespace))]
 [JsonConverter(typeof(EnumInNamespaceConverter))]
 public enum EnumInNamespace
 {
@@ -15,7 +15,7 @@ public enum EnumInNamespace
 }
 
 [EnumExtensions]
-[EnumJsonConverter(typeof(EnumWithDisplayNameInNamespaceConverter), CamelCase = true, CaseSensitive = false, PropertyName = nameof(EnumWithDisplayNameInNamespace))]
+[EnumJsonConverter(typeof(EnumWithDisplayNameInNamespaceConverter), CamelCase = true, CaseSensitive = false, AllowMatchingMetadataAttribute = true, PropertyName = nameof(EnumWithDisplayNameInNamespace))]
 [JsonConverter(typeof(EnumWithDisplayNameInNamespaceConverter))]
 public enum EnumWithDisplayNameInNamespace
 {
@@ -25,7 +25,7 @@ public enum EnumWithDisplayNameInNamespace
 }
 
 [EnumExtensions]
-[EnumJsonConverter(typeof(EnumWithDescriptionInNamespaceConverter), CamelCase = true, CaseSensitive = false, PropertyName = nameof(EnumWithDescriptionInNamespace))]
+[EnumJsonConverter(typeof(EnumWithDescriptionInNamespaceConverter), CamelCase = true, CaseSensitive = false, AllowMatchingMetadataAttribute = true, PropertyName = nameof(EnumWithDescriptionInNamespace))]
 [JsonConverter(typeof(EnumWithDescriptionInNamespaceConverter))]
 public enum EnumWithDescriptionInNamespace
 {
@@ -35,7 +35,7 @@ public enum EnumWithDescriptionInNamespace
 }
 
 [EnumExtensions]
-[EnumJsonConverter(typeof(EnumWithSameDisplayNameConverter), CamelCase = true, CaseSensitive = false, PropertyName = nameof(EnumWithSameDisplayName))]
+[EnumJsonConverter(typeof(EnumWithSameDisplayNameConverter), CamelCase = true, CaseSensitive = false, AllowMatchingMetadataAttribute = true, PropertyName = nameof(EnumWithSameDisplayName))]
 [JsonConverter(typeof(EnumWithSameDisplayNameConverter))]
 public enum EnumWithSameDisplayName
 {
@@ -45,7 +45,7 @@ public enum EnumWithSameDisplayName
 }
 
 [EnumExtensions]
-[EnumJsonConverter(typeof(LongEnumConverter), CamelCase = true, CaseSensitive = false, PropertyName = nameof(LongEnum))]
+[EnumJsonConverter(typeof(LongEnumConverter), CamelCase = true, CaseSensitive = false, AllowMatchingMetadataAttribute = true, PropertyName = nameof(LongEnum))]
 [JsonConverter(typeof(LongEnumConverter))]
 public enum LongEnum : long
 {
@@ -55,7 +55,7 @@ public enum LongEnum : long
 }
 
 [EnumExtensions]
-[EnumJsonConverter(typeof(FlagEnumsConverter), CamelCase = true, CaseSensitive = false, PropertyName = nameof(FlagEnums))]
+[EnumJsonConverter(typeof(FlagEnumsConverter), CamelCase = true, CaseSensitive = false, AllowMatchingMetadataAttribute = true, PropertyName = nameof(FlagEnums))]
 [JsonConverter(typeof(FlagEnumsConverter))]
 [Flags]
 public enum FlagEnums

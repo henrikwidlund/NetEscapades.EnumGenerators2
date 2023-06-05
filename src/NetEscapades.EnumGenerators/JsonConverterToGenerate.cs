@@ -9,4 +9,5 @@ public readonly record struct JsonConverterToGenerate(
     bool IsPublic,
     bool CaseSensitive,
     bool CamelCase,
+    bool AllowMatchingMetadataAttribute,
     string? PropertyName);

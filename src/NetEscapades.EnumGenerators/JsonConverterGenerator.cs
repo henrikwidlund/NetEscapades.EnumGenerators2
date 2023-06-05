@@ -78,6 +78,7 @@ public class JsonConverterGenerator : IIncrementalGenerator
         ProcessNamedArguments(enumJsonConverterAttribute,
             out var caseSensitive,
             out var camelCase,
+            out var allowMatchingMetadataAttribute,
             out var propertyName);
 
         ProcessConstructorArguments(enumJsonConverterAttribute,
@@ -99,17 +100,20 @@ public class JsonConverterGenerator : IIncrementalGenerator
             ExtensionNamespace = extensionNamespace,
             PropertyName = propertyName,
             IsPublic = enumSymbol.DeclaredAccessibility == Accessibility.Public,
-            FullyQualifiedName = fullyQualifiedName
+            FullyQualifiedName = fullyQualifiedName,
+            AllowMatchingMetadataAttribute = allowMatchingMetadataAttribute
         };
     }
 
     private static void ProcessNamedArguments(AttributeData attributeData,
         out bool caseSensitive,
         out bool camelCase,
+        out bool allowMatchingMetadataAttribute,
         out string? propertyName)
     {
         caseSensitive = false;
         camelCase = false;
+        allowMatchingMetadataAttribute = false;
         propertyName = null;
 
         foreach (var namedArgument in attributeData.NamedArguments)
@@ -121,6 +125,9 @@ public class JsonConverterGenerator : IIncrementalGenerator
                     continue;
                 case "CamelCase" when namedArgument.Value.Value?.ToString() is { } cc:
                     camelCase = bool.Parse(cc);
+                    continue;
+                case "AllowMatchingMetadataAttribute" when namedArgument.Value.Value?.ToString() is { } amma:
+                    allowMatchingMetadataAttribute = bool.Parse(amma);
                     continue;
                 case "PropertyName" when namedArgument.Value.Value?.ToString() is { } pn:
                     propertyName = pn;

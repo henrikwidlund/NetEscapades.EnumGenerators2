@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Runtime.CompilerServices;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
 using NetEscapades.EnumGenerators;
@@ -10,6 +12,8 @@ BenchmarkSwitcher
     .Run(args);
 
 [EnumExtensions]
+[EnumJsonConverter(typeof(TestEnumConverter), CaseSensitive = true, AllowMatchingMetadataAttribute = false)]
+[JsonConverter(typeof(TestEnumConverter))]
 public enum TestEnum
 {
     First = 0,
@@ -31,9 +35,9 @@ public class ToStringBenchmark
 
     [Benchmark]
     [MethodImpl(MethodImplOptions.NoInlining)]
-    public string EnumToStringDisplayNameWithReflection()
+    public string? EnumToStringDisplayNameWithReflection()
     {
-        return EnumHelper<TestEnum>.GetDisplayName(_enum);
+        return EnumHelper.GetDisplayName(_enum);
     }
 
     [Benchmark]
@@ -88,7 +92,7 @@ public class IsDefinedNameBenchmark
     [MethodImpl(MethodImplOptions.NoInlining)]
     public bool EnumIsDefinedNameDisplayNameWithReflection()
     {
-        return EnumHelper<TestEnum>.TryParseByDisplayName(_enumDisplaName, false, out _);
+        return EnumHelper.TryParseByDisplayName<TestEnum>(_enumDisplaName, false, out _);
     }
 
     [Benchmark]
@@ -118,7 +122,7 @@ public class IsDefinedNameFromSpanBenchmark
     public bool EnumIsDefinedNameDisplayNameWithReflection()
     {
         ReadOnlySpan<char> enumAsSpan = _enumDisplayName;
-        return EnumHelper<TestEnum>.TryParseByDisplayName(enumAsSpan.ToString(), false, out _);
+        return EnumHelper.TryParseByDisplayName<TestEnum>(enumAsSpan.ToString(), false, out _);
     }
 
     [Benchmark]
@@ -205,7 +209,7 @@ public class TryParseBenchmark
     [MethodImpl(MethodImplOptions.NoInlining)]
     public TestEnum EnumTryParseDisplayNameWithReflection()
     {
-        return EnumHelper<TestEnum>.TryParseByDisplayName("2nd", false, out var result) ? result : default;
+        return EnumHelper.TryParseByDisplayName<TestEnum>("2nd", false, out var result) ? result : default;
     }
 
     [Benchmark]
@@ -258,7 +262,7 @@ public class TryParseFromSpanBenchmark
     public TestEnum EnumTryParseDisplayNameWithReflection()
     {
         ReadOnlySpan<char> enumAsSpan = _enumDisplayName;
-        return EnumHelper<TestEnum>.TryParseByDisplayName(enumAsSpan.ToString(), ignoreCase: false, out var result) ? result : default;
+        return EnumHelper.TryParseByDisplayName<TestEnum>(enumAsSpan.ToString(), ignoreCase: false, out var result) ? result : default;
     }
 
     [Benchmark]
@@ -306,7 +310,7 @@ public class TryParseIgnoreCaseBenchmark
     [MethodImpl(MethodImplOptions.NoInlining)]
     public TestEnum EnumTryParseIgnoreCaseDisplayNameWithReflection()
     {
-        return EnumHelper<TestEnum>.TryParseByDisplayName("2ND", true, out var result) ? result : default;
+        return EnumHelper.TryParseByDisplayName<TestEnum>("2ND", true, out var result) ? result : default;
     }
 
     [Benchmark]
@@ -369,4 +373,307 @@ public class EnumLengthBenchmark
     [Benchmark]
     [MethodImpl(MethodImplOptions.NoInlining)]
     public int EnumLengthProperty() => TestEnumExtensions.Length;
+}
+
+[MemoryDiagnoser]
+public class GetMetadataNamesOrDefault
+{
+    [Benchmark(Baseline = true)]
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    public string[] EnumGetMetadataNamesOrDefault()
+    {
+        return EnumHelper.GetMetadataNamesOrDefault<TestEnum>();
+    }
+
+    [Benchmark]
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    public string[] ExtensionsGetMetadataNamesOrDefault()
+    {
+        return TestEnumExtensions.GetMetadataNamesOrDefault();
+    }
+}
+
+[MemoryDiagnoser]
+public class GetValueOrDefault
+{
+    [Benchmark(Baseline = true)]
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    public TestEnum? EnumGetValueOrDefault()
+    {
+        return Enum.TryParse("Second", false, out TestEnum result)
+            ? result
+            : default;
+    }
+
+    [Benchmark]
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    public TestEnum? ExtensionsGetValueOrDefault()
+    {
+        return TestEnumExtensions.GetValueOrDefault("Second");
+    }
+
+    [Benchmark]
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    public TestEnum? EnumGetValueOrDefaultDisplayNameWithReflection()
+    {
+        return EnumHelper.TryParseByDisplayName<TestEnum>("2nd", false, out var result) ? result : default;
+    }
+
+    [Benchmark]
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    public TestEnum? ExtensionsGetValueOrDefaultDisplayName()
+    {
+        return TestEnumExtensions.GetValueOrDefault("2nd", false, true);
+    }
+}
+
+[MemoryDiagnoser]
+public class GetValueOrDefaultFromSpanBenchmark
+{
+    private static readonly char[] _enum = { 'S', 'e', 'c', 'o', 'n', 'd' };
+    private static readonly char[] _enumDisplayName = { '2', 'n', 'd' };
+
+    [Benchmark(Baseline = true)]
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    public TestEnum? EnumGetValueOrDefault()
+    {
+        ReadOnlySpan<char> enumAsSpan = _enum;
+        return Enum.TryParse(enumAsSpan.ToString(), false, out TestEnum result)
+            ? result
+            : default;
+    }
+
+    [Benchmark]
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    public TestEnum? ExtensionsGetValueOrDefault()
+    {
+        ReadOnlySpan<char> enumAsSpan = _enum;
+        return TestEnumExtensions.GetValueOrDefault(enumAsSpan.ToString());
+    }
+
+    [Benchmark]
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    public TestEnum? ExtensionsGetValueOrDefaultSpan()
+    {
+        return TestEnumExtensions.GetValueOrDefault(_enum.AsSpan());
+    }
+
+    [Benchmark]
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    public TestEnum? EnumGetValueOrDefaultDisplayNameWithReflection()
+    {
+        ReadOnlySpan<char> enumAsSpan = _enumDisplayName;
+        return EnumHelper.TryParseByDisplayName<TestEnum>(enumAsSpan.ToString(), false, out var result) ? result : default;
+    }
+
+    [Benchmark]
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    public TestEnum? ExtensionsGetValueOrDefaultDisplayName()
+    {
+        ReadOnlySpan<char> enumAsSpan = _enumDisplayName;
+        return TestEnumExtensions.GetValueOrDefault(enumAsSpan.ToString(), false, true);
+    }
+
+    [Benchmark]
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    public TestEnum? ExtensionsGetValueOrDefaultDisplayNameSpan()
+    {
+        return TestEnumExtensions.GetValueOrDefault(_enumDisplayName.AsSpan(), false, true);
+    }
+}
+
+[MemoryDiagnoser]
+public class GetValueOrDefaultIgnoreCaseBenchmark
+{
+    [Benchmark(Baseline = true)]
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    public TestEnum EnumGetValueOrDefaultIgnoreCase()
+    {
+        return Enum.TryParse("second", true, out TestEnum result)
+            ? result
+            : default;
+    }
+
+    [Benchmark]
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    public TestEnum? ExtensionsGetValueOrDefaultIgnoreCase()
+    {
+        return TestEnumExtensions.GetValueOrDefault("second", true);
+    }
+
+    [Benchmark]
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    public TestEnum? EnumGetValueOrDefaultIgnoreCaseDisplayNameWithReflection()
+    {
+        return EnumHelper.TryParseByDisplayName<TestEnum>("2ND", true, out var result) ? result : default;
+    }
+
+    [Benchmark]
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    public TestEnum? ExtensionsGetValueOrDefaultIgnoreCaseDisplayName()
+    {
+        return TestEnumExtensions.GetValueOrDefault("2ND", true, true);
+    }
+}
+
+[MemoryDiagnoser]
+public class GetValueOrDefaultIgnoreCaseFromSpanBenchmark
+{
+    private static readonly char[] _enum = { 's', 'e', 'c', 'o', 'n', 'd' };
+
+    [Benchmark(Baseline = true)]
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    public TestEnum? EnumGetValueOrDefaultIgnoreCase()
+    {
+        ReadOnlySpan<char> enumAsSpan = _enum;
+        return Enum.TryParse(enumAsSpan.ToString(), true, out TestEnum result)
+            ? result
+            : default;
+    }
+
+    [Benchmark]
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    public TestEnum? ExtensionsGetValueOrDefaultIgnoreCase()
+    {
+        ReadOnlySpan<char> enumAsSpan = _enum;
+        return TestEnumExtensions.GetValueOrDefault(enumAsSpan.ToString(), true);
+    }
+
+
+    [Benchmark]
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    public TestEnum? ExtensionsGetValueOrDefaultIgnoreCaseSpan()
+    {
+        return TestEnumExtensions.GetValueOrDefault(_enum.AsSpan(), true);
+    }
+}
+
+[MemoryDiagnoser]
+public class DeserializeBenchmark
+{
+    private static readonly string _enumsString =
+        """
+        ["Second","Third","First","Second"]
+        """;
+
+    private static readonly Memory<char> _enumsMemory = _enumsString.ToArray().AsMemory();
+
+    private static readonly JsonSerializerOptions _jsonSerializerOptions = new()
+    {
+        Converters = { new JsonStringEnumConverter() }
+    };
+
+    [Benchmark(Baseline = true)]
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    public TestEnum[]? JsonStringEnumConverter()
+    {
+        return JsonSerializer.Deserialize<TestEnum[]>(_enumsString, _jsonSerializerOptions);
+    }
+
+    [Benchmark]
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    public TestEnum[]? JsonStringEnumConverterSpan()
+    {
+        return JsonSerializer.Deserialize<TestEnum[]>(_enumsMemory.Span, _jsonSerializerOptions);
+    }
+
+    [Benchmark]
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    public TestEnum[]? EnumJsonConverter()
+    {
+        return JsonSerializer.Deserialize<TestEnum[]>(_enumsString);
+    }
+
+    [Benchmark]
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    public TestEnum[]? EnumJsonConverterSpan()
+    {
+        return JsonSerializer.Deserialize<TestEnum[]>(_enumsMemory.Span);
+    }
+}
+
+[EnumExtensions]
+[EnumJsonConverter(typeof(TestEnumIgnoreCaseConverter), CaseSensitive = false, AllowMatchingMetadataAttribute = false)]
+[JsonConverter(typeof(TestEnumIgnoreCaseConverter))]
+public enum TestEnumIgnoreCase
+{
+    First = 0,
+    [Display(Name = "2nd")] Second = 1,
+    Third = 2
+}
+
+[MemoryDiagnoser]
+public class DeserializeIgnoreCaseBenchmark
+{
+    private static readonly string _enumsString =
+        """
+        ["second","Third","first","second"]
+        """;
+
+    private static readonly Memory<char> _enumsMemory = _enumsString.ToArray().AsMemory();
+
+    private static readonly JsonSerializerOptions _jsonSerializerOptions = new()
+    {
+        Converters = { new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) }
+    };
+
+    [Benchmark(Baseline = true)]
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    public TestEnumIgnoreCase[]? JsonStringEnumConverter()
+    {
+        return JsonSerializer.Deserialize<TestEnumIgnoreCase[]>(_enumsString, _jsonSerializerOptions);
+    }
+
+    [Benchmark]
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    public TestEnumIgnoreCase[]? JsonStringEnumConverterSpan()
+    {
+        return JsonSerializer.Deserialize<TestEnumIgnoreCase[]>(_enumsMemory.Span, _jsonSerializerOptions);
+    }
+
+    [Benchmark]
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    public TestEnumIgnoreCase[]? EnumJsonConverter()
+    {
+        return JsonSerializer.Deserialize<TestEnumIgnoreCase[]>(_enumsString);
+    }
+
+    [Benchmark]
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    public TestEnumIgnoreCase[]? EnumJsonConverterSpan()
+    {
+        return JsonSerializer.Deserialize<TestEnumIgnoreCase[]>(_enumsMemory.Span);
+    }
+}
+
+
+
+[MemoryDiagnoser]
+public class SerializeBenchmark
+{
+    private static readonly TestEnum[] _enums = {
+        TestEnum.Second,
+        TestEnum.Third,
+        TestEnum.First,
+        TestEnum.Second
+    };
+
+    private static readonly JsonSerializerOptions _jsonSerializerOptions = new()
+    {
+        Converters = { new JsonStringEnumConverter() }
+    };
+
+    [Benchmark(Baseline = true)]
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    public string JsonStringEnumConverter()
+    {
+        return JsonSerializer.Serialize(_enums, _jsonSerializerOptions);
+    }
+
+    [Benchmark]
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    public string EnumJsonConverter()
+    {
+        return JsonSerializer.Serialize(_enums);
+    }
 }
