@@ -108,7 +108,7 @@ namespace NetEscapades.EnumGenerators
         foreach (var member in enumToGenerate.Names)
         {
             sb.AppendLine().Append(
-                $"""            global::{enumToGenerate.FullyQualifiedName}.{member.Key} => """);
+                $"            global::{enumToGenerate.FullyQualifiedName}.{member.Key} => ");
 
             sb.Append(member.Value.DisplayName is null
                 ? $"nameof(global::{enumToGenerate.FullyQualifiedName}.{member.Key}),"
@@ -188,13 +188,10 @@ namespace NetEscapades.EnumGenerators
             sb.AppendLine().Append(
                 member.Value.DisplayName is not null
                     ? $"""            "{member.Value.DisplayName}","""
-                    : $"""            nameof(global::{enumToGenerate.FullyQualifiedName}.{member.Key}),""");
+                    : $"            nameof(global::{enumToGenerate.FullyQualifiedName}.{member.Key}),");
         }
 
-        sb.AppendLine().Append(
-            """
-                    };
-            """);
+        sb.AppendLine().Append("        };");
     }
 
     private static void GenerateGetValueOrDefault(StringBuilder sb, in EnumToGenerate enumToGenerate)
@@ -303,13 +300,10 @@ namespace NetEscapades.EnumGenerators
         foreach (var member in enumToGenerate.Names)
         {
             sb.AppendLine().Append(
-                $"""            global::{enumToGenerate.FullyQualifiedName}.{member.Key},""");
+                $"            global::{enumToGenerate.FullyQualifiedName}.{member.Key},");
         }
 
-        sb.AppendLine().Append(
-            """
-                    };
-            """);
+        sb.AppendLine().Append("        };");
     }
 
     private static void GenerateGetNames(StringBuilder sb, in EnumToGenerate enumToGenerate)
@@ -331,9 +325,7 @@ namespace NetEscapades.EnumGenerators
         foreach (var member in enumToGenerate.Names)
         {
             sb.AppendLine().Append(
-                $"""
-                            nameof(global::{enumToGenerate.FullyQualifiedName}.{member.Key}),
-                """);
+                $"            nameof(global::{enumToGenerate.FullyQualifiedName}.{member.Key}),");
         }
 
         sb.AppendLine().Append("        };");

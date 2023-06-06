@@ -22,7 +22,7 @@ public static partial class EnumSourceBuilder
         {
             sb.AppendLine()
                 .Append(
-                    $"""            global::{enumToGenerate.FullyQualifiedName}.{member.Key} => true,""");
+                    $"            global::{enumToGenerate.FullyQualifiedName}.{member.Key} => true,");
         }
 
         sb.AppendLine().Append(
@@ -65,7 +65,7 @@ public static partial class EnumSourceBuilder
         if (enumToGenerate.IsDisplayAttributeUsed)
         {
             sb.AppendLine().Append(
-                """
+                    """
                             var isDefinedInDisplayAttribute = false;
                             if (allowMatchingMetadataAttribute)
                             {
@@ -105,7 +105,7 @@ public static partial class EnumSourceBuilder
         foreach (var member in enumToGenerate.Names)
         {
             sb.AppendLine().Append(
-                $"""            nameof(global::{enumToGenerate.FullyQualifiedName}.{member.Key}) => true,""");
+                $"            nameof(global::{enumToGenerate.FullyQualifiedName}.{member.Key}) => true,");
         }
 
         sb.AppendLine().Append(
