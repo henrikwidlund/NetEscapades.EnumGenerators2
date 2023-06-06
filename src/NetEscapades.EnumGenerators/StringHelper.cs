@@ -2,31 +2,6 @@ namespace NetEscapades.EnumGenerators;
 
 internal static class StringHelper
 {
-    public static string? GetPrivateMemoryFieldName(this string? value)
-        => GetPrivateMemoryFieldNamePrivate(value, "EnumMemory");
-
-    public static string? GetPrivateMetadataMemoryFieldName(this string? value)
-        => GetPrivateMemoryFieldNamePrivate(value, "EnumMetadataMemory");
-
-    private static string? GetPrivateMemoryFieldNamePrivate(this string? value, string suffix)
-    {
-        if (value is null || string.IsNullOrEmpty(value))
-            return value;
-
-        return value.ToPrivateFieldCasing() + suffix;
-    }
-
-    private static string? ToPrivateFieldCasing(this string? value)
-    {
-        if (value is null || string.IsNullOrEmpty(value))
-            return value;
-
-        if (char.IsLower(value[0]))
-            return value;
-
-        return "_" + char.ToLowerInvariant(value[0]) + value.Remove(0, 1);
-    }
-
     public static string? ToCamelCase(this string? value)
     {
         if (string.IsNullOrEmpty(value) || !char.IsUpper(value![0]))

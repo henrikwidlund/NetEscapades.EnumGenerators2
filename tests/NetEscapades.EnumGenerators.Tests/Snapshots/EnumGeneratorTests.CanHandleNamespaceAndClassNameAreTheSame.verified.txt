@@ -94,12 +94,10 @@ public static partial class TestEnumExtensions
     {
         return name switch
         {
-            var current when global::System.MemoryExtensions.Equals(current, _value1EnumMemory.Span, global::System.StringComparison.Ordinal) => true,
+            var current when global::System.MemoryExtensions.Equals(current, "Value1".AsSpan(), global::System.StringComparison.Ordinal) => true,
             _ => false
         };
     }
-
-    private static readonly global::System.ReadOnlyMemory<char> _value1EnumMemory = global::System.MemoryExtensions.AsMemory("Value1");
 
     /// <summary>
     /// Converts the string representation of the name or numeric value of
@@ -252,7 +250,7 @@ public static partial class TestEnumExtensions
         {
             switch (name)
             {
-                case var current when global::System.MemoryExtensions.Equals(current, _value1EnumMemory.Span, global::System.StringComparison.OrdinalIgnoreCase):
+                case var current when global::System.MemoryExtensions.Equals(current, "Value1".AsSpan(), global::System.StringComparison.OrdinalIgnoreCase):
                     result = global::Foo.TestEnum.Value1;
                     return true;
                 case { IsEmpty: false } when int.TryParse(name, out var numericResult):
@@ -266,7 +264,7 @@ public static partial class TestEnumExtensions
 
         switch (name)
         {
-            case var current when global::System.MemoryExtensions.Equals(current, _value1EnumMemory.Span, global::System.StringComparison.Ordinal):
+            case var current when global::System.MemoryExtensions.Equals(current, "Value1".AsSpan(), global::System.StringComparison.Ordinal):
                 result = global::Foo.TestEnum.Value1;
                 return true;
             case { IsEmpty: false } when int.TryParse(name, out var numericResult):

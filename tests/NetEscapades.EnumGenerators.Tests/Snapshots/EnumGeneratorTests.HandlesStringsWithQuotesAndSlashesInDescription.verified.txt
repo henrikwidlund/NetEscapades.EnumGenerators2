@@ -124,10 +124,10 @@ public static partial class StringTestingExtensions
         {
             isDefinedInDisplayAttribute = name switch
             {
-                var current when global::System.MemoryExtensions.Equals(current, _quotesEnumMetadataMemory.Span, global::System.StringComparison.Ordinal) => true,
-                var current when global::System.MemoryExtensions.Equals(current, _literalQuotesEnumMetadataMemory.Span, global::System.StringComparison.Ordinal) => true,
-                var current when global::System.MemoryExtensions.Equals(current, _backslashEnumMetadataMemory.Span, global::System.StringComparison.Ordinal) => true,
-                var current when global::System.MemoryExtensions.Equals(current, _backslashLiteralEnumMetadataMemory.Span, global::System.StringComparison.Ordinal) => true,
+                var current when global::System.MemoryExtensions.Equals(current, "Quotes \"".AsSpan(), global::System.StringComparison.Ordinal) => true,
+                var current when global::System.MemoryExtensions.Equals(current, "Literal Quotes \"".AsSpan(), global::System.StringComparison.Ordinal) => true,
+                var current when global::System.MemoryExtensions.Equals(current, "Backslash \\".AsSpan(), global::System.StringComparison.Ordinal) => true,
+                var current when global::System.MemoryExtensions.Equals(current, "LiteralBackslash \\".AsSpan(), global::System.StringComparison.Ordinal) => true,
                 _ => false
             };
         }
@@ -139,22 +139,13 @@ public static partial class StringTestingExtensions
 
         return name switch
         {
-            var current when global::System.MemoryExtensions.Equals(current, _quotesEnumMemory.Span, global::System.StringComparison.Ordinal) => true,
-            var current when global::System.MemoryExtensions.Equals(current, _literalQuotesEnumMemory.Span, global::System.StringComparison.Ordinal) => true,
-            var current when global::System.MemoryExtensions.Equals(current, _backslashEnumMemory.Span, global::System.StringComparison.Ordinal) => true,
-            var current when global::System.MemoryExtensions.Equals(current, _backslashLiteralEnumMemory.Span, global::System.StringComparison.Ordinal) => true,
+            var current when global::System.MemoryExtensions.Equals(current, "Quotes".AsSpan(), global::System.StringComparison.Ordinal) => true,
+            var current when global::System.MemoryExtensions.Equals(current, "LiteralQuotes".AsSpan(), global::System.StringComparison.Ordinal) => true,
+            var current when global::System.MemoryExtensions.Equals(current, "Backslash".AsSpan(), global::System.StringComparison.Ordinal) => true,
+            var current when global::System.MemoryExtensions.Equals(current, "BackslashLiteral".AsSpan(), global::System.StringComparison.Ordinal) => true,
             _ => false
         };
     }
-
-    private static readonly global::System.ReadOnlyMemory<char> _quotesEnumMemory = global::System.MemoryExtensions.AsMemory("Quotes");
-    private static readonly global::System.ReadOnlyMemory<char> _literalQuotesEnumMemory = global::System.MemoryExtensions.AsMemory("LiteralQuotes");
-    private static readonly global::System.ReadOnlyMemory<char> _backslashEnumMemory = global::System.MemoryExtensions.AsMemory("Backslash");
-    private static readonly global::System.ReadOnlyMemory<char> _backslashLiteralEnumMemory = global::System.MemoryExtensions.AsMemory("BackslashLiteral");
-    private static readonly global::System.ReadOnlyMemory<char> _quotesEnumMetadataMemory = global::System.MemoryExtensions.AsMemory("Quotes \"");
-    private static readonly global::System.ReadOnlyMemory<char> _literalQuotesEnumMetadataMemory = global::System.MemoryExtensions.AsMemory("Literal Quotes \"");
-    private static readonly global::System.ReadOnlyMemory<char> _backslashEnumMetadataMemory = global::System.MemoryExtensions.AsMemory("Backslash \\");
-    private static readonly global::System.ReadOnlyMemory<char> _backslashLiteralEnumMetadataMemory = global::System.MemoryExtensions.AsMemory("LiteralBackslash \\");
 
     /// <summary>
     /// Converts the string representation of the name or numeric value of
@@ -367,16 +358,16 @@ public static partial class StringTestingExtensions
             {
                 switch (name)
                 {
-                    case var current when global::System.MemoryExtensions.Equals(current, _quotesEnumMetadataMemory.Span, global::System.StringComparison.OrdinalIgnoreCase):
+                    case var current when global::System.MemoryExtensions.Equals(current, "Quotes \"".AsSpan(), global::System.StringComparison.OrdinalIgnoreCase):
                         result = global::Test.StringTesting.Quotes;
                         return true;
-                    case var current when global::System.MemoryExtensions.Equals(current, _literalQuotesEnumMetadataMemory.Span, global::System.StringComparison.OrdinalIgnoreCase):
+                    case var current when global::System.MemoryExtensions.Equals(current, "Literal Quotes \"".AsSpan(), global::System.StringComparison.OrdinalIgnoreCase):
                         result = global::Test.StringTesting.LiteralQuotes;
                         return true;
-                    case var current when global::System.MemoryExtensions.Equals(current, _backslashEnumMetadataMemory.Span, global::System.StringComparison.OrdinalIgnoreCase):
+                    case var current when global::System.MemoryExtensions.Equals(current, "Backslash \\".AsSpan(), global::System.StringComparison.OrdinalIgnoreCase):
                         result = global::Test.StringTesting.Backslash;
                         return true;
-                    case var current when global::System.MemoryExtensions.Equals(current, _backslashLiteralEnumMetadataMemory.Span, global::System.StringComparison.OrdinalIgnoreCase):
+                    case var current when global::System.MemoryExtensions.Equals(current, "LiteralBackslash \\".AsSpan(), global::System.StringComparison.OrdinalIgnoreCase):
                         result = global::Test.StringTesting.BackslashLiteral;
                         return true;
                 }
@@ -385,16 +376,16 @@ public static partial class StringTestingExtensions
             {
                 switch (name)
                 {
-                    case var current when global::System.MemoryExtensions.Equals(current, _quotesEnumMetadataMemory.Span, global::System.StringComparison.Ordinal):
+                    case var current when global::System.MemoryExtensions.Equals(current, "Quotes \"".AsSpan(), global::System.StringComparison.Ordinal):
                         result = global::Test.StringTesting.Quotes;
                         return true;
-                    case var current when global::System.MemoryExtensions.Equals(current, _literalQuotesEnumMetadataMemory.Span, global::System.StringComparison.Ordinal):
+                    case var current when global::System.MemoryExtensions.Equals(current, "Literal Quotes \"".AsSpan(), global::System.StringComparison.Ordinal):
                         result = global::Test.StringTesting.LiteralQuotes;
                         return true;
-                    case var current when global::System.MemoryExtensions.Equals(current, _backslashEnumMetadataMemory.Span, global::System.StringComparison.Ordinal):
+                    case var current when global::System.MemoryExtensions.Equals(current, "Backslash \\".AsSpan(), global::System.StringComparison.Ordinal):
                         result = global::Test.StringTesting.Backslash;
                         return true;
-                    case var current when global::System.MemoryExtensions.Equals(current, _backslashLiteralEnumMetadataMemory.Span, global::System.StringComparison.Ordinal):
+                    case var current when global::System.MemoryExtensions.Equals(current, "LiteralBackslash \\".AsSpan(), global::System.StringComparison.Ordinal):
                         result = global::Test.StringTesting.BackslashLiteral;
                         return true;
                 }
@@ -405,16 +396,16 @@ public static partial class StringTestingExtensions
         {
             switch (name)
             {
-                case var current when global::System.MemoryExtensions.Equals(current, _quotesEnumMemory.Span, global::System.StringComparison.OrdinalIgnoreCase):
+                case var current when global::System.MemoryExtensions.Equals(current, "Quotes".AsSpan(), global::System.StringComparison.OrdinalIgnoreCase):
                     result = global::Test.StringTesting.Quotes;
                     return true;
-                case var current when global::System.MemoryExtensions.Equals(current, _literalQuotesEnumMemory.Span, global::System.StringComparison.OrdinalIgnoreCase):
+                case var current when global::System.MemoryExtensions.Equals(current, "LiteralQuotes".AsSpan(), global::System.StringComparison.OrdinalIgnoreCase):
                     result = global::Test.StringTesting.LiteralQuotes;
                     return true;
-                case var current when global::System.MemoryExtensions.Equals(current, _backslashEnumMemory.Span, global::System.StringComparison.OrdinalIgnoreCase):
+                case var current when global::System.MemoryExtensions.Equals(current, "Backslash".AsSpan(), global::System.StringComparison.OrdinalIgnoreCase):
                     result = global::Test.StringTesting.Backslash;
                     return true;
-                case var current when global::System.MemoryExtensions.Equals(current, _backslashLiteralEnumMemory.Span, global::System.StringComparison.OrdinalIgnoreCase):
+                case var current when global::System.MemoryExtensions.Equals(current, "BackslashLiteral".AsSpan(), global::System.StringComparison.OrdinalIgnoreCase):
                     result = global::Test.StringTesting.BackslashLiteral;
                     return true;
                 case { IsEmpty: false } when int.TryParse(name, out var numericResult):
@@ -428,16 +419,16 @@ public static partial class StringTestingExtensions
 
         switch (name)
         {
-            case var current when global::System.MemoryExtensions.Equals(current, _quotesEnumMemory.Span, global::System.StringComparison.Ordinal):
+            case var current when global::System.MemoryExtensions.Equals(current, "Quotes".AsSpan(), global::System.StringComparison.Ordinal):
                 result = global::Test.StringTesting.Quotes;
                 return true;
-            case var current when global::System.MemoryExtensions.Equals(current, _literalQuotesEnumMemory.Span, global::System.StringComparison.Ordinal):
+            case var current when global::System.MemoryExtensions.Equals(current, "LiteralQuotes".AsSpan(), global::System.StringComparison.Ordinal):
                 result = global::Test.StringTesting.LiteralQuotes;
                 return true;
-            case var current when global::System.MemoryExtensions.Equals(current, _backslashEnumMemory.Span, global::System.StringComparison.Ordinal):
+            case var current when global::System.MemoryExtensions.Equals(current, "Backslash".AsSpan(), global::System.StringComparison.Ordinal):
                 result = global::Test.StringTesting.Backslash;
                 return true;
-            case var current when global::System.MemoryExtensions.Equals(current, _backslashLiteralEnumMemory.Span, global::System.StringComparison.Ordinal):
+            case var current when global::System.MemoryExtensions.Equals(current, "BackslashLiteral".AsSpan(), global::System.StringComparison.Ordinal):
                 result = global::Test.StringTesting.BackslashLiteral;
                 return true;
             case { IsEmpty: false } when int.TryParse(name, out var numericResult):

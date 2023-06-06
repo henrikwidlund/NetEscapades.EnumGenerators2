@@ -165,7 +165,7 @@ public static partial class EnumSourceBuilder
                 {
                     sb.AppendLine()
                         .Append(
-                            $"""                var current when global::System.MemoryExtensions.Equals(current, {member.Key.GetPrivateMetadataMemoryFieldName()}.Span, global::System.StringComparison.Ordinal) => true,""");
+                            $"""                var current when global::System.MemoryExtensions.Equals(current, "{member.Value.DisplayName}".AsSpan(), global::System.StringComparison.Ordinal) => true,""");
                 }
             }
 
@@ -191,7 +191,7 @@ public static partial class EnumSourceBuilder
         foreach (var member in enumToGenerate.Names)
         {
             sb.AppendLine().Append(
-                $"""            var current when global::System.MemoryExtensions.Equals(current, {member.Key.GetPrivateMemoryFieldName()}.Span, global::System.StringComparison.Ordinal) => true,""");
+                $"""            var current when global::System.MemoryExtensions.Equals(current, "{member.Key}".AsSpan(), global::System.StringComparison.Ordinal) => true,""");
         }
 
         sb.AppendLine().Append(

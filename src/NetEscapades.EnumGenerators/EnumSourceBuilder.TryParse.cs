@@ -285,7 +285,7 @@ public static partial class EnumSourceBuilder
             {
                 sb.AppendLine().Append(
                     $"""
-                                        case var current when global::System.MemoryExtensions.Equals(current, {member.Key.GetPrivateMetadataMemoryFieldName()}.Span, global::System.StringComparison.OrdinalIgnoreCase):
+                                        case var current when global::System.MemoryExtensions.Equals(current, "{member.Value.DisplayName}".AsSpan(), global::System.StringComparison.OrdinalIgnoreCase):
                                             result = global::{enumToGenerate.FullyQualifiedName}.{member.Key};
                                             return true;
                     """);
@@ -307,7 +307,7 @@ public static partial class EnumSourceBuilder
             {
                 sb.AppendLine().Append(
                     $"""
-                                        case var current when global::System.MemoryExtensions.Equals(current, {member.Key.GetPrivateMetadataMemoryFieldName()}.Span, global::System.StringComparison.Ordinal):
+                                        case var current when global::System.MemoryExtensions.Equals(current, "{member.Value.DisplayName}".AsSpan(), global::System.StringComparison.Ordinal):
                                             result = global::{enumToGenerate.FullyQualifiedName}.{member.Key};
                                             return true;
                     """);
@@ -333,7 +333,7 @@ public static partial class EnumSourceBuilder
         {
             sb.AppendLine().Append(
                 $"""
-                                case var current when global::System.MemoryExtensions.Equals(current, {member.Key.GetPrivateMemoryFieldName()}.Span, global::System.StringComparison.OrdinalIgnoreCase):
+                                case var current when global::System.MemoryExtensions.Equals(current, "{member.Key}".AsSpan(), global::System.StringComparison.OrdinalIgnoreCase):
                                     result = global::{enumToGenerate.FullyQualifiedName}.{member.Key};
                                     return true;
                 """);
@@ -358,7 +358,7 @@ public static partial class EnumSourceBuilder
         {
             sb.AppendLine().Append(
                 $"""
-                            case var current when global::System.MemoryExtensions.Equals(current, {member.Key.GetPrivateMemoryFieldName()}.Span, global::System.StringComparison.Ordinal):
+                            case var current when global::System.MemoryExtensions.Equals(current, "{member.Key}".AsSpan(), global::System.StringComparison.Ordinal):
                                 result = global::{enumToGenerate.FullyQualifiedName}.{member.Key};
                                 return true;
                 """);

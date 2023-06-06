@@ -44,7 +44,6 @@ namespace NetEscapades.EnumGenerators
         GenerateToStringFast(sb, enumToGenerate);
         GenerateHasFlagFast(sb, enumToGenerate);
         GenerateIsDefined(sb, enumToGenerate);
-        GenerateMemoryBackingFields(sb, enumToGenerate);
         GenerateTryParse(sb, enumToGenerate);
         GenerateGetMetadataNamesOrDefault(sb, enumToGenerate);
         GenerateGetValueOrDefault(sb, enumToGenerate);
@@ -156,25 +155,6 @@ namespace NetEscapades.EnumGenerators
         GenerateIsDefinedStringMetadata(sb, enumToGenerate);
         GenerateIsDefinedSpan(sb);
         GenerateIsDefinedSpanMetadata(sb, enumToGenerate);
-    }
-
-    private static void GenerateMemoryBackingFields(StringBuilder sb, in EnumToGenerate enumToGenerate)
-    {
-        sb.AppendLine();
-        foreach (var member in enumToGenerate.Names)
-        {
-            sb.AppendLine()
-                .Append(
-                    $"""    private static readonly global::System.ReadOnlyMemory<char> {member.Key.GetPrivateMemoryFieldName()} = global::System.MemoryExtensions.AsMemory("{member.Key}");""");
-        }
-
-        foreach (var member in enumToGenerate.Names.Where(static m =>
-                     m.Value.DisplayName is not null && m.Value.IsDisplayNameTheFirstPresence))
-        {
-            sb.AppendLine()
-                .Append(
-                    $"""    private static readonly global::System.ReadOnlyMemory<char> {member.Key.GetPrivateMetadataMemoryFieldName()} = global::System.MemoryExtensions.AsMemory("{member.Value.DisplayName}");""");
-        }
     }
 
     private static void GenerateTryParse(StringBuilder sb, in EnumToGenerate enumToGenerate)

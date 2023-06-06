@@ -122,8 +122,8 @@ public static partial class MyEnumExtensions
         {
             isDefinedInDisplayAttribute = name switch
             {
-                var current when global::System.MemoryExtensions.Equals(current, _secondEnumMetadataMemory.Span, global::System.StringComparison.Ordinal) => true,
-                var current when global::System.MemoryExtensions.Equals(current, _fourthEnumMetadataMemory.Span, global::System.StringComparison.Ordinal) => true,
+                var current when global::System.MemoryExtensions.Equals(current, "2nd".AsSpan(), global::System.StringComparison.Ordinal) => true,
+                var current when global::System.MemoryExtensions.Equals(current, "4th".AsSpan(), global::System.StringComparison.Ordinal) => true,
                 _ => false
             };
         }
@@ -135,20 +135,13 @@ public static partial class MyEnumExtensions
 
         return name switch
         {
-            var current when global::System.MemoryExtensions.Equals(current, _firstEnumMemory.Span, global::System.StringComparison.Ordinal) => true,
-            var current when global::System.MemoryExtensions.Equals(current, _secondEnumMemory.Span, global::System.StringComparison.Ordinal) => true,
-            var current when global::System.MemoryExtensions.Equals(current, _thirdEnumMemory.Span, global::System.StringComparison.Ordinal) => true,
-            var current when global::System.MemoryExtensions.Equals(current, _fourthEnumMemory.Span, global::System.StringComparison.Ordinal) => true,
+            var current when global::System.MemoryExtensions.Equals(current, "First".AsSpan(), global::System.StringComparison.Ordinal) => true,
+            var current when global::System.MemoryExtensions.Equals(current, "Second".AsSpan(), global::System.StringComparison.Ordinal) => true,
+            var current when global::System.MemoryExtensions.Equals(current, "Third".AsSpan(), global::System.StringComparison.Ordinal) => true,
+            var current when global::System.MemoryExtensions.Equals(current, "Fourth".AsSpan(), global::System.StringComparison.Ordinal) => true,
             _ => false
         };
     }
-
-    private static readonly global::System.ReadOnlyMemory<char> _firstEnumMemory = global::System.MemoryExtensions.AsMemory("First");
-    private static readonly global::System.ReadOnlyMemory<char> _secondEnumMemory = global::System.MemoryExtensions.AsMemory("Second");
-    private static readonly global::System.ReadOnlyMemory<char> _thirdEnumMemory = global::System.MemoryExtensions.AsMemory("Third");
-    private static readonly global::System.ReadOnlyMemory<char> _fourthEnumMemory = global::System.MemoryExtensions.AsMemory("Fourth");
-    private static readonly global::System.ReadOnlyMemory<char> _secondEnumMetadataMemory = global::System.MemoryExtensions.AsMemory("2nd");
-    private static readonly global::System.ReadOnlyMemory<char> _fourthEnumMetadataMemory = global::System.MemoryExtensions.AsMemory("4th");
 
     /// <summary>
     /// Converts the string representation of the name or numeric value of
@@ -349,10 +342,10 @@ public static partial class MyEnumExtensions
             {
                 switch (name)
                 {
-                    case var current when global::System.MemoryExtensions.Equals(current, _secondEnumMetadataMemory.Span, global::System.StringComparison.OrdinalIgnoreCase):
+                    case var current when global::System.MemoryExtensions.Equals(current, "2nd".AsSpan(), global::System.StringComparison.OrdinalIgnoreCase):
                         result = global::MyTestNameSpace.MyEnum.Second;
                         return true;
-                    case var current when global::System.MemoryExtensions.Equals(current, _fourthEnumMetadataMemory.Span, global::System.StringComparison.OrdinalIgnoreCase):
+                    case var current when global::System.MemoryExtensions.Equals(current, "4th".AsSpan(), global::System.StringComparison.OrdinalIgnoreCase):
                         result = global::MyTestNameSpace.MyEnum.Fourth;
                         return true;
                 }
@@ -361,10 +354,10 @@ public static partial class MyEnumExtensions
             {
                 switch (name)
                 {
-                    case var current when global::System.MemoryExtensions.Equals(current, _secondEnumMetadataMemory.Span, global::System.StringComparison.Ordinal):
+                    case var current when global::System.MemoryExtensions.Equals(current, "2nd".AsSpan(), global::System.StringComparison.Ordinal):
                         result = global::MyTestNameSpace.MyEnum.Second;
                         return true;
-                    case var current when global::System.MemoryExtensions.Equals(current, _fourthEnumMetadataMemory.Span, global::System.StringComparison.Ordinal):
+                    case var current when global::System.MemoryExtensions.Equals(current, "4th".AsSpan(), global::System.StringComparison.Ordinal):
                         result = global::MyTestNameSpace.MyEnum.Fourth;
                         return true;
                 }
@@ -375,16 +368,16 @@ public static partial class MyEnumExtensions
         {
             switch (name)
             {
-                case var current when global::System.MemoryExtensions.Equals(current, _firstEnumMemory.Span, global::System.StringComparison.OrdinalIgnoreCase):
+                case var current when global::System.MemoryExtensions.Equals(current, "First".AsSpan(), global::System.StringComparison.OrdinalIgnoreCase):
                     result = global::MyTestNameSpace.MyEnum.First;
                     return true;
-                case var current when global::System.MemoryExtensions.Equals(current, _secondEnumMemory.Span, global::System.StringComparison.OrdinalIgnoreCase):
+                case var current when global::System.MemoryExtensions.Equals(current, "Second".AsSpan(), global::System.StringComparison.OrdinalIgnoreCase):
                     result = global::MyTestNameSpace.MyEnum.Second;
                     return true;
-                case var current when global::System.MemoryExtensions.Equals(current, _thirdEnumMemory.Span, global::System.StringComparison.OrdinalIgnoreCase):
+                case var current when global::System.MemoryExtensions.Equals(current, "Third".AsSpan(), global::System.StringComparison.OrdinalIgnoreCase):
                     result = global::MyTestNameSpace.MyEnum.Third;
                     return true;
-                case var current when global::System.MemoryExtensions.Equals(current, _fourthEnumMemory.Span, global::System.StringComparison.OrdinalIgnoreCase):
+                case var current when global::System.MemoryExtensions.Equals(current, "Fourth".AsSpan(), global::System.StringComparison.OrdinalIgnoreCase):
                     result = global::MyTestNameSpace.MyEnum.Fourth;
                     return true;
                 case { IsEmpty: false } when int.TryParse(name, out var numericResult):
@@ -398,16 +391,16 @@ public static partial class MyEnumExtensions
 
         switch (name)
         {
-            case var current when global::System.MemoryExtensions.Equals(current, _firstEnumMemory.Span, global::System.StringComparison.Ordinal):
+            case var current when global::System.MemoryExtensions.Equals(current, "First".AsSpan(), global::System.StringComparison.Ordinal):
                 result = global::MyTestNameSpace.MyEnum.First;
                 return true;
-            case var current when global::System.MemoryExtensions.Equals(current, _secondEnumMemory.Span, global::System.StringComparison.Ordinal):
+            case var current when global::System.MemoryExtensions.Equals(current, "Second".AsSpan(), global::System.StringComparison.Ordinal):
                 result = global::MyTestNameSpace.MyEnum.Second;
                 return true;
-            case var current when global::System.MemoryExtensions.Equals(current, _thirdEnumMemory.Span, global::System.StringComparison.Ordinal):
+            case var current when global::System.MemoryExtensions.Equals(current, "Third".AsSpan(), global::System.StringComparison.Ordinal):
                 result = global::MyTestNameSpace.MyEnum.Third;
                 return true;
-            case var current when global::System.MemoryExtensions.Equals(current, _fourthEnumMemory.Span, global::System.StringComparison.Ordinal):
+            case var current when global::System.MemoryExtensions.Equals(current, "Fourth".AsSpan(), global::System.StringComparison.Ordinal):
                 result = global::MyTestNameSpace.MyEnum.Fourth;
                 return true;
             case { IsEmpty: false } when int.TryParse(name, out var numericResult):
