@@ -298,6 +298,30 @@ public class EnumGeneratorTests
     }
 
     [Fact]
+    public Task CanHandleNamespaceAndClassNameAreTheSame()
+    {
+        const string input = """
+            using NetEscapades.EnumGenerators;
+            using System.ComponentModel.DataAnnotations;
+
+            namespace Foo
+            {
+                public class Foo {}
+
+                [EnumExtensions]
+                public enum TestEnum
+                {
+                    Value1
+                }
+            }
+            """;
+        var (diagnostics, output) = TestHelpers.GetGeneratedOutput<EnumGenerator>(input);
+
+        Assert.Empty(diagnostics);
+        return Verify(output).UseDirectory("Snapshots");
+    }
+
+    [Fact]
     public Task HandlesStringsWithQuotesAndSlashesInDescription()
     {
         const string input =
@@ -310,10 +334,10 @@ public class EnumGeneratorTests
             [EnumExtensions]
             public enum StringTesting
             {
-            [System.ComponentModel.Description("Quotes \"")]   Quotes,
-            [System.ComponentModel.Description(@"Literal Quotes """)]   LiteralQuotes,
-            [System.ComponentModel.Description("Backslash \\")]   Backslash,
-            [System.ComponentModel.Description(@"LiteralBackslash \")]   BackslashLiteral,
+                [System.ComponentModel.Description("Quotes \"")]   Quotes,
+                [System.ComponentModel.Description(@"Literal Quotes """)]   LiteralQuotes,
+                [System.ComponentModel.Description("Backslash \\")]   Backslash,
+                [System.ComponentModel.Description(@"LiteralBackslash \")]   BackslashLiteral,
             }
             """";
 
