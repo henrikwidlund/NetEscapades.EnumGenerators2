@@ -46,7 +46,7 @@ internal static class EnumHelper
         if (!typeof(T).IsEnum) return null;
         var memberInfo = typeof(T).GetMember(value.ToString()!);
         if (memberInfo.Length <= 0) return null;
-        var displayName = memberInfo[0].GetCustomAttribute<DisplayAttribute>()!.GetName();
+        var displayName = memberInfo[0].GetCustomAttribute<DisplayAttribute>()?.GetName();
         return displayName;
     }
 
