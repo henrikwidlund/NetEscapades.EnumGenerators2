@@ -150,7 +150,7 @@ public abstract class ExtensionTests<T> where T : struct, Enum
 
     protected void GeneratesGetValuesTest(T[] values)
     {
-        var expected = (T[])Enum.GetValues(typeof(T));
+        var expected = (T[]) Enum.GetValues(typeof(T));
         values.Should().Equal(expected);
     }
 
@@ -165,7 +165,7 @@ public abstract class ExtensionTests<T> where T : struct, Enum
         enumValue = default;
 
         var stringComparisonOptions = ignoreCase ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
-        var enumValues = (T[])Enum.GetValues(typeof(T));
+        var enumValues = (T[]) Enum.GetValues(typeof(T));
         foreach (var value in enumValues)
         {
             if (TryGetDisplayNameOrDescription(value.ToString(), out var displayName) && string.Equals(displayName, name, stringComparisonOptions))

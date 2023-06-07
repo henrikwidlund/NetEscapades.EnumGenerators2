@@ -11,7 +11,7 @@ internal static class EnumHelper
         enumValue = default;
 
         var stringComparisonOption = ignoreCase ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
-        var enumValues = (T[])Enum.GetValues(typeof(T));
+        var enumValues = (T[]) Enum.GetValues(typeof(T));
         foreach (var value in enumValues)
         {
             if (TryGetDisplayName<T>(value.ToString(), out var displayName) && displayName.Equals(name, stringComparisonOption))

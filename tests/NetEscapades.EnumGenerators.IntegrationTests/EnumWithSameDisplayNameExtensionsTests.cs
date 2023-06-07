@@ -8,7 +8,7 @@ public class EnumWithSameDisplayNameExtensionsTests : ExtensionTests<EnumWithSam
     {
         EnumWithSameDisplayName.First,
         EnumWithSameDisplayName.Second,
-        (EnumWithSameDisplayName)3
+        (EnumWithSameDisplayName) 3
     };
 
     public static TheoryData<string> ValuesToParse() => new()

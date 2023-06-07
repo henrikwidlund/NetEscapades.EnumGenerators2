@@ -8,7 +8,7 @@ public class EnumWithDescriptionInNamespaceExtensionsTests : ExtensionTests<Enum
     {
         EnumWithDescriptionInNamespace.First,
         EnumWithDescriptionInNamespace.Second,
-        (EnumWithDescriptionInNamespace)3,
+        (EnumWithDescriptionInNamespace) 3
     };
 
     public static TheoryData<string> ValuesToParse() => new()
@@ -152,5 +152,5 @@ public class EnumWithDescriptionInNamespaceExtensionsTests : ExtensionTests<Enum
     public void GeneratesGetValues() => GeneratesGetValuesTest(EnumWithDescriptionInNamespaceExtensions.GetValues());
 
     [Fact]
-    public void GeneratesGetNames() => base.GeneratesGetNamesTest(EnumWithDescriptionInNamespaceExtensions.GetNames());
+    public void GeneratesGetNames() => GeneratesGetNamesTest(EnumWithDescriptionInNamespaceExtensions.GetNames());
 }

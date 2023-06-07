@@ -24,7 +24,7 @@ public class JsonConverterGenerator : IIncrementalGenerator
             .Where(static m => m is not null);
 
         context.RegisterSourceOutput(jsonConvertersToGenerate,
-                static (spc, source) => Execute(source, spc));
+            static (spc, source) => Execute(source, spc));
     }
 
     private static void Execute(JsonConverterToGenerate? jsonConverterToGenerate, SourceProductionContext context)
@@ -52,7 +52,7 @@ public class JsonConverterGenerator : IIncrementalGenerator
 
         var attributes = enumSymbol.GetAttributes();
         var enumJsonConverterAttribute = attributes.FirstOrDefault(static ad => ad.AttributeClass?.Name == "EnumJsonConverterAttribute" ||
-                                                                                ad.AttributeClass?.ToDisplayString() == EnumJsonConverterAttribute);
+            ad.AttributeClass?.ToDisplayString() == EnumJsonConverterAttribute);
 
         if (enumJsonConverterAttribute == null)
             return null;

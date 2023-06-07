@@ -68,13 +68,13 @@ namespace NetEscapades.EnumGenerators
         }
 
         sb.AppendLine().AppendLine(
-                $$"""
-                /// <summary>
-                /// Extension methods for <see cref="global::{{enumToGenerate.FullyQualifiedName}}" />.
-                /// </summary>
-                {{(enumToGenerate.IsPublic ? "public" : "internal")}} static partial class {{enumToGenerate.Name}}
-                {
-                """);
+            $$"""
+            /// <summary>
+            /// Extension methods for <see cref="global::{{enumToGenerate.FullyQualifiedName}}" />.
+            /// </summary>
+            {{(enumToGenerate.IsPublic ? "public" : "internal")}} static partial class {{enumToGenerate.Name}}
+            {
+            """);
     }
 
     private static void GenerateEnumLengthConst(StringBuilder sb, in EnumToGenerate enumToGenerate)
@@ -132,19 +132,19 @@ namespace NetEscapades.EnumGenerators
                 .AppendLine()
                 .AppendLine()
                 .Append(
-                $"""
-                    /// <summary>
-                    /// Determines whether one or more bit fields are set in the current instance.
-                    /// Equivalent to calling <see cref="global::System.Enum.HasFlag" /> on <paramref name="value"/>.
-                    /// </summary>
-                    /// <param name="value">The value of the instance to investigate.</param>
-                    /// <param name="flag">The flag to check for.</param>
-                    /// <returns><see langword="true" /> if the fields set in the flag are also set in the current instance; otherwise <see langword="false" />.</returns>
-                    /// <remarks>If the underlying value of <paramref name="flag"/> is zero, the method returns <see langword="true" />.
-                    /// This is consistent with the behaviour of <see cref="global::System.Enum.HasFlag" />.</remarks>
-                    public static bool HasFlagFast(this global::{enumToGenerate.FullyQualifiedName} value, global::{enumToGenerate.FullyQualifiedName} flag)
-                        => flag == 0 || (value & flag) == flag;
-                """);
+                    $"""
+                        /// <summary>
+                        /// Determines whether one or more bit fields are set in the current instance.
+                        /// Equivalent to calling <see cref="global::System.Enum.HasFlag" /> on <paramref name="value"/>.
+                        /// </summary>
+                        /// <param name="value">The value of the instance to investigate.</param>
+                        /// <param name="flag">The flag to check for.</param>
+                        /// <returns><see langword="true" /> if the fields set in the flag are also set in the current instance; otherwise <see langword="false" />.</returns>
+                        /// <remarks>If the underlying value of <paramref name="flag"/> is zero, the method returns <see langword="true" />.
+                        /// This is consistent with the behaviour of <see cref="global::System.Enum.HasFlag" />.</remarks>
+                        public static bool HasFlagFast(this global::{enumToGenerate.FullyQualifiedName} value, global::{enumToGenerate.FullyQualifiedName} flag)
+                            => flag == 0 || (value & flag) == flag;
+                    """);
         }
     }
 
@@ -209,16 +209,16 @@ namespace NetEscapades.EnumGenerators
             """);
 
         sb.AppendLine().AppendLine().Append(
-                $"""
-                    /// <summary>
-                    /// Gets the <see cref="global::{enumToGenerate.FullyQualifiedName}" /> representation of the <paramref name="name"/>
-                    /// or <see langword="default" /> if there's no match.
-                    /// </summary>
-                    /// <param name="name">The value that should be matched.</param>
-                    /// <returns>The matching <see cref="global::{enumToGenerate.FullyQualifiedName}" /> or <see langword="null" /> if there was no match.</returns>
-                    public static global::{enumToGenerate.FullyQualifiedName}? GetValueOrDefault(in global::System.ReadOnlySpan<char> name) =>
-                        TryParse(name, out global::{enumToGenerate.FullyQualifiedName} value) ? value : null;
-                """);
+            $"""
+                /// <summary>
+                /// Gets the <see cref="global::{enumToGenerate.FullyQualifiedName}" /> representation of the <paramref name="name"/>
+                /// or <see langword="default" /> if there's no match.
+                /// </summary>
+                /// <param name="name">The value that should be matched.</param>
+                /// <returns>The matching <see cref="global::{enumToGenerate.FullyQualifiedName}" /> or <see langword="null" /> if there was no match.</returns>
+                public static global::{enumToGenerate.FullyQualifiedName}? GetValueOrDefault(in global::System.ReadOnlySpan<char> name) =>
+                    TryParse(name, out global::{enumToGenerate.FullyQualifiedName} value) ? value : null;
+            """);
 
         sb.AppendLine().AppendLine().Append(
             $"""

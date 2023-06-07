@@ -8,7 +8,7 @@ public class LongEnumExtensionsTests : ExtensionTests<LongEnum>
     {
         LongEnum.First,
         LongEnum.Second,
-        (LongEnum)3
+        (LongEnum) 3
     };
 
     public static TheoryData<string> ValuesToParse() => new()

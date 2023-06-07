@@ -9,7 +9,7 @@ public class EnumInFooExtensionsTests : ExtensionTests<EnumInFoo>
     {
         EnumInFoo.First,
         EnumInFoo.Second,
-        (EnumInFoo)3,
+        (EnumInFoo) 3,
     };
 
     public static TheoryData<string> ValuesToParse() => new()
@@ -153,5 +153,5 @@ public class EnumInFooExtensionsTests : ExtensionTests<EnumInFoo>
     public void GeneratesGetValues() => GeneratesGetValuesTest(EnumInFooExtensions.GetValues());
 
     [Fact]
-    public void GeneratesGetNames() => base.GeneratesGetNamesTest(EnumInFooExtensions.GetNames());
+    public void GeneratesGetNames() => GeneratesGetNamesTest(EnumInFooExtensions.GetNames());
 }

@@ -65,13 +65,13 @@ public static partial class EnumSourceBuilder
         if (enumToGenerate.IsDisplayAttributeUsed)
         {
             sb.AppendLine().Append(
-                    """
-                            var isDefinedInDisplayAttribute = false;
-                            if (allowMatchingMetadataAttribute)
+                """
+                        var isDefinedInDisplayAttribute = false;
+                        if (allowMatchingMetadataAttribute)
+                        {
+                            isDefinedInDisplayAttribute = name switch
                             {
-                                isDefinedInDisplayAttribute = name switch
-                                {
-                    """);
+                """);
 
             foreach (var member in enumToGenerate.Names)
             {

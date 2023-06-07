@@ -3,7 +3,7 @@ namespace NetEscapades.EnumGenerators;
 /// <summary>
 /// Add to enums to indicate that a JsonConverter for the enum should be generated.
 /// </summary>
-[AttributeUsage(System.AttributeTargets.Enum)]
+[AttributeUsage(AttributeTargets.Enum)]
 [System.Diagnostics.Conditional("NETESCAPADES_ENUMGENERATORS_USAGES")]
 public sealed class EnumJsonConverterAttribute : Attribute
 {
