@@ -58,14 +58,7 @@ internal static class EnumHelper
         for (var i = 0; i < values.Length; i++)
         {
             var displayName = GetDisplayName(values[i]);
-            if (displayName is not null)
-            {
-                names[i] = displayName;
-            }
-            else
-            {
-                names[i] = values[i].ToString();
-            }
+            names[i] = displayName ?? values[i].ToString();
         }
 
         return names;

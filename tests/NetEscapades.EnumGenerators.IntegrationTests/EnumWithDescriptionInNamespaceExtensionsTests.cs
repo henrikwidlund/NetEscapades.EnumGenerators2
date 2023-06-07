@@ -8,7 +8,7 @@ public class EnumWithDescriptionInNamespaceExtensionsTests : ExtensionTests<Enum
     {
         EnumWithDescriptionInNamespace.First,
         EnumWithDescriptionInNamespace.Second,
-        (EnumWithDescriptionInNamespace) 3
+        (EnumWithDescriptionInNamespace)3
     };
 
     public static TheoryData<string> ValuesToParse() => new()

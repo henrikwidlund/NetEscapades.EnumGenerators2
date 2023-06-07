@@ -8,7 +8,7 @@ public class EnumInSystemExtensionsTests : ExtensionTests<EnumInSystem>
     {
         EnumInSystem.First,
         EnumInSystem.Second,
-        (EnumInSystem) 3
+        (EnumInSystem)3
     };
 
     public static TheoryData<string> ValuesToParse() => new()

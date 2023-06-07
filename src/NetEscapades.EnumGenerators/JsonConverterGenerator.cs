@@ -51,14 +51,17 @@ public class JsonConverterGenerator : IIncrementalGenerator
         var extensionNamespace = enumSymbol.ContainingNamespace.IsGlobalNamespace ? string.Empty : enumSymbol.ContainingNamespace.ToString();
 
         var attributes = enumSymbol.GetAttributes();
-        var enumJsonConverterAttribute = attributes.FirstOrDefault(static ad => ad.AttributeClass?.Name == "EnumJsonConverterAttribute" ||
+        var enumJsonConverterAttribute = attributes.FirstOrDefault(static ad =>
+            ad.AttributeClass?.Name == "EnumJsonConverterAttribute" ||
             ad.AttributeClass?.ToDisplayString() == EnumJsonConverterAttribute);
 
         if (enumJsonConverterAttribute == null)
             return null;
 
-        var enumExtensionsAttribute = attributes.FirstOrDefault(static ad => ad.AttributeClass?.Name == "EnumExtensionsAttribute" ||
-                                                                             ad.AttributeClass?.ToDisplayString() == EnumExtensionsAttribute);
+        var enumExtensionsAttribute = attributes.FirstOrDefault(static ad =>
+            ad.AttributeClass?.Name == "EnumExtensionsAttribute" ||
+            ad.AttributeClass?.ToDisplayString() == EnumExtensionsAttribute);
+
         if (enumExtensionsAttribute == null)
             return null;
 
