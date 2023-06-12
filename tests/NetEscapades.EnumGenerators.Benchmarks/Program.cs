@@ -489,7 +489,7 @@ public class DeserializeIgnoreCaseBenchmark
             ["second","Third","first","Second"]
             """;
 
-    private static readonly Memory<char> EnumsMemory = EnumsString.ToArray().AsMemory();
+    private static readonly char[] EnumsChars = EnumsString.ToArray();
 
     private static readonly JsonSerializerOptions JsonSerializerOptions = new()
     {
@@ -504,7 +504,7 @@ public class DeserializeIgnoreCaseBenchmark
     [Benchmark]
     [MethodImpl(MethodImplOptions.NoInlining)]
     public TestEnumIgnoreCase[]? JsonStringEnumConverterSpan() =>
-        JsonSerializer.Deserialize<TestEnumIgnoreCase[]>(EnumsMemory.Span, JsonSerializerOptions);
+        JsonSerializer.Deserialize<TestEnumIgnoreCase[]>(EnumsChars.AsSpan(), JsonSerializerOptions);
 
     [Benchmark]
     [MethodImpl(MethodImplOptions.NoInlining)]
@@ -513,7 +513,7 @@ public class DeserializeIgnoreCaseBenchmark
     [Benchmark]
     [MethodImpl(MethodImplOptions.NoInlining)]
     public TestEnumIgnoreCase[]? EnumJsonConverterSpan() =>
-        JsonSerializer.Deserialize<TestEnumIgnoreCase[]>(EnumsMemory.Span);
+        JsonSerializer.Deserialize<TestEnumIgnoreCase[]>(EnumsChars.AsSpan());
 }
 
 [MemoryDiagnoser]

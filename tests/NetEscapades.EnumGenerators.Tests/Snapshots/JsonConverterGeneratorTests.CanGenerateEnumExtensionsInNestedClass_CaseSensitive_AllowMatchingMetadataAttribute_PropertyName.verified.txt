@@ -9,10 +9,12 @@
 
 #nullable enable
 
+namespace MyTestNameSpace;
+
 /// <summary>
 /// Converts a <see cref="global::MyTestNameSpace.InnerClass.MyEnum" /> to or from JSON.
 /// </summary>
-internal sealed class MyEnumConverter : global::System.Text.Json.Serialization.JsonConverter<MyTestNameSpace.InnerClass.MyEnum>
+internal sealed class MyEnumConverter : global::System.Text.Json.Serialization.JsonConverter<global::MyTestNameSpace.InnerClass.MyEnum>
 {
     private const string PropertyName = "Bla";
 

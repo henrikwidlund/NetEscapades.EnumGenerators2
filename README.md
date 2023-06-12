@@ -539,7 +539,7 @@ This will generate a class called `MyEnumConverter`. For example:
 /// <summary>
 /// Converts a <see cref="global::MyEnum" /> to or from JSON.
 /// </summary>
-public sealed class MyEnumConverter : global::System.Text.Json.Serialization.JsonConverter<MyEnum>
+public sealed class MyEnumConverter : global::System.Text.Json.Serialization.JsonConverter<global::MyEnum>
 {
     /// <inheritdoc />
     /// <summary>

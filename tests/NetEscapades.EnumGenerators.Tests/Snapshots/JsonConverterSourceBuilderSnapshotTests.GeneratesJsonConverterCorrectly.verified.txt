@@ -8,12 +8,13 @@
 //------------------------------------------------------------------------------
 
 #nullable enable
+
 namespace Something.Blah;
 
 /// <summary>
 /// Converts a <see cref="global::Something.Blah.ShortName" /> to or from JSON.
 /// </summary>
-public sealed class ShortNameConverter : global::System.Text.Json.Serialization.JsonConverter<Something.Blah.ShortName>
+public sealed class ShortNameConverter : global::System.Text.Json.Serialization.JsonConverter<global::Something.Blah.ShortName>
 {
     private const string PropertyName = "shortName";
 

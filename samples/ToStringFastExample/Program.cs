@@ -2,6 +2,8 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using NetEscapades.EnumGenerators;
+using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 const ExampleEnums value = ExampleEnums.First;
 Console.WriteLine(value.ToStringFast());
@@ -40,4 +42,13 @@ internal enum FlagEnums
     Flag1 = 1 << 0,
     Flag2 = 1 << 1,
     Flag3 = 1 << 2
+}
+
+[EnumExtensions]
+[EnumJsonConverter(typeof(MyEnumConverter))]
+[JsonConverter(typeof(MyEnumConverter))]
+public enum MyEnum
+{
+    First,
+    [Display(Name = "2nd")] Second
 }

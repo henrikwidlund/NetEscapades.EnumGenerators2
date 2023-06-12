@@ -15,9 +15,9 @@ namespace NetEscapades.EnumGenerators
     /// <summary>
     /// Add to enums to indicate that a JsonConverter for the enum should be generated.
     /// </summary>
-    [System.AttributeUsage(System.AttributeTargets.Enum)]
-    [System.Diagnostics.Conditional("NETESCAPADES_ENUMGENERATORS_USAGES")]
-    public class EnumJsonConverterAttribute : System.Attribute
+    [global::System.AttributeUsage(global::System.AttributeTargets.Enum)]
+    [global::System.Diagnostics.Conditional("NETESCAPADES_ENUMGENERATORS_USAGES")]
+    public class EnumJsonConverterAttribute : global::System.Attribute
     {
         /// <summary>
         /// The converter that should be generated.
@@ -54,15 +54,19 @@ namespace NetEscapades.EnumGenerators
         sb.Append(Constants.GeneratedCodeHeader)
             .AppendLine();
 
-        if (!string.IsNullOrEmpty(jsonConverterToGenerate.ConverterNamespace))
-            sb.AppendLine($"namespace {jsonConverterToGenerate.ConverterNamespace};");
+        var converterNamespace = string.IsNullOrEmpty(jsonConverterToGenerate.ConverterNamespace)
+            ? jsonConverterToGenerate.ExtensionNamespace
+            : jsonConverterToGenerate.ConverterNamespace;
+
+        if (!string.IsNullOrEmpty(converterNamespace))
+            sb.AppendLine().AppendLine($"namespace {converterNamespace};");
 
         sb.AppendLine()
             .AppendLine($$"""
             /// <summary>
             /// Converts a <see cref="global::{{jsonConverterToGenerate.FullyQualifiedName}}" /> to or from JSON.
             /// </summary>
-            {{(jsonConverterToGenerate.IsPublic ? "public" : "internal")}} sealed class {{jsonConverterToGenerate.ConverterType}} : global::System.Text.Json.Serialization.JsonConverter<{{jsonConverterToGenerate.FullyQualifiedName}}>
+            {{(jsonConverterToGenerate.IsPublic ? "public" : "internal")}} sealed class {{jsonConverterToGenerate.ConverterType}} : global::System.Text.Json.Serialization.JsonConverter<global::{{jsonConverterToGenerate.FullyQualifiedName}}>
             {
             """);
 
