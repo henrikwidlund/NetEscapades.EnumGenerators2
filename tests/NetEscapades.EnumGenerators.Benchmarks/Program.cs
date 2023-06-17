@@ -46,7 +46,7 @@ public class IsDefinedBenchmark
 
     [Benchmark(Baseline = true)]
     [MethodImpl(MethodImplOptions.NoInlining)]
-    public bool EnumIsDefinedName() => Enum.IsDefined(typeof(TestEnum), BenchmarkEnum);
+    public bool EnumIsDefinedName() => Enum.IsDefined(BenchmarkEnum);
 
     [Benchmark]
     [MethodImpl(MethodImplOptions.NoInlining)]
