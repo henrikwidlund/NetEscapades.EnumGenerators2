@@ -2,8 +2,6 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using NetEscapades.EnumGenerators;
-using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
 
 const ExampleEnums value = ExampleEnums.First;
 Console.WriteLine(value.ToStringFast());
