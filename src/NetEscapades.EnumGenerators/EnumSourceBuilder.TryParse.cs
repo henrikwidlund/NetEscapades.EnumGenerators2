@@ -49,7 +49,7 @@ public static partial class EnumSourceBuilder
                     [global::System.Diagnostics.CodeAnalysis.NotNullWhen(true)]
                     string? name,
                     out global::{enumToGenerate.FullyQualifiedName} value,
-                    bool ignoreCase)
+                    in bool ignoreCase)
                     => TryParse(name, out value, ignoreCase, false);
             """);
     }
@@ -77,8 +77,8 @@ public static partial class EnumSourceBuilder
                     [global::System.Diagnostics.CodeAnalysis.NotNullWhen(true)]
                     string? name,
                     out global::{{enumToGenerate.FullyQualifiedName}} value,
-                    bool ignoreCase,
-                    bool allowMatchingMetadataAttribute)
+                    in bool ignoreCase,
+                    in bool allowMatchingMetadataAttribute)
                 {
             """);
 
@@ -235,7 +235,7 @@ public static partial class EnumSourceBuilder
                 public static bool TryParse(
                     in global::System.ReadOnlySpan<char> name,
                     out global::{enumToGenerate.FullyQualifiedName} value,
-                    bool ignoreCase)
+                    in bool ignoreCase)
                     => TryParse(name, out value, ignoreCase, false);
             """);
     }
@@ -262,8 +262,8 @@ public static partial class EnumSourceBuilder
                 public static bool TryParse(
                     in global::System.ReadOnlySpan<char> name,
                     out global::{{enumToGenerate.FullyQualifiedName}} result,
-                    bool ignoreCase,
-                    bool allowMatchingMetadataAttribute)
+                    in bool ignoreCase,
+                    in bool allowMatchingMetadataAttribute)
                 {
             """);
 

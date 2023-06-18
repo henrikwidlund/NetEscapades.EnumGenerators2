@@ -13,7 +13,7 @@ public static partial class EnumSourceBuilder
                 /// </summary>
                 /// <param name="value">The value to check if it's defined.</param>
                 /// <returns><see langword="true" /> if the value exists in the enumeration, <see langword="false" /> otherwise.</returns>
-                public static bool IsDefined(global::{{enumToGenerate.FullyQualifiedName}} value)
+                public static bool IsDefined(in global::{{enumToGenerate.FullyQualifiedName}} value)
                     => value switch
                     {
             """);
@@ -58,7 +58,7 @@ public static partial class EnumSourceBuilder
                 /// <param name="allowMatchingMetadataAttribute">If <see langword="true" />, considers the value of metadata attributes, otherwise ignores them.</param>
                 /// <returns><see langword="true" /> if a member with the name exists in the enumeration, or a member is decorated
                 /// with a <c>[Display]</c>/<c>[Description]</c> attribute with the name, <see langword="false" /> otherwise.</returns>
-                public static bool IsDefined(string name, bool allowMatchingMetadataAttribute)
+                public static bool IsDefined(string name, in bool allowMatchingMetadataAttribute)
                 {
             """);
 
@@ -144,7 +144,7 @@ public static partial class EnumSourceBuilder
                 /// <param name="allowMatchingMetadataAttribute">If <see langword="true" />, considers the value of metadata attributes, otherwise ignores them.</param>
                 /// <returns><see langword="true" /> if a member with the name exists in the enumeration, or a member is decorated
                 /// with a <c>[Display]</c>/<c>[Description]</c> attribute with the name, <see langword="false" /> otherwise.</returns>
-                public static bool IsDefined(in global::System.ReadOnlySpan<char> name, bool allowMatchingMetadataAttribute)
+                public static bool IsDefined(in global::System.ReadOnlySpan<char> name, in bool allowMatchingMetadataAttribute)
                 {
             """);
 

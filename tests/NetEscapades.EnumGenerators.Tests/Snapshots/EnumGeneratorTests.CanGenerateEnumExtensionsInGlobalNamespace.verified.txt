@@ -28,7 +28,7 @@ public static partial class MyEnumExtensions
     /// </summary>
     /// <param name="value">The value to retrieve the string value for.</param>
     /// <returns>The string representation of the value.</returns>
-    public static string ToStringFast(this global::MyEnum value)
+    public static string ToStringFast(this in global::MyEnum value)
         => value switch
         {
             global::MyEnum.First => nameof(global::MyEnum.First),
@@ -41,7 +41,7 @@ public static partial class MyEnumExtensions
     /// </summary>
     /// <param name="value">The value to check if it's defined.</param>
     /// <returns><see langword="true" /> if the value exists in the enumeration, <see langword="false" /> otherwise.</returns>
-    public static bool IsDefined(global::MyEnum value)
+    public static bool IsDefined(in global::MyEnum value)
         => value switch
         {
             global::MyEnum.First => true,
@@ -65,7 +65,7 @@ public static partial class MyEnumExtensions
     /// <param name="allowMatchingMetadataAttribute">If <see langword="true" />, considers the value of metadata attributes, otherwise ignores them.</param>
     /// <returns><see langword="true" /> if a member with the name exists in the enumeration, or a member is decorated
     /// with a <c>[Display]</c>/<c>[Description]</c> attribute with the name, <see langword="false" /> otherwise.</returns>
-    public static bool IsDefined(string name, bool allowMatchingMetadataAttribute)
+    public static bool IsDefined(string name, in bool allowMatchingMetadataAttribute)
     {
         return name switch
         {
@@ -91,7 +91,7 @@ public static partial class MyEnumExtensions
     /// <param name="allowMatchingMetadataAttribute">If <see langword="true" />, considers the value of metadata attributes, otherwise ignores them.</param>
     /// <returns><see langword="true" /> if a member with the name exists in the enumeration, or a member is decorated
     /// with a <c>[Display]</c>/<c>[Description]</c> attribute with the name, <see langword="false" /> otherwise.</returns>
-    public static bool IsDefined(in global::System.ReadOnlySpan<char> name, bool allowMatchingMetadataAttribute)
+    public static bool IsDefined(in global::System.ReadOnlySpan<char> name, in bool allowMatchingMetadataAttribute)
     {
         return name switch
         {
@@ -136,7 +136,7 @@ public static partial class MyEnumExtensions
         [global::System.Diagnostics.CodeAnalysis.NotNullWhen(true)]
         string? name,
         out global::MyEnum value,
-        bool ignoreCase)
+        in bool ignoreCase)
         => TryParse(name, out value, ignoreCase, false);
 
     /// <summary>
@@ -158,8 +158,8 @@ public static partial class MyEnumExtensions
         [global::System.Diagnostics.CodeAnalysis.NotNullWhen(true)]
         string? name,
         out global::MyEnum value,
-        bool ignoreCase,
-        bool allowMatchingMetadataAttribute)
+        in bool ignoreCase,
+        in bool allowMatchingMetadataAttribute)
     {
         if (ignoreCase)
         {
@@ -230,7 +230,7 @@ public static partial class MyEnumExtensions
     public static bool TryParse(
         in global::System.ReadOnlySpan<char> name,
         out global::MyEnum value,
-        bool ignoreCase)
+        in bool ignoreCase)
         => TryParse(name, out value, ignoreCase, false);
 
     /// <summary>
@@ -251,8 +251,8 @@ public static partial class MyEnumExtensions
     public static bool TryParse(
         in global::System.ReadOnlySpan<char> name,
         out global::MyEnum result,
-        bool ignoreCase,
-        bool allowMatchingMetadataAttribute)
+        in bool ignoreCase,
+        in bool allowMatchingMetadataAttribute)
     {
         if (ignoreCase)
         {
@@ -330,7 +330,7 @@ public static partial class MyEnumExtensions
     /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode;
     /// <see langword="false" /> to read value in case sensitive mode.</param>
     /// <returns>The matching <see cref="global::MyEnum" /> or <see langword="null" /> if there was no match.</returns>
-    public static global::MyEnum? GetValueOrDefault(string? name, bool ignoreCase) =>
+    public static global::MyEnum? GetValueOrDefault(string? name, in bool ignoreCase) =>
         TryParse(name, out global::MyEnum value, ignoreCase) ? value : null;
 
     /// <summary>
@@ -341,7 +341,7 @@ public static partial class MyEnumExtensions
     /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode;
     /// <see langword="false" /> to read value in case sensitive mode.</param>
     /// <returns>The matching <see cref="global::MyEnum" /> or <see langword="null" /> if there was no match.</returns>
-    public static global::MyEnum? GetValueOrDefault(in global::System.ReadOnlySpan<char> name, bool ignoreCase) =>
+    public static global::MyEnum? GetValueOrDefault(in global::System.ReadOnlySpan<char> name, in bool ignoreCase) =>
         TryParse(name, out global::MyEnum value, ignoreCase) ? value : null;
 
     /// <summary>
@@ -354,7 +354,7 @@ public static partial class MyEnumExtensions
     /// <param name="allowMatchingMetadataAttribute">If <see langword="true" />,
     /// considers the value of metadata attributes, otherwise ignores them.</param>
     /// <returns>The matching <see cref="global::MyEnum" /> or <see langword="null" /> if there was no match.</returns>
-    public static global::MyEnum? GetValueOrDefault(string? name, bool ignoreCase, bool allowMatchingMetadataAttribute) =>
+    public static global::MyEnum? GetValueOrDefault(string? name, in bool ignoreCase, in bool allowMatchingMetadataAttribute) =>
         TryParse(name, out global::MyEnum value, ignoreCase, allowMatchingMetadataAttribute) ? value : null;
 
     /// <summary>
@@ -367,7 +367,7 @@ public static partial class MyEnumExtensions
     /// <param name="allowMatchingMetadataAttribute">If <see langword="true" />,
     /// considers the value of metadata attributes, otherwise ignores them.</param>
     /// <returns>The matching <see cref="global::MyEnum" /> or <see langword="null" /> if there was no match.</returns>
-    public static global::MyEnum? GetValueOrDefault(in global::System.ReadOnlySpan<char> name, bool ignoreCase, bool allowMatchingMetadataAttribute) =>
+    public static global::MyEnum? GetValueOrDefault(in global::System.ReadOnlySpan<char> name, in bool ignoreCase, in bool allowMatchingMetadataAttribute) =>
         TryParse(name, out global::MyEnum value, ignoreCase, allowMatchingMetadataAttribute) ? value : null;
 
     /// <summary>

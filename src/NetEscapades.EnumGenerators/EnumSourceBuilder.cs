@@ -101,7 +101,7 @@ namespace NetEscapades.EnumGenerators
                 /// </summary>
                 /// <param name="value">The value to retrieve the string value for.</param>
                 /// <returns>The string representation of the value.</returns>
-                public static string ToStringFast(this global::{{enumToGenerate.FullyQualifiedName}} value)
+                public static string ToStringFast(this in global::{{enumToGenerate.FullyQualifiedName}} value)
                     => value switch
                     {
             """);
@@ -142,7 +142,7 @@ namespace NetEscapades.EnumGenerators
                         /// <returns><see langword="true" /> if the fields set in the flag are also set in the current instance; otherwise <see langword="false" />.</returns>
                         /// <remarks>If the underlying value of <paramref name="flag"/> is zero, the method returns <see langword="true" />.
                         /// This is consistent with the behaviour of <see cref="global::System.Enum.HasFlag" />.</remarks>
-                        public static bool HasFlagFast(this global::{enumToGenerate.FullyQualifiedName} value, global::{enumToGenerate.FullyQualifiedName} flag)
+                        public static bool HasFlagFast(this in global::{enumToGenerate.FullyQualifiedName} value, in global::{enumToGenerate.FullyQualifiedName} flag)
                             => flag == 0 || (value & flag) == flag;
                     """);
         }
@@ -230,7 +230,7 @@ namespace NetEscapades.EnumGenerators
                 /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode;
                 /// <see langword="false" /> to read value in case sensitive mode.</param>
                 /// <returns>The matching <see cref="global::{enumToGenerate.FullyQualifiedName}" /> or <see langword="null" /> if there was no match.</returns>
-                public static global::{enumToGenerate.FullyQualifiedName}? GetValueOrDefault(string? name, bool ignoreCase) =>
+                public static global::{enumToGenerate.FullyQualifiedName}? GetValueOrDefault(string? name, in bool ignoreCase) =>
                     TryParse(name, out global::{enumToGenerate.FullyQualifiedName} value, ignoreCase) ? value : null;
             """);
 
@@ -244,7 +244,7 @@ namespace NetEscapades.EnumGenerators
                 /// <param name="ignoreCase"><see langword="true" /> to read value in case insensitive mode;
                 /// <see langword="false" /> to read value in case sensitive mode.</param>
                 /// <returns>The matching <see cref="global::{enumToGenerate.FullyQualifiedName}" /> or <see langword="null" /> if there was no match.</returns>
-                public static global::{enumToGenerate.FullyQualifiedName}? GetValueOrDefault(in global::System.ReadOnlySpan<char> name, bool ignoreCase) =>
+                public static global::{enumToGenerate.FullyQualifiedName}? GetValueOrDefault(in global::System.ReadOnlySpan<char> name, in bool ignoreCase) =>
                     TryParse(name, out global::{enumToGenerate.FullyQualifiedName} value, ignoreCase) ? value : null;
             """);
 
@@ -260,7 +260,7 @@ namespace NetEscapades.EnumGenerators
                 /// <param name="allowMatchingMetadataAttribute">If <see langword="true" />,
                 /// considers the value of metadata attributes, otherwise ignores them.</param>
                 /// <returns>The matching <see cref="global::{enumToGenerate.FullyQualifiedName}" /> or <see langword="null" /> if there was no match.</returns>
-                public static global::{enumToGenerate.FullyQualifiedName}? GetValueOrDefault(string? name, bool ignoreCase, bool allowMatchingMetadataAttribute) =>
+                public static global::{enumToGenerate.FullyQualifiedName}? GetValueOrDefault(string? name, in bool ignoreCase, in bool allowMatchingMetadataAttribute) =>
                     TryParse(name, out global::{enumToGenerate.FullyQualifiedName} value, ignoreCase, allowMatchingMetadataAttribute) ? value : null;
             """);
 
@@ -276,7 +276,7 @@ namespace NetEscapades.EnumGenerators
                 /// <param name="allowMatchingMetadataAttribute">If <see langword="true" />,
                 /// considers the value of metadata attributes, otherwise ignores them.</param>
                 /// <returns>The matching <see cref="global::{enumToGenerate.FullyQualifiedName}" /> or <see langword="null" /> if there was no match.</returns>
-                public static global::{enumToGenerate.FullyQualifiedName}? GetValueOrDefault(in global::System.ReadOnlySpan<char> name, bool ignoreCase, bool allowMatchingMetadataAttribute) =>
+                public static global::{enumToGenerate.FullyQualifiedName}? GetValueOrDefault(in global::System.ReadOnlySpan<char> name, in bool ignoreCase, in bool allowMatchingMetadataAttribute) =>
                     TryParse(name, out global::{enumToGenerate.FullyQualifiedName} value, ignoreCase, allowMatchingMetadataAttribute) ? value : null;
             """);
     }
