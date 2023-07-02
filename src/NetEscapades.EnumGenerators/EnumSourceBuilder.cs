@@ -101,7 +101,11 @@ namespace NetEscapades.EnumGenerators
                 /// </summary>
                 /// <param name="value">The value to retrieve the string value for.</param>
                 /// <returns>The string representation of the value.</returns>
-                public static string ToStringFast(this in global::{{enumToGenerate.FullyQualifiedName}} value)
+            #if NET6_0
+                public static string ToStringFast(this global::{{enumToGenerate.FullyQualifiedName}} value)
+            #else
+                public static string ToStringFast(this global::{{enumToGenerate.FullyQualifiedName}} value)
+            #endif
                     => value switch
                     {
             """);
@@ -142,7 +146,11 @@ namespace NetEscapades.EnumGenerators
                         /// <returns><see langword="true" /> if the fields set in the flag are also set in the current instance; otherwise <see langword="false" />.</returns>
                         /// <remarks>If the underlying value of <paramref name="flag"/> is zero, the method returns <see langword="true" />.
                         /// This is consistent with the behaviour of <see cref="global::System.Enum.HasFlag" />.</remarks>
-                        public static bool HasFlagFast(this in global::{enumToGenerate.FullyQualifiedName} value, in global::{enumToGenerate.FullyQualifiedName} flag)
+                    #if NET6_0
+                        public static bool HasFlagFast(this global::{enumToGenerate.FullyQualifiedName} value, global::{enumToGenerate.FullyQualifiedName} flag)
+                    #else
+                        public static bool HasFlagFast(this global::{enumToGenerate.FullyQualifiedName} value, in global::{enumToGenerate.FullyQualifiedName} flag)
+                    #endif
                             => flag == 0 || (value & flag) == flag;
                     """);
         }

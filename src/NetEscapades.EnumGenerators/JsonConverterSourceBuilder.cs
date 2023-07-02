@@ -92,6 +92,13 @@ namespace NetEscapades.EnumGenerators
                 /// </remarks>
                 public override global::{{jsonConverterToGenerate.FullyQualifiedName}} Read(ref global::System.Text.Json.Utf8JsonReader reader, global::System.Type typeToConvert, global::System.Text.Json.JsonSerializerOptions options)
                 {
+            #if NET6_0
+                    var enumString = reader.GetString();
+                    if (global::{{fullyQualifiedExtension}}.TryParse(enumString, out var enumValue, {{(jsonConverterToGenerate.CaseSensitive ? "false" : "true")}}, {{(jsonConverterToGenerate.AllowMatchingMetadataAttribute ? "true))" : "false))")}}
+                        return enumValue;
+
+                    throw new global::System.Text.Json.JsonException($"{enumString} is not a valid value.", {{(string.IsNullOrEmpty(propertyName) ? "null" : "PropertyName")}}, null, null);
+            #else
                     char[]? rentedBuffer = null;
                     var bufferLength = reader.HasValueSequence ? checked((int)reader.ValueSequence.Length) : reader.ValueSpan.Length;
 
@@ -116,6 +123,7 @@ namespace NetEscapades.EnumGenerators
                             global::System.Buffers.ArrayPool<char>.Shared.Return(rentedBuffer);
                         }
                     }
+            #endif
                 }
             """)
             .AppendLine()
