@@ -8,7 +8,7 @@ public class EnumWithDescriptionInNamespaceExtensionsTests : ExtensionTests<Enum
     {
         EnumWithDescriptionInNamespace.First,
         EnumWithDescriptionInNamespace.Second,
-        (EnumWithDescriptionInNamespace)3
+        (EnumWithDescriptionInNamespace) 3
     };
 
     public static TheoryData<string> ValuesToParse() => new()
@@ -25,7 +25,7 @@ public class EnumWithDescriptionInNamespaceExtensionsTests : ExtensionTests<Enum
         "2147483647",
         "3000000000",
         "Fourth",
-        "Fifth",
+        "Fifth"
     };
 
     protected override string ToStringFast(EnumWithDescriptionInNamespace value) => value.ToStringFast();

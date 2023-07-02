@@ -78,7 +78,7 @@ public class FlagsEnumExtensionsTests : ExtensionTests<FlagEnums>
             FlagEnums.ThirdAndFourth,
             FlagEnums.First | FlagEnums.Second,
             (FlagEnums) 65,
-            (FlagEnums) 0,
+            (FlagEnums) 0
         };
 
         return from v1 in values

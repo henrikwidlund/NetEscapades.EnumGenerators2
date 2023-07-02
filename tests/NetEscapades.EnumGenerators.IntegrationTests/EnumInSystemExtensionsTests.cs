@@ -8,7 +8,7 @@ public class EnumInSystemExtensionsTests : ExtensionTests<EnumInSystem>
     {
         EnumInSystem.First,
         EnumInSystem.Second,
-        (EnumInSystem)3
+        (EnumInSystem) 3
     };
 
     public static TheoryData<string> ValuesToParse() => new()
@@ -25,7 +25,7 @@ public class EnumInSystemExtensionsTests : ExtensionTests<EnumInSystem>
         "2147483647",
         "3000000000",
         "Fourth",
-        "Fifth",
+        "Fifth"
     };
 
     protected override string ToStringFast(EnumInSystem value) => value.ToStringFast();

@@ -9,7 +9,7 @@ public class EnumInFooExtensionsTests : ExtensionTests<EnumInFoo>
     {
         EnumInFoo.First,
         EnumInFoo.Second,
-        (EnumInFoo) 3,
+        (EnumInFoo) 3
     };
 
     public static TheoryData<string> ValuesToParse() => new()
@@ -26,7 +26,7 @@ public class EnumInFooExtensionsTests : ExtensionTests<EnumInFoo>
         "2147483647",
         "3000000000",
         "Fourth",
-        "Fifth",
+        "Fifth"
     };
 
     protected override string ToStringFast(EnumInFoo value) => value.ToStringFast();

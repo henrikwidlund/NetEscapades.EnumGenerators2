@@ -68,7 +68,7 @@ namespace NetEscapades.EnumGenerators.IntegrationTests
     {
         First = 0,
         [Description("2nd")] Second = 1,
-        Third = 2,
+        Third = 2
     }
 
     [EnumExtensions]
@@ -109,6 +109,6 @@ namespace NetEscapades.EnumGenerators.IntegrationTests
         [Description("Quotes \"")] Quotes,
         [Description(@"Literal Quotes """)] LiteralQuotes,
         [Description("Backslash \\")] Backslash,
-        [Description(@"LiteralBackslash \")] BackslashLiteral,
+        [Description(@"LiteralBackslash \")] BackslashLiteral
     }
 }
